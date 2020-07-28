@@ -1,0 +1,14 @@
+---
+title: Kaya
+author:
+    - Tim Tröndle
+institute: IASS Potsdam
+tags:
+    - reproducible-research
+abstract: |
+    Analysing how Kaya factors change during crises.
+bibliography: literature.yaml
+csl: apa.csl
+link-citations: True
+date: 2020-07-28
+---
