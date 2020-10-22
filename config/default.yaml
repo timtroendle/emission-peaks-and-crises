@@ -1,0 +1,63 @@
+bp:
+    path: data/bp-stats-review-2020-all-data.xlsx
+    sheetnames:
+        energy: Primary Energy Consumption
+        emissions: Carbon Dioxide Emissions
+worldbank:
+    paths:
+        population: data/population/API_SP.POP.TOTL_DS2_en_csv_v2_1217749.csv
+        gdp: data/gdp/API_NY.GDP.MKTP.CD_DS2_en_csv_v2_1217511.csv
+countries:
+    - Canada
+    - Mexico
+    - US
+    - Argentina
+    - Brazil
+    - Chile
+    - Colombia
+    - Ecuador
+    - Peru
+    - Trinidad and Tobago
+    - Venezuela
+    - Austria
+    - Belgium
+    - Bulgaria
+    - Croatia
+    - Cyprus
+    - Czech Republic
+    - Denmark
+    - Estonia
+    - Finland
+    - France
+    - Germany
+    - Greece
+    - Hungary
+    - Iceland
+    - Ireland
+    - Italy
+    - Latvia
+    - Lithuania
+    - Luxembourg
+    - Netherlands
+    - North Macedonia
+    - Norway
+    - Poland
+    - Portugal
+    - Romania
+    - Slovakia
+    - Slovenia
+    - Spain
+    - Sweden
+    - Switzerland
+    - Turkey
+    - Ukraine
+    - United Kingdom
+    - Azerbaijan
+    - Belarus
+    - Kazakhstan
+    - Russian Federation
+    - Turkmenistan
+    #- USSR FIX no worldbank data available
+    - Uzbekistan
+    - China
+    - Japan

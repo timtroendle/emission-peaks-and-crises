@@ -1,32 +1,18 @@
 PANDOC = "pandoc --filter pantable --filter pandoc-fignos --filter pandoc-tablenos --filter pandoc-citeproc"
 
+configfile: "./config/default.yaml"
+include: "./rules/preprocess.smk"
+include: "./rules/analyse.smk"
+
 
 rule all:
     message: "Run entire analysis and compile report."
     input:
-        "build/report.html",
-        "build/test-report.html"
-
-
-rule run:
-    message: "Runs the demo model."
-    input: "src/model.py"
-    params:
-        slope = 4,
-        x0 = 5
-    output: "build/results.pickle"
-    conda: "envs/default.yaml"
-    script: "src/model.py"
-
-
-rule plot:
-    message: "Visualises the demo results."
-    input:
-        src = "src/vis.py",
-        results = rules.run.output
-    output: "build/plot.png"
-    conda: "envs/default.yaml"
-    script: "src/vis.py"
+        "build/decoupling-index.csv",
+        "build/contribution-population.csv",
+        "build/contribution-energy-intensity-in-ej-per-usd.csv",
+        "build/contribution-gdp-in-usd-per-capita.csv",
+        "build/contribution-carbon-intensity-in-mt-per-ej.csv"
 
 
 def pandoc_options(wildcards):
@@ -49,7 +35,6 @@ rule report:
         "report/pandoc-metadata.yaml",
         "report/apa.csl",
         "report/report.css",
-        rules.plot.output
     params: options = pandoc_options
     output: "build/report.{suffix}"
     wildcard_constraints:

@@ -1,6 +1,16 @@
 # generated files
 build/
 
+# data
+data/bp-stats-review-2020-all-data.xlsx
+data/co2-emissions/
+data/energy-per-capita/
+data/gdp/
+data/population/
+
+# notebooks
+notebooks
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

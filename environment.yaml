@@ -6,3 +6,4 @@ dependencies:
     - python=3.8
     - flake8=3.8.3
     - snakemake-minimal=5.20.1
+    - pycountry=20.7.3
