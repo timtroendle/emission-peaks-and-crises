@@ -5,7 +5,8 @@ build/
 data/bp-stats-review-2020-all-data.xlsx
 data/co2-emissions/
 data/energy-per-capita/
-data/gdp/
+data/gdp-constant/
+data/gdp-current/
 data/population/
 
 # notebooks

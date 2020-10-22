@@ -6,7 +6,7 @@ bp:
 worldbank:
     paths:
         population: data/population/API_SP.POP.TOTL_DS2_en_csv_v2_1217749.csv
-        gdp: data/gdp/API_NY.GDP.MKTP.CD_DS2_en_csv_v2_1217511.csv
+        gdp: data/gdp-constant/API_NY.GDP.MKTP.KD_DS2_en_csv_v2_1495282.csv
 countries:
     - Canada
     - Mexico
