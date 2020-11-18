@@ -5,14 +5,22 @@ include: "./rules/preprocess.smk"
 include: "./rules/analyse.smk"
 
 
+COUNTRY_CODES = [
+    pycountry.countries.lookup(country_name).alpha_3
+    for country_name in config["countries"]
+]
+
+
 rule all:
     message: "Run entire analysis and compile report."
     input:
         "build/decoupling-index.csv",
-        "build/contribution-population.csv",
-        "build/contribution-energy-intensity-in-ej-per-usd.csv",
-        "build/contribution-gdp-in-usd-per-capita.csv",
-        "build/contribution-carbon-intensity-in-mt-per-ej.csv"
+        "build/contributions.nc",
+        expand("build/contribution/1998-2007-{country_id}.png", country_id=COUNTRY_CODES),
+        expand("build/contribution/2008-2008-{country_id}.png", country_id=COUNTRY_CODES),
+        expand("build/contribution/2009-2018-{country_id}.png", country_id=COUNTRY_CODES),
+        "build/contribution/2008-2014-GRC.png",
+        "build/contribution/2015-2018-GRC.png"
 
 
 def pandoc_options(wildcards):
