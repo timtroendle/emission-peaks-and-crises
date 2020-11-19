@@ -16,11 +16,7 @@ rule all:
     input:
         "build/decoupling-index.csv",
         "build/contributions.nc",
-        expand("build/contribution/1998-2007-{country_id}.png", country_id=COUNTRY_CODES),
-        expand("build/contribution/2008-2009-{country_id}.png", country_id=COUNTRY_CODES),
-        expand("build/contribution/2010-2018-{country_id}.png", country_id=COUNTRY_CODES),
-        "build/contribution/2008-2013-GRC.png",
-        "build/contribution/2014-2018-GRC.png"
+        expand("build/crises/{crisis}/analysis.done", crisis=config["crises"])
 
 
 def pandoc_options(wildcards):

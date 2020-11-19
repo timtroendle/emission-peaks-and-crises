@@ -61,3 +61,68 @@ countries:
     - Uzbekistan
     - China
     - Japan
+crises:
+    financial-crisis:
+        pre-from-year: 1998
+        from-year: 2008
+        to-year: 2009
+        post-to-year: 2019
+        countries:
+            - Canada
+            - Mexico
+            - US
+            - Argentina
+            - Brazil
+            - Chile
+            - Colombia
+            - Ecuador
+            - Peru
+            - Trinidad and Tobago
+            - Venezuela
+            - Austria
+            - Belgium
+            - Bulgaria
+            - Croatia
+            - Cyprus
+            - Czech Republic
+            - Denmark
+            - Estonia
+            - Finland
+            - France
+            - Germany
+            - Hungary
+            - Iceland
+            - Ireland
+            - Italy
+            - Latvia
+            - Lithuania
+            - Luxembourg
+            - Netherlands
+            - North Macedonia
+            - Norway
+            - Poland
+            - Portugal
+            - Romania
+            - Slovakia
+            - Slovenia
+            - Spain
+            - Sweden
+            - Switzerland
+            - Turkey
+            - Ukraine
+            - United Kingdom
+            - Azerbaijan
+            - Belarus
+            - Kazakhstan
+            - Russian Federation
+            - Turkmenistan
+            - Uzbekistan
+            - China
+            - Japan
+    financial-crisis-greece:
+        pre-from-year: 1998
+        from-year: 2008
+        to-year: 2013
+        post-to-year: 2019
+        countries:
+            - Greece

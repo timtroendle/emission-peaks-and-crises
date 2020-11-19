@@ -1,3 +1,63 @@
+from dataclasses import dataclass
+import pycountry
+
+
+@dataclass
+class Crisis:
+    pre_from_year: int
+    pre_to_year: int
+    from_year: int
+    to_year: int
+    post_from_year: int
+    post_to_year: int
+    ids_countries: list
+
+    @classmethod
+    def from_config(cls, config):
+        return Crisis(
+            pre_from_year=config["pre-from-year"],
+            pre_to_year=config["from-year"] - 1,
+            from_year=config["from-year"],
+            to_year=config["to-year"],
+            post_from_year=config["to-year"] + 1,
+            post_to_year=config["post-to-year"],
+            ids_countries=[pycountry.countries.lookup(country_name).alpha_3
+                           for country_name in config["countries"]]
+        )
+
+
+CRISES = {
+    crisis_name: Crisis.from_config(config["crises"][crisis_name])
+    for crisis_name in config["crises"]
+}
+
+
+def contribution_factor_barplots(wildcards):
+    crisis_name = wildcards["crisis"]
+    crisis = CRISES[crisis_name]
+    pre_plots = [
+        f"build/crises/{{crisis}}/contribution/{crisis.pre_from_year}-{crisis.pre_to_year}-{country_id}.png"
+        for country_id in crisis.ids_countries
+    ]
+    crisis_plots = [
+        f"build/crises/{{crisis}}/contribution/{crisis.from_year}-{crisis.to_year}-{country_id}.png"
+        for country_id in crisis.ids_countries
+    ]
+    post_plots = [
+        f"build/crises/{{crisis}}/contribution/{crisis.post_from_year}-{crisis.post_to_year}-{country_id}.png"
+        for country_id in crisis.ids_countries
+
+    ]
+    return pre_plots + crisis_plots + post_plots
+
+
+rule crisis_analysis:
+    message: "Analyse {wildcards.crisis}."
+    input:
+        contribution_factor_barplots
+    output: touch("build/crises/{crisis}/analysis.done")
+
+
 rule decoupling_index:
     message: "Calculate the decoupling index."
     input:
@@ -40,6 +100,6 @@ rule plot_contribution_bar_chart:
     input:
         src = "src/vis/contribution.py",
         contributions = rules.contributions.output[0],
-    output: "build/contribution/{from_year}-{to_year}-{country_id}.png"
+    output: "build/crises/{crisis}/contribution/{from_year}-{to_year}-{country_id}.png"
     conda: "../envs/default.yaml"
     script: "../src/vis/contribution.py"
