@@ -61,6 +61,12 @@ countries:
     - Uzbekistan
     - China
     - Japan
+    - Indonesia
+    #- Korea, Republic of TODO no emissions data
+    - Thailand
+    #- Hong Kong TODO no emissions data
+    - Malaysia
+    #- Uruguay TODO no emissions data
 crises:
     financial-crisis:
         pre-from-year: 1998
@@ -126,3 +132,30 @@ crises:
         post-to-year: 2019
         countries:
             - Greece
+    asian-financial-crisis:
+        pre-from-year: 1988
+        from-year: 1998
+        to-year: 1998
+        post-to-year: 2009
+        countries:
+            - Indonesia
+            #- Korea, Republic of TODO no emissions data
+            - Thailand
+            #- Hong Kong TODO no emissions data
+            - Malaysia
+    argentine-great-depression:
+        pre-from-year: 1989
+        from-year: 1999
+        to-year: 2002
+        post-to-year: 2013
+        countries:
+            - Argentina
+            #- Uruguay TODO no emissions data
+    tequila-crisis:
+        pre-from-year: 1985
+        from-year: 1995
+        to-year: 1995
+        post-to-year: 2006
+        countries:
+            - Mexico
+
