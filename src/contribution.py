@@ -16,9 +16,9 @@ def contribution(path_to_emissions, path_to_kaya_factor, path_to_output):
     emissions = pd.read_csv(path_to_emissions, index_col=0)
     kaya_factor = pd.read_csv(path_to_kaya_factor, index_col=0)
 
-    nominator = emissions.shift(-1) - emissions
-    denominator = emissions.shift(-1).applymap(np.log10) - emissions.applymap(np.log10)
-    factor = (kaya_factor.shift(-1) / kaya_factor).applymap(np.log10)
+    nominator = emissions - emissions.shift(1)
+    denominator = emissions.applymap(np.log10) - emissions.shift(1).applymap(np.log10)
+    factor = (kaya_factor / kaya_factor.shift(1)).applymap(np.log10)
     contribution = (nominator / denominator) * factor
     contribution.to_csv(path_to_output, index=True, header=True)
 
