@@ -22,7 +22,7 @@ def contribution(path_to_contributions, from_year, to_year, country_id, path_to_
     contributions = (
         xr
         .open_dataset(path_to_contributions)["contributions"]
-        .sel(country_id=country_id, year=[from_year, to_year])
+        .sel(country_id=country_id, year=range(from_year, to_year + 1))
         .sum("year")
         .to_series()
     )
