@@ -16,7 +16,8 @@ rule all:
     input:
         "build/decoupling-index.csv",
         "build/contributions.nc",
-        expand("build/crises/{crisis}/analysis.done", crisis=config["crises"])
+        expand("build/crises/{crisis}/analysis.done", crisis=config["crises"]),
+        expand("build/change-points/emissions-{country}.png", country=COUNTRY_CODES)
 
 
 def pandoc_options(wildcards):

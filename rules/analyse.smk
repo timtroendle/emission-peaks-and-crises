@@ -83,6 +83,17 @@ rule plot_contribution_bar_chart:
     script: "../src/vis/contribution.py"
 
 
+rule plot_emission_change_points:
+    message: "Plot change points of emission time series for country {wildcards.country}."
+    input:
+        src = "src/vis/emission_change_points.py",
+        emissions = rules.emissions.output[0]
+    params: penalty = 3 # penalty value used in the PELT method
+    output: "build/change-points/emissions-{country}.png"
+    conda: "../envs/changepoint.yaml"
+    script: "../src/vis/emission_change_points.py"
+
+
 rule overview:
     message: "Create overview table for {wildcards.crisis}."
     input:
