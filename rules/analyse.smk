@@ -28,11 +28,22 @@ def contribution_factor_barplots(wildcards):
     return pre_plots + crisis_plots + post_plots
 
 
+def contribution_factor_timeseries(wildcards):
+    crisis_name = wildcards["crisis"]
+    crisis = CRISES[crisis_name]
+    plots = [
+        f"build/crises/{{crisis}}/contribution-timeseries/{crisis.pre_from_year}-{crisis.post_to_year}-{country_id}.png"
+        for country_id in crisis.country_ids
+    ]
+    return plots
+
+
 rule crisis_analysis:
     message: "Analyse {wildcards.crisis}."
     input:
         "build/crises/{crisis}/overview.csv",
-        contribution_factor_barplots
+        contribution_factor_barplots,
+        contribution_factor_timeseries
     output: touch("build/crises/{crisis}/analysis.done")
 
 
@@ -92,6 +103,17 @@ rule plot_emission_change_points:
     output: "build/change-points/emissions-{country}.png"
     conda: "../envs/changepoint.yaml"
     script: "../src/vis/emission_change_points.py"
+
+
+rule plot_contribution_timeseries:
+    message: "Plot timeseries of contributions for country {wildcards.country_id}."
+    input:
+        src = "src/vis/contribution_timeseries.py",
+        emissions = rules.emissions.output[0],
+        contributions = rules.contributions.output[0]
+    output: "build/crises/{crisis}/contribution-timeseries/{from_year}-{to_year}-{country_id}.png"
+    conda: "../envs/default.yaml"
+    script: "../src/vis/contribution_timeseries.py"
 
 
 rule overview:
