@@ -84,6 +84,19 @@ rule contributions:
     script: "../src/contributions.py"
 
 
+rule multiplicative_contributions:
+    message: "Calculate multiplicative contributions to emissions."
+    input:
+        src = "src/mul_contributions.py",
+        population = rules.population.output[0],
+        energy_intensity = rules.energy_intensity.output[0],
+        gdp = rules.gdp_per_capita.output[0],
+        carbon_intensity = rules.carbon_intensity.output[0]
+    output: "build/multiplicative-contributions.nc"
+    conda: "../envs/default.yaml"
+    script: "../src/mul_contributions.py"
+
+
 rule plot_contribution_bar_chart:
     message: "Plot a bar chart visualising contribution factors for country {wildcards.country_id}."
     input:
@@ -110,7 +123,7 @@ rule plot_contribution_timeseries:
     input:
         src = "src/vis/contribution_timeseries.py",
         emissions = rules.emissions.output[0],
-        contributions = rules.contributions.output[0]
+        contributions = rules.multiplicative_contributions.output[0]
     output: "build/crises/{crisis}/contribution-timeseries/{from_year}-{to_year}-{country_id}.png"
     conda: "../envs/default.yaml"
     script: "../src/vis/contribution_timeseries.py"

@@ -39,11 +39,11 @@ def timeseries(path_to_contributions, path_to_emissions, country_id, from_year, 
         series = ds.contributions.sel(factor=factor).to_series()
         ax.plot(
             ds.year,
-            series.cumsum() / reference_value + 1,
+            series.cumprod() / series.loc[reference_year],
             label=factor.item(),
             linestyle="--"
         )
-    ax.set_ylabel(f"$\mathrm{{CO_2}}$ emissions relative to {reference_year}")
+    ax.set_ylabel(f"Change since {reference_year}")
     ax.set_title(country_id)
     ax.legend()
 
