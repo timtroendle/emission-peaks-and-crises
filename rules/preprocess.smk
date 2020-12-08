@@ -1,10 +1,10 @@
 import pycountry
 
 
-COUNTRY_CODES = [
+COUNTRY_CODES = sorted([
     pycountry.countries.lookup(country_name).alpha_3
     for country_name in config["countries"]
-]
+])
 
 
 rule energy:

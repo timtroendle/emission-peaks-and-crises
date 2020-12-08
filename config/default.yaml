@@ -8,64 +8,84 @@ worldbank:
         population: data/population/API_SP.POP.TOTL_DS2_en_csv_v2_1217749.csv
         gdp: data/gdp-constant/API_NY.GDP.MKTP.KD_DS2_en_csv_v2_1495282.csv
 countries:
-    - Canada
-    - Mexico
     - US
+    - United Arab Emirates
     - Argentina
-    - Brazil
-    - Chile
-    - Colombia
-    - Ecuador
-    - Peru
-    - Trinidad and Tobago
-    - Venezuela
+    - Australia
     - Austria
+    - Azerbaijan
     - Belgium
+    - Bangladesh
     - Bulgaria
-    - Croatia
+    - Belarus
+    - Brazil
+    - Canada
+    - Switzerland
+    - Chile
+    - China
+    - Colombia
     - Cyprus
     - Czech Republic
+    - Germany
     - Denmark
+    - Algeria
+    - Ecuador
+    - Egypt
+    - Spain
     - Estonia
     - Finland
     - France
-    - Germany
+    - United Kingdom
     - Greece
+    - Croatia
+    - Hong Kong
     - Hungary
-    - Iceland
+    - Indonesia
+    - India
     - Ireland
+    - Iraq
+    - Iceland
+    - Israel
     - Italy
-    - Latvia
+    - Japan
+    - Kazakhstan
+    - Kuwait
+    - Sri Lanka
     - Lithuania
     - Luxembourg
-    - Netherlands
+    - Latvia
+    - Morocco
+    - Mexico
     - North Macedonia
+    - Malaysia
+    - Netherlands
     - Norway
+    - New Zealand
+    - Oman
+    - Pakistan
+    - Peru
+    - Philippines
     - Poland
     - Portugal
+    - Qatar
     - Romania
+    - Russian Federation
+    - Saudi Arabia
+    - Singapore
     - Slovakia
     - Slovenia
-    - Spain
     - Sweden
-    - Switzerland
+    - Thailand
+    - Turkmenistan
+    - Trinidad and Tobago
     - Turkey
     - Ukraine
-    - United Kingdom
-    - Azerbaijan
-    - Belarus
-    - Kazakhstan
-    - Russian Federation
-    - Turkmenistan
-    #- USSR FIX no worldbank data available
     - Uzbekistan
-    - China
-    - Japan
-    - Indonesia
+    - Venezuela
+    - South Africa
+
+    #- USSR FIX no worldbank data available
     #- Korea, Republic of TODO no emissions data
-    - Thailand
-    #- Hong Kong TODO no emissions data
-    - Malaysia
     #- Uruguay TODO no emissions data
 crises:
     financial-crisis:
@@ -141,7 +161,7 @@ crises:
             - Indonesia
             #- Korea, Republic of TODO no emissions data
             - Thailand
-            #- Hong Kong TODO no emissions data
+            - Hong Kong
             - Malaysia
     argentine-great-depression:
         pre-from-year: 1989

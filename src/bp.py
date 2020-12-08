@@ -22,12 +22,16 @@ def preprocess_bp_data(path_to_bp_data, sheet_name, countries, path_to_output):
 def bp_country_names(country_name):
     if country_name == "Trinidad and Tobago":
         return "Trinidad & Tobago" # BP uses this unusual way of writing the country name
+    elif country_name == "Hong Kong":
+        return "China Hong Kong SAR"
     return country_name
 
 
 def sane_country_names(country_name):
     if country_name == "Trinidad & Tobago":
         return "Trinidad and Tobago"
+    elif country_name == "China Hong Kong SAR":
+        return "Hong Kong"
     return country_name
 
 
