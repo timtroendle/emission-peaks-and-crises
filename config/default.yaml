@@ -94,64 +94,68 @@ crises:
         to-year: 2009
         post-to-year: 2019
         countries:
-            - Canada
-            - Mexico
-            - US
+            - United Arab Emirates
             - Argentina
-            - Brazil
-            - Chile
-            - Colombia
-            - Ecuador
-            - Peru
-            - Trinidad and Tobago
-            - Venezuela
+            - Australia
             - Austria
             - Belgium
             - Bulgaria
-            - Croatia
-            - Cyprus
-            - Czech Republic
-            - Denmark
-            - Estonia
-            - Finland
-            - France
+            - Brazil
+            - Canada
+            - Switzerland
+            - Chile
             - Germany
+            - Denmark
+            - Algeria
+            - Ecuador
+            - Estonia
+            - France
+            - United Kingdom
+            - Hong Kong
             - Hungary
-            - Iceland
             - Ireland
-            - Italy
-            - Latvia
+            - Iceland
+            - Israel
+            - Japan
+            - Kazakhstan
+            - Kuwait
             - Lithuania
             - Luxembourg
-            - Netherlands
+            - Latvia
+            - Mexico
             - North Macedonia
+            - Malaysia
             - Norway
-            - Poland
-            - Portugal
+            - New Zealand
+            - Philippines
             - Romania
+            - Russian Federation
+            - Saudi Arabia
+            - Singapore
             - Slovakia
-            - Slovenia
-            - Spain
             - Sweden
-            - Switzerland
+            - Thailand
+            - Trinidad and Tobago
             - Turkey
             - Ukraine
-            - United Kingdom
-            - Azerbaijan
-            - Belarus
-            - Kazakhstan
-            - Russian Federation
-            - Turkmenistan
-            - Uzbekistan
-            - China
-            - Japan
-    financial-crisis-greece:
+            - United States
+            - South Africa
+    financial-and-euro-crisis:
         pre-from-year: 1998
         from-year: 2008
         to-year: 2013
         post-to-year: 2019
         countries:
+            - Cyprus
+            - Czechia
+            - Spain
+            - Finland
             - Greece
+            - Croatia
+            - Italy
+            - Netherlands
+            - Portugal
+            - Slovenia
     asian-financial-crisis:
         pre-from-year: 1988
         from-year: 1998

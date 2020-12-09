@@ -134,7 +134,7 @@ rule overview:
     input:
         src = "src/overview.py",
         emissions = rules.emissions.output[0],
-        gdp = rules.gdp.output[0]
+        gdp = rules.gdp_per_capita.output[0]
     params: crisis = lambda wildcards: config["crises"][wildcards["crisis"]]
     output: "build/crises/{crisis}/overview.csv"
     conda: "../envs/default.yaml"
