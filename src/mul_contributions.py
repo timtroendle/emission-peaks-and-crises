@@ -2,8 +2,8 @@ import pandas as pd
 
 
 def contributions(path_to_carbon_intensity, path_to_energy_intensity,
-                  path_to_population, path_to_gdp, path_to_output):
-    (
+                  path_to_population, path_to_gdp, path_to_output_nc, path_to_output_csv):
+    contributions = (
         pd
         .concat([
             contribution(path_to_carbon_intensity, "carbon-intensity"),
@@ -11,9 +11,13 @@ def contributions(path_to_carbon_intensity, path_to_energy_intensity,
             contribution(path_to_population, "population"),
             contribution(path_to_gdp, "gdp"),
         ])
-        .to_xarray()
         .rename("contributions")
-        .to_netcdf(path_to_output)
+    )
+    contributions.to_csv(path_to_output_csv, index=True, header=True)
+    (
+        contributions
+        .to_xarray()
+        .to_netcdf(path_to_output_nc)
     )
 
 
@@ -38,5 +42,6 @@ if __name__ == "__main__":
         path_to_energy_intensity=snakemake.input.energy_intensity,
         path_to_population=snakemake.input.population,
         path_to_gdp=snakemake.input.gdp,
-        path_to_output=snakemake.output[0]
+        path_to_output_nc=snakemake.output.nc,
+        path_to_output_csv=snakemake.output.csv
     )

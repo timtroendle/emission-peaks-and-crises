@@ -187,9 +187,9 @@ crises:
         countries:
             - Mexico
     all-crises:
-        pre-from-year: 1965
-        from-year: 1965
-        to-year: 2019
+        pre-from-year: 1966
+        from-year: 1967
+        to-year: 2018
         post-to-year: 2019
         countries:
             - OECD

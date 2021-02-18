@@ -91,7 +91,9 @@ rule multiplicative_contributions:
         energy_intensity = rules.energy_intensity.output[0],
         gdp = rules.gdp_per_capita.output[0],
         carbon_intensity = rules.carbon_intensity.output[0]
-    output: "build/multiplicative-contributions.nc"
+    output:
+        nc = "build/multiplicative-contributions.nc",
+        csv = "build/multiplicative-contributions.csv"
     conda: "../envs/default.yaml"
     script: "../src/mul_contributions.py"
 
@@ -122,7 +124,7 @@ rule plot_contribution_timeseries:
     input:
         src = "src/vis/contribution_timeseries.py",
         emissions = rules.emissions.output[0],
-        contributions = rules.multiplicative_contributions.output[0]
+        contributions = rules.multiplicative_contributions.output.nc
     output: "build/crises/{crisis}/contribution-timeseries/{from_year}-{to_year}-{country_id}.png"
     conda: "../envs/default.yaml"
     script: "../src/vis/contribution_timeseries.py"
