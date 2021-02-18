@@ -1,8 +1,16 @@
+"""Rules to preprocess Worldbank and BP data."""
 import pycountry
 
 
+def country_to_country_code(country_name):
+    if country_name == "World":
+        return "WLD"
+    else:
+        return pycountry.countries.lookup(country_name).alpha_3
+
+
 COUNTRY_CODES = sorted([
-    pycountry.countries.lookup(country_name).alpha_3
+    country_to_country_code(country_name)
     for country_name in config["countries"]
 ])
 

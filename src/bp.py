@@ -14,7 +14,7 @@ def preprocess_bp_data(path_to_bp_data, sheet_name, countries, path_to_output):
         .loc[countries, :]
         .transpose()
         .rename(columns=sane_country_names)
-        .rename(columns=lambda country_name: pycountry.countries.lookup(country_name).alpha_3)
+        .rename(columns=lambda country_name: country_to_country_code(country_name))
         .to_csv(path_to_output, index=True, header=True)
     )
 
@@ -24,6 +24,8 @@ def bp_country_names(country_name):
         return "Trinidad & Tobago" # BP uses this unusual way of writing the country name
     elif country_name == "Hong Kong":
         return "China Hong Kong SAR"
+    elif country_name == "World":
+        return "Total World"
     return country_name
 
 
@@ -32,7 +34,16 @@ def sane_country_names(country_name):
         return "Trinidad and Tobago"
     elif country_name == "China Hong Kong SAR":
         return "Hong Kong"
+    elif country_name == "Total World":
+        return "World"
     return country_name
+
+
+def country_to_country_code(country_name):
+    if country_name == "World":
+        return "WLD"
+    else:
+        return pycountry.countries.lookup(country_name).alpha_3
 
 
 if __name__ == "__main__":

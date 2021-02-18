@@ -22,6 +22,13 @@ class Crisis:
             to_year=config["to-year"],
             post_from_year=config["to-year"] + 1,
             post_to_year=config["post-to-year"],
-            country_ids=[pycountry.countries.lookup(country_name).alpha_3
+            country_ids=[country_to_country_code(country_name)
                          for country_name in config["countries"]]
         )
+
+
+def country_to_country_code(country_name):
+    if country_name == "World":
+        return "WLD"
+    else:
+        return pycountry.countries.lookup(country_name).alpha_3

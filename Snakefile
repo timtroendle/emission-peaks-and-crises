@@ -5,12 +5,6 @@ include: "./rules/preprocess.smk"
 include: "./rules/analyse.smk"
 
 
-COUNTRY_CODES = [
-    pycountry.countries.lookup(country_name).alpha_3
-    for country_name in config["countries"]
-]
-
-
 rule all:
     message: "Run entire analysis and compile report."
     input:

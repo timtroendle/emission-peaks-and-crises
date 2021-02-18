@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-import pycountry
 
 from src.crisis import Crisis
 

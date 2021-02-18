@@ -83,6 +83,7 @@ countries:
     - Uzbekistan
     - Venezuela
     - South Africa
+    - World
 
     #- USSR FIX no worldbank data available
     #- Korea, Republic of TODO no emissions data
@@ -140,6 +141,7 @@ crises:
             - Ukraine
             - United States
             - South Africa
+            - World
     financial-and-euro-crisis:
         pre-from-year: 1998
         from-year: 2008
