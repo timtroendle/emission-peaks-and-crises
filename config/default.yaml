@@ -83,6 +83,7 @@ countries:
     - Uzbekistan
     - Venezuela
     - South Africa
+    - OECD
     - World
 
     #- USSR FIX no worldbank data available
@@ -141,6 +142,7 @@ crises:
             - Ukraine
             - United States
             - South Africa
+            - OECD
             - World
     financial-and-euro-crisis:
         pre-from-year: 1998

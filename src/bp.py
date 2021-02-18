@@ -26,6 +26,8 @@ def bp_country_names(country_name):
         return "China Hong Kong SAR"
     elif country_name == "World":
         return "Total World"
+    elif country_name == "OECD":
+        return "of which: OECD"
     return country_name
 
 
@@ -36,12 +38,16 @@ def sane_country_names(country_name):
         return "Hong Kong"
     elif country_name == "Total World":
         return "World"
+    elif country_name == "of which: OECD":
+        return "OECD"
     return country_name
 
 
 def country_to_country_code(country_name):
     if country_name == "World":
         return "WLD"
+    elif country_name == "OECD":
+        return "OED"
     else:
         return pycountry.countries.lookup(country_name).alpha_3
 

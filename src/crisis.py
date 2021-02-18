@@ -30,5 +30,7 @@ class Crisis:
 def country_to_country_code(country_name):
     if country_name == "World":
         return "WLD"
+    elif country_name == "OECD":
+        return "OED"
     else:
         return pycountry.countries.lookup(country_name).alpha_3
