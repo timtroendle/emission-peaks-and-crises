@@ -140,3 +140,18 @@ rule overview:
     output: "build/crises/{crisis}/overview.csv"
     conda: "../envs/default.yaml"
     script: "../src/overview.py"
+
+
+rule method_comparison:
+    message: "Apply different timeseries analysis methods for comparison -- {wildcards.crisis}."
+    input:
+        src = "src/methods.py",
+        emissions = rules.emissions.output[0],
+        gdp = rules.gdp.output[0],
+        population = rules.population.output[0],
+        carbon_intensity = rules.carbon_intensity.output[0],
+        energy_intensity = rules.energy_intensity.output[0]
+    params: crisis = lambda wildcards: config["crises"][wildcards["crisis"]]
+    output: "build/crises/{crisis}/methods.nc"
+    conda: "../envs/methods.yaml"
+    script: "../src/methods.py"
