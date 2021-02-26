@@ -91,6 +91,7 @@ countries:
     #- Uruguay TODO no emissions data
 crises:
     financial-crisis:
+        name: Global Financial Crisis
         pre-from-year: 1998
         from-year: 2008
         to-year: 2009
@@ -145,6 +146,7 @@ crises:
             - OECD
             - World
     financial-and-euro-crisis:
+        name: Global Financial & Euro-Crisis
         pre-from-year: 1998
         from-year: 2008
         to-year: 2013
@@ -161,6 +163,7 @@ crises:
             - Portugal
             - Slovenia
     asian-financial-crisis:
+        name: Asian Financial Crisis
         pre-from-year: 1988
         from-year: 1998
         to-year: 1998
@@ -171,7 +174,8 @@ crises:
             - Thailand
             - Hong Kong
             - Malaysia
-    argentine-great-depression:
+    argentinean-great-depression:
+        name: Argentinean Great Depression
         pre-from-year: 1989
         from-year: 1999
         to-year: 2002
@@ -180,6 +184,7 @@ crises:
             - Argentina
             #- Uruguay TODO no emissions data
     tequila-crisis:
+        name: Tequila Crisis
         pre-from-year: 1985
         from-year: 1995
         to-year: 1995
@@ -187,6 +192,7 @@ crises:
         countries:
             - Mexico
     all-crises:
+        name: All Crisis
         pre-from-year: 1966
         from-year: 1967
         to-year: 2018

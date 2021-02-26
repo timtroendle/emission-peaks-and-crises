@@ -142,6 +142,28 @@ rule overview:
     script: "../src/overview.py"
 
 
+rule trend:
+    message: "Determine trends in time series for {wildcards.crisis}."
+    input:
+        src = "src/trend.py",
+        emissions = rules.emissions.output[0]
+    params: crisis = lambda wildcards: config["crises"][wildcards["crisis"]]
+    output: "build/crises/{crisis}/trend.nc"
+    conda: "../envs/default.yaml"
+    script: "../src/trend.py"
+
+
+rule plot_trend:
+    message: "Plot pre- and post-crisis trends for {wildcards.crisis}."
+    input:
+        src = "src/vis/trend.py",
+        trend = rules.trend.output[0]
+    params: crisis_name = lambda wildcards: CRISES[wildcards["crisis"]].name
+    output: "build/crises/{crisis}/trend.png"
+    conda: "../envs/default.yaml"
+    script: "../src/vis/trend.py"
+
+
 rule method_comparison:
     message: "Apply different timeseries analysis methods for comparison -- {wildcards.crisis}."
     input:
@@ -153,5 +175,5 @@ rule method_comparison:
         energy_intensity = rules.energy_intensity.output[0]
     params: crisis = lambda wildcards: config["crises"][wildcards["crisis"]]
     output: "build/crises/{crisis}/methods.nc"
-    conda: "../envs/methods.yaml"
+    conda: "../envs/default.yaml"
     script: "../src/methods.py"

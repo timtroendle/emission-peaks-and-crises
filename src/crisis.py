@@ -5,6 +5,7 @@ import pycountry
 
 @dataclass
 class Crisis:
+    name: str
     pre_from_year: int
     pre_to_year: int
     from_year: int
@@ -16,6 +17,7 @@ class Crisis:
     @classmethod
     def from_config(cls, config):
         return Crisis(
+            name=config["name"],
             pre_from_year=config["pre-from-year"],
             pre_to_year=config["from-year"] - 1,
             from_year=config["from-year"],
