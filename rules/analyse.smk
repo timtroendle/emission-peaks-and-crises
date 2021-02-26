@@ -37,12 +37,26 @@ def contribution_factor_timeseries(wildcards):
     return plots
 
 
+def trend_analysis(wildcards):
+    crisis_name = wildcards["crisis"]
+    crisis = CRISES[crisis_name]
+    plots = [
+        f"build/crises/{{crisis}}/trend-emissions.png",
+        f"build/crises/{{crisis}}/trend-population.png",
+        f"build/crises/{{crisis}}/trend-gdp.png",
+        f"build/crises/{{crisis}}/trend-carbon-intensity.png",
+        f"build/crises/{{crisis}}/trend-energy-intensity.png",
+    ]
+    return plots
+
+
 rule crisis_analysis:
     message: "Analyse {wildcards.crisis}."
     input:
         "build/crises/{crisis}/overview.csv",
         contribution_factor_barplots,
-        contribution_factor_timeseries
+        contribution_factor_timeseries,
+        trend_analysis
     output: touch("build/crises/{crisis}/analysis.done")
 
 
@@ -146,7 +160,11 @@ rule trend:
     message: "Determine trends in time series for {wildcards.crisis}."
     input:
         src = "src/trend.py",
-        emissions = rules.emissions.output[0]
+        emissions = rules.emissions.output[0],
+        gdp = rules.gdp.output[0],
+        population = rules.population.output[0],
+        carbon_intensity = rules.carbon_intensity.output[0],
+        energy_intensity = rules.energy_intensity.output[0]
     params: crisis = lambda wildcards: config["crises"][wildcards["crisis"]]
     output: "build/crises/{crisis}/trend.nc"
     conda: "../envs/default.yaml"
@@ -154,12 +172,12 @@ rule trend:
 
 
 rule plot_trend:
-    message: "Plot pre- and post-crisis trends for {wildcards.crisis}."
+    message: "Plot pre- and post-crisis trends for {wildcards.variable} during {wildcards.crisis}."
     input:
         src = "src/vis/trend.py",
         trend = rules.trend.output[0]
     params: crisis_name = lambda wildcards: CRISES[wildcards["crisis"]].name
-    output: "build/crises/{crisis}/trend.png"
+    output: "build/crises/{crisis}/trend-{variable}.png"
     conda: "../envs/default.yaml"
     script: "../src/vis/trend.py"
 

@@ -1,12 +1,20 @@
 import xarray as xr
 import matplotlib.pyplot as plt
 
+VARIABLE_NAMES = {
+    "emissions": "Emissions",
+    "gdp": "GDP",
+    "population": "Population",
+    "carbon-intensity": "Carbon intensity",
+    "energy-intensity": "Energy intensity"
+}
 
-def plot_trend_connecting_dot_plot(path_to_trend_data, crisis_name, path_to_plot):
+
+def plot_trend_connecting_dot_plot(path_to_trend_data, crisis_name, variable, path_to_plot):
     df = (
         xr.open_dataset(path_to_trend_data)
         ["trend"]
-        .sel(variable="emissions")
+        .sel(variable=variable)
         .to_dataframe()
         .mul(100)
         .drop(columns=["variable"])
@@ -40,7 +48,7 @@ def plot_trend_connecting_dot_plot(path_to_trend_data, crisis_name, path_to_plot
     ax.set_yticks(country_range)
     ax.set_yticklabels(df.index)
     ax.set_title(
-        f"Emissions growth before and after {crisis_name}",
+        f"{VARIABLE_NAMES[variable]} growth before and after {crisis_name}",
         ha='left',
         x=0,
         y=1.025
@@ -53,7 +61,7 @@ def plot_trend_connecting_dot_plot(path_to_trend_data, crisis_name, path_to_plot
         y=1.01,
         transform=ax.transAxes
     )
-    ax.set_xlabel('Emissions growth (%)')
+    ax.set_xlabel(f'{VARIABLE_NAMES[variable]} growth (%)')
     ax.set_ylabel('Country')
     fig.savefig(path_to_plot)
 
@@ -62,5 +70,6 @@ if __name__ == "__main__":
     plot_trend_connecting_dot_plot(
         path_to_trend_data=snakemake.input.trend,
         crisis_name=snakemake.params.crisis_name,
+        variable=snakemake.wildcards.variable,
         path_to_plot=snakemake.output[0]
     )

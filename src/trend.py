@@ -5,26 +5,37 @@ import pwlf
 from crisis import Crisis
 
 
-def trend(path_to_emissions, crisis, path_to_output):
-    emissions = pd.read_csv(path_to_emissions, index_col=0).loc[:, crisis.country_ids]
+def trend(path_to_emissions, path_to_gdp, path_to_population, path_to_carbon_intensity,
+          path_to_energy_intensity, crisis, path_to_output):
+    all_ts = {
+        "emissions": pd.read_csv(path_to_emissions, index_col=0).loc[:, crisis.country_ids],
+        "gdp": pd.read_csv(path_to_gdp, index_col=0).loc[:, crisis.country_ids],
+        "population": pd.read_csv(path_to_population, index_col=0).loc[:, crisis.country_ids],
+        "carbon-intensity": pd.read_csv(path_to_carbon_intensity, index_col=0).loc[:, crisis.country_ids],
+        "energy-intensity": pd.read_csv(path_to_energy_intensity, index_col=0).loc[:, crisis.country_ids],
+    }
     (
         xr
         .Dataset(data_vars={
-            "trend": piecewise_linear_trend(emissions, crisis=crisis),
-            "goodness_of_fit": goodness_of_fit(emissions, crisis=crisis)
+            "trend": piecewise_linear_trend(all_ts, crisis=crisis),
+            "goodness_of_fit": goodness_of_fit(all_ts, crisis=crisis)
         })
         .to_netcdf(path_to_output)
     )
 
 
-def piecewise_linear_trend(emissions, crisis):
-    emissions = ts_piecewise_linear_trend(emissions, "emissions", crisis)
-    return emissions.to_xarray()
+def piecewise_linear_trend(all_ts, crisis):
+    return pd.concat([
+        ts_piecewise_linear_trend(data, name, crisis)
+        for name, data in all_ts.items()
+    ]).to_xarray()
 
 
-def goodness_of_fit(emissions, crisis):
-    emissions = ts_goodness_of_fit(emissions, "emissions", crisis)
-    return emissions.to_xarray()
+def goodness_of_fit(all_ts, crisis):
+    return pd.concat([
+        ts_goodness_of_fit(data, name, crisis)
+        for name, data in all_ts.items()
+    ]).to_xarray()
 
 
 def ts_goodness_of_fit(ts, variable_name, crisis):
@@ -86,6 +97,10 @@ def annual_relative_change(fit, year):
 if __name__ == "__main__":
     trend(
         path_to_emissions=snakemake.input.emissions,
+        path_to_gdp=snakemake.input.gdp,
+        path_to_population=snakemake.input.population,
+        path_to_carbon_intensity=snakemake.input.carbon_intensity,
+        path_to_energy_intensity=snakemake.input.energy_intensity,
         crisis=Crisis.from_config(snakemake.params.crisis),
         path_to_output=snakemake.output[0]
     )
