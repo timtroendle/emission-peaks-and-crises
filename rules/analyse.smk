@@ -46,6 +46,7 @@ def trend_analysis(wildcards):
         f"build/crises/{{crisis}}/trend-gdp.png",
         f"build/crises/{{crisis}}/trend-carbon-intensity.png",
         f"build/crises/{{crisis}}/trend-energy-intensity.png",
+        f"build/crises/{{crisis}}/trend-change-in-percentage-points.csv"
     ]
     return plots
 
@@ -169,6 +170,16 @@ rule trend:
     output: "build/crises/{crisis}/trend.nc"
     conda: "../envs/default.yaml"
     script: "../src/trend.py"
+
+
+rule trend_change:
+    message: "Determine change in trends from pre- to post-crisis {wildcards.crisis}."
+    input:
+        src = "src/trend_change.py",
+        trend = rules.trend.output[0]
+    output: "build/crises/{crisis}/trend-change-in-percentage-points.csv"
+    conda: "../envs/default.yaml"
+    script: "../src/trend_change.py"
 
 
 rule plot_trend:
