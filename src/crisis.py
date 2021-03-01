@@ -34,5 +34,7 @@ def country_to_country_code(country_name):
         return "WLD"
     elif country_name == "OECD":
         return "OED"
+    elif country_name == "Non-OECD":
+        return "NOE"
     else:
         return pycountry.countries.lookup(country_name).alpha_3

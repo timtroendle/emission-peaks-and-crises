@@ -84,6 +84,7 @@ countries:
     - Venezuela
     - South Africa
     - OECD
+    - Non-OECD
     - World
 
     #- USSR FIX no worldbank data available
@@ -144,6 +145,7 @@ crises:
             - United States
             - South Africa
             - OECD
+            - Non-OECD
             - World
     financial-and-euro-crisis:
         name: Global Financial & Euro-Crisis
@@ -199,4 +201,5 @@ crises:
         post-to-year: 2019
         countries:
             - OECD
+            - Non-OECD
             - World

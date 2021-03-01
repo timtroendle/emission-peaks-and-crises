@@ -28,6 +28,8 @@ def bp_country_names(country_name):
         return "Total World"
     elif country_name == "OECD":
         return "of which: OECD"
+    elif country_name == "Non-OECD":
+        return "                 Non-OECD"
     return country_name
 
 
@@ -40,6 +42,8 @@ def sane_country_names(country_name):
         return "World"
     elif country_name == "of which: OECD":
         return "OECD"
+    elif country_name == "                 Non-OECD":
+        return "Non-OECD"
     return country_name
 
 
@@ -48,6 +52,8 @@ def country_to_country_code(country_name):
         return "WLD"
     elif country_name == "OECD":
         return "OED"
+    elif country_name == "Non-OECD":
+        return "NOE"
     else:
         return pycountry.countries.lookup(country_name).alpha_3
 
