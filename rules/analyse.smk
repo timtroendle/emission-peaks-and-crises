@@ -46,7 +46,9 @@ def trend_analysis(wildcards):
         f"build/crises/{{crisis}}/trend-gdp.png",
         f"build/crises/{{crisis}}/trend-carbon-intensity.png",
         f"build/crises/{{crisis}}/trend-energy-intensity.png",
-        f"build/crises/{{crisis}}/trend-change-in-percentage-points.csv"
+        f"build/crises/{{crisis}}/decoupling-index.png",
+        f"build/crises/{{crisis}}/trend-change-in-percentage-points.csv",
+        f"build/crises/{{crisis}}/r-squared.csv"
     ]
     return plots
 
@@ -193,6 +195,17 @@ rule plot_trend:
     output: "build/crises/{crisis}/trend-{variable}.png"
     conda: "../envs/default.yaml"
     script: "../src/vis/trend.py"
+
+
+rule plot_decoupling_index:
+    message: "Plot pre- and post-crisis decoupling_index during {wildcards.crisis}."
+    input:
+        src = "src/vis/decoupling_index.py",
+        trend = rules.trend.output[0]
+    params: crisis_name = lambda wildcards: CRISES[wildcards["crisis"]].name
+    output: "build/crises/{crisis}/decoupling-index.png"
+    conda: "../envs/default.yaml"
+    script: "../src/vis/decoupling_index.py"
 
 
 rule method_comparison:
