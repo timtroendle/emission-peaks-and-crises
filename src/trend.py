@@ -40,7 +40,12 @@ def goodness_of_fit(all_ts, crisis):
 
 def ts_goodness_of_fit(ts, variable_name, crisis):
     ts = ts.loc[crisis.pre_from_year - 1:crisis.post_to_year, :]
-    t0 = [crisis.pre_from_year - 1, crisis.from_year - 1, crisis.post_from_year - 1, crisis.post_to_year]
+    t0 = [
+        crisis.pre_from_year - 1, # to consider diffs, needs to start 1 year before pre-period
+        crisis.from_year - 1, # to consider diffs, needs to start 1 year before crisis
+        crisis.to_year, # to consider diffs, needs to start 1 year before post-period
+        crisis.post_to_year
+    ]
     goodness = pd.Series(
         index=ts.columns,
         data=[
