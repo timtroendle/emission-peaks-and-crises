@@ -172,14 +172,16 @@ rule trend:
     script: "../src/trend.py"
 
 
-rule trend_change:
-    message: "Determine change in trends from pre- to post-crisis {wildcards.crisis}."
+rule results_as_csv:
+    message: "Transform results into csv format for {wildcards.crisis}."
     input:
-        src = "src/trend_change.py",
+        src = "src/csv_results.py",
         trend = rules.trend.output[0]
-    output: "build/crises/{crisis}/trend-change-in-percentage-points.csv"
+    output:
+        trend_change = "build/crises/{crisis}/trend-change-in-percentage-points.csv",
+        r_squared = "build/crises/{crisis}/r-squared.csv"
     conda: "../envs/default.yaml"
-    script: "../src/trend_change.py"
+    script: "../src/csv_results.py"
 
 
 rule plot_trend:
