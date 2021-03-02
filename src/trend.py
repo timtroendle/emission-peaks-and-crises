@@ -46,17 +46,15 @@ def ts_r_squared(ts, variable_name, crisis):
         crisis.to_year, # to consider diffs, needs to start 1 year before post-period
         crisis.post_to_year
     ]
-    ssr = pd.Series( # sum of squares of residuals
+    r_squared = pd.Series( # sum of squares of residuals
         index=ts.columns,
         data=[
             national_piecewise_linear_trend(ts.loc[:, country], t0)[3]
             for country in ts.columns
         ]
     )
-    sst = ((ts - ts.mean()) ** 2).sum() # total sum of squares
-    rsquared = 1 - ssr / sst
     return (
-        rsquared
+        r_squared
         .rename_axis(index="country")
         .to_frame()
         .assign(variable=variable_name)
@@ -87,17 +85,19 @@ def ts_piecewise_linear_trend(ts, variable_name, crisis):
     )
 
 
-def national_piecewise_linear_trend(ts, t0):
+def national_piecewise_linear_fit(ts, t0):
     fit = pwlf.PiecewiseLinFit(ts.index, ts.values)
-    goodness = fit.fit_with_breaks(t0)
-    pre_trend = annual_relative_change(fit, t0[0])
-    crisis_trend = annual_relative_change(fit, t0[1])
-    post_trend = annual_relative_change(fit, t0[2])
-    return (pre_trend, crisis_trend, post_trend, goodness)
+    fit.fit_with_breaks(t0)
+    return fit
 
 
-def annual_relative_change(fit, year):
-    return (fit.predict(year + 1)[0] - fit.predict(year)[0]) / fit.predict(year)[0]
+def national_piecewise_linear_trend(ts, t0):
+    fit = national_piecewise_linear_fit(ts, t0)
+    pre_trend, crisis_trend, post_trend = fit.calc_slopes()
+    rel_pre_trend = pre_trend / fit.predict(t0[0])[0]
+    rel_crisis_trend = crisis_trend / fit.predict(t0[1])[0]
+    rel_post_trend = post_trend / fit.predict(t0[2])[0]
+    return rel_pre_trend, rel_crisis_trend, rel_post_trend, fit.r_squared()
 
 
 if __name__ == "__main__":
