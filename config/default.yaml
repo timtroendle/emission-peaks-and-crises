@@ -7,6 +7,8 @@ worldbank:
     paths:
         population: data/population/API_SP.POP.TOTL_DS2_en_csv_v2_1217749.csv
         gdp: data/gdp-constant/API_NY.GDP.MKTP.KD_DS2_en_csv_v2_1495282.csv
+report:
+    r2_threshold: 0.5
 countries:
     - US
     - United Arab Emirates

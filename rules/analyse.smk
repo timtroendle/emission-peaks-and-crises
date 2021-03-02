@@ -191,7 +191,9 @@ rule plot_trend:
     input:
         src = "src/vis/trend.py",
         trend = rules.trend.output[0]
-    params: crisis_name = lambda wildcards: CRISES[wildcards["crisis"]].name
+    params:
+        crisis_name = lambda wildcards: CRISES[wildcards["crisis"]].name,
+        r2_threshold = config["report"]["r2_threshold"]
     output: "build/crises/{crisis}/trend-{variable}.png"
     conda: "../envs/default.yaml"
     script: "../src/vis/trend.py"
