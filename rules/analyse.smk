@@ -181,7 +181,8 @@ rule results_as_csv:
         trend = rules.trend.output[0]
     output:
         trend_change = "build/crises/{crisis}/trend-change-in-percentage-points.csv",
-        r_squared = "build/crises/{crisis}/r-squared.csv"
+        r_squared = "build/crises/{crisis}/r-squared.csv",
+        p_value = "build/crises/{crisis}/worst-p-value.csv"
     conda: "../envs/default.yaml"
     script: "../src/csv_results.py"
 
@@ -193,7 +194,8 @@ rule plot_trend:
         trend = rules.trend.output[0]
     params:
         crisis_name = lambda wildcards: CRISES[wildcards["crisis"]].name,
-        r2_threshold = config["report"]["r2_threshold"]
+        r2_threshold = config["report"]["r2_threshold"],
+        p_value_threshold = config["report"]["p_value_threshold"]
     output: "build/crises/{crisis}/trend-{variable}.png"
     conda: "../envs/default.yaml"
     script: "../src/vis/trend.py"

@@ -9,6 +9,7 @@ worldbank:
         gdp: data/gdp-constant/API_NY.GDP.MKTP.KD_DS2_en_csv_v2_1495282.csv
 report:
     r2_threshold: 0.5
+    p_value_threshold: 0.05
 countries:
     - US
     - United Arab Emirates

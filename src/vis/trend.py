@@ -8,9 +8,12 @@ VARIABLE_NAMES = {
     "carbon-intensity": "Carbon intensity",
     "energy-intensity": "Energy intensity"
 }
+ALPHA_NOT_SIGNIFICANT = 0.2
+ALPHA_SIGNIFICANT = 0.4
 
 
-def plot_trend_connecting_dot_plot(path_to_trend_data, crisis_name, variable, r2_threshold, path_to_plot):
+def plot_trend_connecting_dot_plot(path_to_trend_data, crisis_name, variable,
+                                   r2_threshold, p_value_threshold, path_to_plot):
     ds = xr.open_dataset(path_to_trend_data)
     trend = (
         ds
@@ -29,38 +32,92 @@ def plot_trend_connecting_dot_plot(path_to_trend_data, crisis_name, variable, r2
         ["r_squared"]
         .sel(variable=variable)
         .to_series()
+        .reindex_like(trend)
     )
-    country_range = range(1, len(trend.index) + 1)
+    p_value = (
+        ds
+        ["p_value"]
+        .sel(variable="emissions", period=["pre_crisis", "post_crisis"])
+        .to_dataframe()
+        .drop(columns=["variable"])
+        .unstack()
+        .loc[:, "p_value"]
+        .reindex_like(trend)
+    )
+    pre_significant = p_value["pre_crisis"] <= p_value_threshold
+    post_significant = p_value["post_crisis"] <= p_value_threshold
 
     fig = plt.figure(figsize=(8, len(trend.index) / 4))
     ax = fig.subplots()
 
-    ax.hlines(y=country_range, xmin=trend['pre_crisis'], xmax=trend['post_crisis'], color='grey', alpha=0.4)
-    ax.vlines(x=0, ymin=country_range[0], ymax=country_range[-1], color='grey', linestyle=":", alpha=0.4)
     ax.scatter(
         trend['post_crisis'].where(trend["post_crisis"] <= trend["pre_crisis"]),
-        country_range,
+        trend.index,
         color='green',
-        alpha=0.4,
+        alpha=ALPHA_NOT_SIGNIFICANT,
+        label='decrease'
+    )
+    ax.scatter(
+        trend['post_crisis'].where((trend["post_crisis"] <= trend["pre_crisis"]) & post_significant),
+        trend.index,
+        color='green',
+        alpha=ALPHA_SIGNIFICANT,
         label='decrease'
     )
     ax.scatter(
         trend['post_crisis'].where(trend["post_crisis"] > trend["pre_crisis"]),
-        country_range,
+        trend.index,
         color='red',
-        alpha=0.4,
+        alpha=ALPHA_NOT_SIGNIFICANT,
+        label="increase"
+    )
+    ax.scatter(
+        trend['post_crisis'].where((trend["post_crisis"] > trend["pre_crisis"]) & post_significant),
+        trend.index,
+        color='red',
+        alpha=ALPHA_NOT_SIGNIFICANT,
         label="increase"
     )
     ax.scatter(
         trend['post_crisis'].where(r2 < r2_threshold),
-        country_range,
+        trend.index,
+        linewidth=1,
+        color="k",
+        marker="x"
+    )
+    ax.scatter(
+        trend['pre_crisis'].where(r2 < r2_threshold),
+        trend.index,
         linewidth=1,
         color="k",
         marker="x"
     )
 
-    ax.set_yticks(country_range)
-    ax.set_yticklabels(trend.index)
+    ax.hlines(
+        y=trend.index,
+        xmin=trend['pre_crisis'],
+        xmax=trend['post_crisis'],
+        color='grey',
+        zorder=0,
+        alpha=ALPHA_NOT_SIGNIFICANT
+    )
+    ax.hlines(
+        y=trend.index.where(pre_significant).dropna(),
+        xmin=trend['pre_crisis'].where(pre_significant).dropna(),
+        xmax=trend['post_crisis'].where(pre_significant).dropna(),
+        color='grey',
+        zorder=0,
+        alpha=ALPHA_SIGNIFICANT
+    )
+    ax.vlines(
+        x=0,
+        ymin=trend.index[0],
+        ymax=trend.index[-1],
+        color='grey',
+        linestyle=":",
+        alpha=ALPHA_SIGNIFICANT
+    )
+
     ax.set_title(
         f"{VARIABLE_NAMES[variable]} growth before and after {crisis_name}",
         ha='left',
@@ -76,7 +133,7 @@ def plot_trend_connecting_dot_plot(path_to_trend_data, crisis_name, variable, r2
         transform=ax.transAxes
     )
     ax.text(
-        s=f"x: $r^2$ < {r2_threshold}",
+        s=f"x: $r^2$ < {r2_threshold}\nSaturated values: p <= {p_value_threshold}",
         transform=ax.transAxes,
         ha="right",
         x=0.975,
@@ -93,5 +150,6 @@ if __name__ == "__main__":
         crisis_name=snakemake.params.crisis_name,
         variable=snakemake.wildcards.variable,
         r2_threshold=snakemake.params.r2_threshold,
+        p_value_threshold=snakemake.params.p_value_threshold,
         path_to_plot=snakemake.output[0]
     )

@@ -15,41 +15,49 @@ def trend(path_to_emissions, path_to_gdp, path_to_population, path_to_carbon_int
         "carbon-intensity": pd.read_csv(path_to_carbon_intensity, index_col=0).loc[time_slice, crisis.country_ids],
         "energy-intensity": pd.read_csv(path_to_energy_intensity, index_col=0).loc[time_slice, crisis.country_ids],
     }
-    (
-        xr
-        .Dataset(data_vars={
-            "trend": piecewise_linear_trend(all_ts, crisis=crisis),
-            "r_squared": r_squared(all_ts, crisis=crisis)
-        })
-        .to_netcdf(path_to_output)
-    )
-
-
-def piecewise_linear_trend(all_ts, crisis):
-    return pd.concat([
-        ts_piecewise_linear_trend(data, name, crisis)
-        for name, data in all_ts.items()
-    ]).to_xarray()
-
-
-def r_squared(all_ts, crisis):
-    return pd.concat([
-        ts_r_squared(data, name, crisis)
-        for name, data in all_ts.items()
-    ]).to_xarray()
-
-
-def ts_r_squared(ts, variable_name, crisis):
     t0 = [
         crisis.pre_from_year - 1, # to consider diffs, needs to start 1 year before pre-period
         crisis.from_year - 1, # to consider diffs, needs to start 1 year before crisis
         crisis.to_year, # to consider diffs, needs to start 1 year before post-period
         crisis.post_to_year
     ]
+    (
+        xr
+        .Dataset(data_vars={
+            "trend": piecewise_linear_trend(all_ts, t0=t0),
+            "r_squared": r_squared(all_ts, t0=t0),
+            "p_value": p_value(all_ts, t0=t0)
+        })
+        .to_netcdf(path_to_output)
+    )
+
+
+def piecewise_linear_trend(all_ts, t0):
+    return pd.concat([
+        ts_piecewise_linear_trend(data, name, t0)
+        for name, data in all_ts.items()
+    ]).to_xarray()
+
+
+def r_squared(all_ts, t0):
+    return pd.concat([
+        ts_r_squared(data, name, t0)
+        for name, data in all_ts.items()
+    ]).to_xarray()
+
+
+def p_value(all_ts, t0):
+    return pd.concat([
+        ts_p_value(data, name, t0)
+        for name, data in all_ts.items()
+    ]).to_xarray()
+
+
+def ts_r_squared(ts, variable_name, t0):
     r_squared = pd.Series( # sum of squares of residuals
         index=ts.columns,
         data=[
-            national_piecewise_linear_trend(ts.loc[:, country], t0)[3]
+            national_piecewise_linear_fit(ts.loc[:, country], t0).r_squared()
             for country in ts.columns
         ]
     )
@@ -65,14 +73,40 @@ def ts_r_squared(ts, variable_name, crisis):
     )
 
 
-def ts_piecewise_linear_trend(ts, variable_name, crisis):
-    t0 = [crisis.pre_from_year - 1, crisis.from_year - 1, crisis.post_from_year - 1, crisis.post_to_year]
+def ts_p_value(ts, variable_name, t0):
     trend = pd.DataFrame(
         index=ts.columns,
         data={
-            "pre_crisis": [national_piecewise_linear_trend(ts.loc[:, country], t0)[0] for country in ts.columns],
-            "crisis": [national_piecewise_linear_trend(ts.loc[:, country], t0)[1] for country in ts.columns],
-            "post_crisis": [national_piecewise_linear_trend(ts.loc[:, country], t0)[2] for country in ts.columns],
+            "pre_pre_crisis": [national_piecewise_linear_fit(ts.loc[:, country], t0).p_values()[0]
+                               for country in ts.columns],
+            "pre_crisis": [national_piecewise_linear_fit(ts.loc[:, country], t0).p_values()[1]
+                           for country in ts.columns],
+            "crisis": [national_piecewise_linear_fit(ts.loc[:, country], t0).p_values()[2]
+                       for country in ts.columns],
+            "post_crisis": [national_piecewise_linear_fit(ts.loc[:, country], t0).p_values()[3]
+                            for country in ts.columns],
+        }
+    )
+    return (
+        trend
+        .rename_axis(index="country", columns="period")
+        .assign(variable=variable_name)
+        .reset_index()
+        .set_index(["variable", "country"])
+        .stack()
+    )
+
+
+def ts_piecewise_linear_trend(ts, variable_name, t0):
+    trend = pd.DataFrame(
+        index=ts.columns,
+        data={
+            "pre_crisis": [national_piecewise_linear_trend(ts.loc[:, country], t0)[0]
+                           for country in ts.columns],
+            "crisis": [national_piecewise_linear_trend(ts.loc[:, country], t0)[1]
+                       for country in ts.columns],
+            "post_crisis": [national_piecewise_linear_trend(ts.loc[:, country], t0)[2]
+                            for country in ts.columns],
         }
     )
     return (
@@ -97,7 +131,7 @@ def national_piecewise_linear_trend(ts, t0):
     rel_pre_trend = pre_trend / fit.predict(t0[0])[0]
     rel_crisis_trend = crisis_trend / fit.predict(t0[1])[0]
     rel_post_trend = post_trend / fit.predict(t0[2])[0]
-    return rel_pre_trend, rel_crisis_trend, rel_post_trend, fit.r_squared()
+    return rel_pre_trend, rel_crisis_trend, rel_post_trend
 
 
 if __name__ == "__main__":
