@@ -167,6 +167,97 @@ crises:
             - Netherlands
             - Portugal
             - Slovenia
+    first-oil-crisis:
+        name: First oil crisis
+        pre-from-year: 1966 # no energy intensity data available before that
+        from-year: 1973
+        to-year: 1974
+        post-to-year: 1979
+        countries:
+            - Argentina
+            - Australia
+            - Austria
+            - Belgium
+            - Brazil
+            - Chile
+            - Denmark
+            - Algeria
+            - Ecuador
+            - France
+            - United Kingdom
+            - Hong Kong
+            - Israel
+            - Japan
+            - Luxembourg
+            - Mexico
+            - Malaysia
+            - Norway
+            - Philippines
+            - Singapore
+            - Sweden
+            - Thailand
+            - Trinidad and Tobago
+            - Turkey
+            - United States
+            - South Africa
+            - Spain
+            - Finland
+            - Greece
+            - Italy
+            - Netherlands
+            - Portugal
+            - OECD
+            - Non-OECD
+            - World
+    second-oil-crisis:
+        name: Second oil crisis
+        pre-from-year: 1974
+        from-year: 1979
+        to-year: 1982
+        post-to-year: 1992
+        countries:
+            - Argentina
+            - Australia
+            - Austria
+            - Belgium
+            - Brazil
+            - Canada
+            - Switzerland
+            - Chile
+            - Germany
+            - Denmark
+            - Algeria
+            - Ecuador
+            - France
+            - United Kingdom
+            - Hong Kong
+            - Ireland
+            - Iceland
+            - Israel
+            - Japan
+            - Luxembourg
+            - Mexico
+            - Malaysia
+            - Norway
+            - New Zealand
+            - Philippines
+            - Saudi Arabia
+            - Singapore
+            - Sweden
+            - Thailand
+            - Trinidad and Tobago
+            - Turkey
+            - United States
+            - South Africa
+            - Spain
+            - Finland
+            - Greece
+            - Italy
+            - Netherlands
+            - Portugal
+            - OECD
+            - Non-OECD
+            - World
     asian-financial-crisis:
         name: Asian Financial Crisis
         pre-from-year: 1988

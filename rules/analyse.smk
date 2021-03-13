@@ -116,7 +116,9 @@ rule multiplicative_contributions:
 
 
 rule plot_contribution_bar_chart:
-    message: "Plot a bar chart visualising contribution factors for country {wildcards.country_id}."
+    message:
+        "Plot a bar chart visualising contribution factors for country {wildcards.country_id} " +
+        "during {wildcards.crisis}."
     input:
         src = "src/vis/contribution.py",
         contributions = rules.contributions.output[0],
@@ -137,7 +139,7 @@ rule plot_emission_change_points:
 
 
 rule plot_contribution_timeseries:
-    message: "Plot timeseries of contributions for country {wildcards.country_id}."
+    message: "Plot timeseries of contributions for country {wildcards.country_id} during {wildcards.crisis}."
     input:
         src = "src/vis/contribution_timeseries.py",
         emissions = rules.emissions.output[0],
