@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from src.crisis import Crisis
 
 CRISES = {
-    crisis_name: Crisis.from_config(config["crises"][crisis_name])
+    crisis_name: Crisis.from_config(config["crises"][crisis_name], config["countries"])
     for crisis_name in config["crises"]
 }
 
@@ -57,8 +57,6 @@ rule crisis_analysis:
     message: "Analyse {wildcards.crisis}."
     input:
         "build/crises/{crisis}/overview.csv",
-        contribution_factor_barplots,
-        contribution_factor_timeseries,
         trend_analysis
     output: touch("build/crises/{crisis}/analysis.done")
 
@@ -155,7 +153,9 @@ rule overview:
         src = "src/overview.py",
         emissions = rules.emissions.output[0],
         gdp = rules.gdp_per_capita.output[0]
-    params: crisis = lambda wildcards: config["crises"][wildcards["crisis"]]
+    params:
+        crisis = lambda wildcards: config["crises"][wildcards["crisis"]],
+        countries = config["countries"]
     output: "build/crises/{crisis}/overview.csv"
     conda: "../envs/default.yaml"
     script: "../src/overview.py"
@@ -170,7 +170,9 @@ rule trend:
         population = rules.population.output[0],
         carbon_intensity = rules.carbon_intensity.output[0],
         energy_intensity = rules.energy_intensity.output[0]
-    params: crisis = lambda wildcards: config["crises"][wildcards["crisis"]]
+    params:
+        crisis = lambda wildcards: config["crises"][wildcards["crisis"]],
+        countries = config["countries"]
     output: "build/crises/{crisis}/trend.nc"
     conda: "../envs/default.yaml"
     script: "../src/trend.py"
@@ -182,6 +184,7 @@ rule results_as_csv:
         src = "src/csv_results.py",
         trend = rules.trend.output[0]
     output:
+        trend = "build/crises/{crisis}/trend.csv",
         trend_change = "build/crises/{crisis}/trend-change-in-percentage-points.csv",
         r_squared = "build/crises/{crisis}/r-squared.csv",
         p_value = "build/crises/{crisis}/worst-p-value.csv"
@@ -223,7 +226,9 @@ rule method_comparison:
         population = rules.population.output[0],
         carbon_intensity = rules.carbon_intensity.output[0],
         energy_intensity = rules.energy_intensity.output[0]
-    params: crisis = lambda wildcards: config["crises"][wildcards["crisis"]]
+    params:
+        crisis = lambda wildcards: config["crises"][wildcards["crisis"]],
+        countries = config["countries"]
     output: "build/crises/{crisis}/methods.nc"
     conda: "../envs/default.yaml"
     script: "../src/methods.py"

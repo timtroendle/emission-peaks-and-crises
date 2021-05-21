@@ -74,6 +74,6 @@ if __name__ == "__main__":
     crisis_analysis(
         path_to_carbon_emissions=snakemake.input.emissions,
         path_to_gdp=snakemake.input.gdp,
-        crisis=Crisis.from_config(snakemake.params.crisis),
+        crisis=Crisis.from_config(snakemake.params.crisis, snakemake.params.countries),
         path_to_output=snakemake.output[0]
     )

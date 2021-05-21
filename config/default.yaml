@@ -11,88 +11,54 @@ report:
     r2_threshold: 0.5
     p_value_threshold: 0.05
 countries:
-    - US
-    - United Arab Emirates
-    - Argentina
-    - Australia
     - Austria
-    - Azerbaijan
+    - Australia
     - Belgium
-    - Bangladesh
-    - Bulgaria
-    - Belarus
-    - Brazil
     - Canada
-    - Switzerland
     - Chile
-    - China
     - Colombia
-    - Cyprus
     - Czech Republic
-    - Germany
     - Denmark
-    - Algeria
-    - Ecuador
-    - Egypt
-    - Spain
     - Estonia
     - Finland
     - France
-    - United Kingdom
+    - Germany
     - Greece
-    - Croatia
-    - Hong Kong
     - Hungary
-    - Indonesia
-    - India
-    - Ireland
-    - Iraq
     - Iceland
+    - Ireland
     - Israel
     - Italy
     - Japan
-    - Kazakhstan
-    - Kuwait
-    - Sri Lanka
+    #- Korea, Republic of TODO no emissions data
+    - Latvia
     - Lithuania
     - Luxembourg
-    - Latvia
-    - Morocco
     - Mexico
-    - North Macedonia
-    - Malaysia
     - Netherlands
-    - Norway
     - New Zealand
-    - Oman
-    - Pakistan
-    - Peru
-    - Philippines
+    - Norway
     - Poland
     - Portugal
-    - Qatar
-    - Romania
-    - Russian Federation
-    - Saudi Arabia
-    - Singapore
     - Slovakia
     - Slovenia
+    - Spain
     - Sweden
-    - Thailand
-    - Turkmenistan
-    - Trinidad and Tobago
+    - Switzerland
     - Turkey
-    - Ukraine
-    - Uzbekistan
-    - Venezuela
+    - United Kingdom
+    - US
+    - Argentina
+    - Brazil
+    - China
+    - Indonesia
+    - India
+    - Russian Federation
     - South Africa
+    - Saudi Arabia
     - OECD
     - Non-OECD
     - World
-
-    #- USSR FIX no worldbank data available
-    #- Korea, Republic of TODO no emissions data
-    #- Uruguay TODO no emissions data
 crises:
     financial-crisis:
         name: Global Financial Crisis
@@ -100,200 +66,27 @@ crises:
         from-year: 2008
         to-year: 2009
         post-to-year: 2019
-        countries:
-            - United Arab Emirates
-            - Argentina
-            - Australia
-            - Austria
-            - Belgium
-            - Bulgaria
-            - Brazil
-            - Canada
-            - Switzerland
-            - Chile
-            - Germany
-            - Denmark
-            - Algeria
-            - Ecuador
-            - Estonia
-            - France
-            - United Kingdom
-            - Hong Kong
-            - Hungary
-            - Ireland
-            - Iceland
-            - Israel
-            - Japan
-            - Kazakhstan
-            - Kuwait
-            - Lithuania
-            - Luxembourg
-            - Latvia
-            - Mexico
-            - North Macedonia
-            - Malaysia
-            - Norway
-            - New Zealand
-            - Philippines
-            - Romania
-            - Russian Federation
-            - Saudi Arabia
-            - Singapore
-            - Slovakia
-            - Sweden
-            - Thailand
-            - Trinidad and Tobago
-            - Turkey
-            - Ukraine
-            - United States
-            - South Africa
-            - OECD
-            - Non-OECD
-            - World
     financial-and-euro-crisis:
         name: Global Financial & Euro-Crisis
         pre-from-year: 1998
         from-year: 2008
         to-year: 2013
         post-to-year: 2019
-        countries:
-            - Cyprus
-            - Czechia
-            - Spain
-            - Finland
-            - Greece
-            - Croatia
-            - Italy
-            - Netherlands
-            - Portugal
-            - Slovenia
-    first-oil-crisis:
-        name: First oil crisis
-        pre-from-year: 1966 # no energy intensity data available before that
-        from-year: 1973
-        to-year: 1974
-        post-to-year: 1979
-        countries:
-            - Argentina
-            - Australia
-            - Austria
-            - Belgium
-            - Brazil
-            - Chile
-            - Denmark
-            - Algeria
-            - Ecuador
-            - France
-            - United Kingdom
-            - Hong Kong
-            - Israel
-            - Japan
-            - Luxembourg
-            - Mexico
-            - Malaysia
-            - Norway
-            - Philippines
-            - Singapore
-            - Sweden
-            - Thailand
-            - Trinidad and Tobago
-            - Turkey
-            - United States
-            - South Africa
-            - Spain
-            - Finland
-            - Greece
-            - Italy
-            - Netherlands
-            - Portugal
-            - OECD
-            - Non-OECD
-            - World
-    second-oil-crisis:
-        name: Second oil crisis
-        pre-from-year: 1974
-        from-year: 1979
-        to-year: 1982
-        post-to-year: 1992
-        countries:
-            - Argentina
-            - Australia
-            - Austria
-            - Belgium
-            - Brazil
-            - Canada
-            - Switzerland
-            - Chile
-            - Germany
-            - Denmark
-            - Algeria
-            - Ecuador
-            - France
-            - United Kingdom
-            - Hong Kong
-            - Ireland
-            - Iceland
-            - Israel
-            - Japan
-            - Luxembourg
-            - Mexico
-            - Malaysia
-            - Norway
-            - New Zealand
-            - Philippines
-            - Saudi Arabia
-            - Singapore
-            - Sweden
-            - Thailand
-            - Trinidad and Tobago
-            - Turkey
-            - United States
-            - South Africa
-            - Spain
-            - Finland
-            - Greece
-            - Italy
-            - Netherlands
-            - Portugal
-            - OECD
-            - Non-OECD
-            - World
     asian-financial-crisis:
         name: Asian Financial Crisis
         pre-from-year: 1988
         from-year: 1998
         to-year: 1998
-        post-to-year: 2009
-        countries:
-            - Indonesia
-            #- Korea, Republic of TODO no emissions data
-            - Thailand
-            - Hong Kong
-            - Malaysia
-    argentinean-great-depression:
-        name: Argentinean Great Depression
-        pre-from-year: 1989
-        from-year: 1999
-        to-year: 2002
-        post-to-year: 2013
-        countries:
-            - Argentina
-            #- Uruguay TODO no emissions data
-    tequila-crisis:
-        name: Tequila Crisis
-        pre-from-year: 1985
-        from-year: 1995
-        to-year: 1995
-        post-to-year: 2006
-        countries:
-            - Mexico
-    all-crises:
-        name: All Crisis
-        pre-from-year: 1966
-        from-year: 1967
-        to-year: 2018
-        post-to-year: 2019
-        countries:
-            - OECD
-            - Non-OECD
-            - World
+        post-to-year: 2007
+    soviet-union-collapse:
+        name: Soviet Union’s collapse and Nordic countries’ Financial crisis
+        pre-from-year: 1980
+        from-year: 1990
+        to-year: 1992
+        post-to-year: 2003
+    oil-crisis:
+        name: Oil crisis
+        pre-from-year: 1966 # no energy intensity data available before that
+        from-year: 1974
+        to-year: 1975
+        post-to-year: 1985

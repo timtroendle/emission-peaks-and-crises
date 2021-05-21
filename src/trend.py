@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import xarray as xr
 import pwlf
@@ -57,7 +58,7 @@ def ts_r_squared(ts, variable_name, t0):
     r_squared = pd.Series( # sum of squares of residuals
         index=ts.columns,
         data=[
-            national_piecewise_linear_fit(ts.loc[:, country], t0).r_squared()
+            national_piecewise_linear_r_squared(ts.loc[:, country], t0)
             for country in ts.columns
         ]
     )
@@ -77,13 +78,13 @@ def ts_p_value(ts, variable_name, t0):
     trend = pd.DataFrame(
         index=ts.columns,
         data={
-            "pre_pre_crisis": [national_piecewise_linear_fit(ts.loc[:, country], t0).p_values()[0]
+            "pre_pre_crisis": [national_piecewise_linear_p_values(ts.loc[:, country], t0)[0]
                                for country in ts.columns],
-            "pre_crisis": [national_piecewise_linear_fit(ts.loc[:, country], t0).p_values()[1]
+            "pre_crisis": [national_piecewise_linear_p_values(ts.loc[:, country], t0)[1]
                            for country in ts.columns],
-            "crisis": [national_piecewise_linear_fit(ts.loc[:, country], t0).p_values()[2]
+            "crisis": [national_piecewise_linear_p_values(ts.loc[:, country], t0)[2]
                        for country in ts.columns],
-            "post_crisis": [national_piecewise_linear_fit(ts.loc[:, country], t0).p_values()[3]
+            "post_crisis": [national_piecewise_linear_p_values(ts.loc[:, country], t0)[3]
                             for country in ts.columns],
         }
     )
@@ -126,12 +127,28 @@ def national_piecewise_linear_fit(ts, t0):
 
 
 def national_piecewise_linear_trend(ts, t0):
+    if ts.isna().any():
+        return np.nan, np.nan, np.nan
     fit = national_piecewise_linear_fit(ts, t0)
     pre_trend, crisis_trend, post_trend = fit.calc_slopes()
     rel_pre_trend = pre_trend / fit.predict(t0[0])[0]
     rel_crisis_trend = crisis_trend / fit.predict(t0[1])[0]
     rel_post_trend = post_trend / fit.predict(t0[2])[0]
     return rel_pre_trend, rel_crisis_trend, rel_post_trend
+
+
+def national_piecewise_linear_r_squared(ts, t0):
+    if ts.isna().any():
+        return np.nan
+    fit = national_piecewise_linear_fit(ts, t0)
+    return fit.r_squared()
+
+
+def national_piecewise_linear_p_values(ts, t0):
+    if ts.isna().any():
+        return np.nan, np.nan, np.nan, np.nan
+    fit = national_piecewise_linear_fit(ts, t0)
+    return fit.p_values()
 
 
 if __name__ == "__main__":
@@ -141,6 +158,6 @@ if __name__ == "__main__":
         path_to_population=snakemake.input.population,
         path_to_carbon_intensity=snakemake.input.carbon_intensity,
         path_to_energy_intensity=snakemake.input.energy_intensity,
-        crisis=Crisis.from_config(snakemake.params.crisis),
+        crisis=Crisis.from_config(snakemake.params.crisis, snakemake.params.countries),
         path_to_output=snakemake.output[0]
     )

@@ -123,6 +123,6 @@ if __name__ == "__main__":
         path_to_population=snakemake.input.population,
         path_to_carbon_intensity=snakemake.input.carbon_intensity,
         path_to_energy_intensity=snakemake.input.energy_intensity,
-        crisis=Crisis.from_config(snakemake.params.crisis),
+        crisis=Crisis.from_config(snakemake.params.crisis, snakemake.params.countries),
         path_to_output=snakemake.output[0]
     )

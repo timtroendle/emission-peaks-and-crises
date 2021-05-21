@@ -8,10 +8,8 @@ include: "./rules/analyse.smk"
 rule all:
     message: "Run entire analysis and compile report."
     input:
-        "build/decoupling-index.csv",
         "build/contributions.nc",
-        expand("build/crises/{crisis}/analysis.done", crisis=config["crises"]),
-        expand("build/change-points/emissions-{country}.png", country=COUNTRY_CODES)
+        expand("build/crises/{crisis}/analysis.done", crisis=config["crises"])
 
 
 def pandoc_options(wildcards):
