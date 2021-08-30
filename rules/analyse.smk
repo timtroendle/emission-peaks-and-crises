@@ -232,3 +232,13 @@ rule method_comparison:
     output: "build/crises/{crisis}/methods.nc"
     conda: "../envs/default.yaml"
     script: "../src/methods.py"
+
+
+rule plot_peaker:
+    message: "Plot timeline of peaks."
+    input:
+        src = "src/vis/peaker.py",
+        emissions = rules.emissions.output[0]
+    output: "build/peaker.png",
+    conda: "../envs/default.yaml"
+    script: "../src/vis/peaker.py"
