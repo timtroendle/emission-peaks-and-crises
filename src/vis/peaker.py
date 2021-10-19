@@ -8,12 +8,19 @@ BLUE = '#4F6DB8'
 RED = '#A01914'
 
 
-def plot_peak_timeline(path_to_emissions, path_to_plot):
+def plot_peak_timeline(path_to_emissions, path_to_plot, path_to_peak_csv):
     cc = coco.CountryConverter()
     emissions = pd.read_csv(path_to_emissions, index_col=0)
     emissions.drop(
         columns=list(filter(lambda x: x not in cc.data.ISO3.values, emissions.columns)),
         inplace=True
+    )
+    (
+        emissions
+        .idxmax()
+        .rename("peak_year")
+        .sort_values()
+        .to_csv(path_to_peak_csv, index=True, header=True)
     )
     rolling_emissions = emissions.rolling(window=5, center=False).mean().dropna(how='all')
     n_peaked_all, n_not_peaked_all = cumsum_peaked(rolling_emissions)
@@ -54,5 +61,6 @@ def cumsum_peaked(emissions):
 if __name__ == "__main__":
     plot_peak_timeline(
         path_to_emissions=snakemake.input.emissions,
-        path_to_plot=snakemake.output[0]
+        path_to_plot=snakemake.output.plot,
+        path_to_peak_csv=snakemake.output.csv
     )

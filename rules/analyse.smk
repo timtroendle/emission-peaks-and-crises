@@ -239,6 +239,8 @@ rule plot_peaker:
     input:
         src = "src/vis/peaker.py",
         emissions = rules.emissions.output[0]
-    output: "build/peaker.png",
+    output:
+        plot = "build/peaker.png",
+        csv = "build/peaker.csv"
     conda: "../envs/default.yaml"
     script: "../src/vis/peaker.py"
