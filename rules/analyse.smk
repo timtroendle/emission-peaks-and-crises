@@ -239,6 +239,9 @@ rule plot_peaker:
     input:
         src = "src/vis/peaker.py",
         emissions = rules.emissions.output[0]
+    params:
+        crises_years = [1974, 1979, 1990, 2008],
+        crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis"]
     output:
         plot = "build/peaker.png",
         csv = "build/peaker.csv"
