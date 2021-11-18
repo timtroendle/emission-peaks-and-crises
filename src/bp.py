@@ -24,6 +24,8 @@ def bp_country_names(country_name):
         return "Trinidad & Tobago" # BP uses this unusual way of writing the country name
     elif country_name == "Hong Kong":
         return "China Hong Kong SAR"
+    elif country_name == "Korea, Republic of":
+        return "South Korea"
     elif country_name == "World":
         return "Total World"
     elif country_name == "OECD":
@@ -38,6 +40,8 @@ def sane_country_names(country_name):
         return "Trinidad and Tobago"
     elif country_name == "China Hong Kong SAR":
         return "Hong Kong"
+    elif country_name == "South Korea":
+        return "Korea, Republic of"
     elif country_name == "Total World":
         return "World"
     elif country_name == "of which: OECD":
