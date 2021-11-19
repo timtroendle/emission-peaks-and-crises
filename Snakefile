@@ -8,8 +8,7 @@ include: "./rules/analyse.smk"
 rule all:
     message: "Run entire analysis and compile report."
     input:
-        "build/contributions.nc",
-        expand("build/crises/{crisis}/analysis.done", crisis=config["crises"]),
+        "build/multiplicative-contributions.nc",
         "build/peaker.png",
         "build/contribution-timeseries/panelA.png",
         "build/contribution-timeseries/panelB.png",

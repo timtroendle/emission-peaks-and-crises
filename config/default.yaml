@@ -7,9 +7,6 @@ worldbank:
     paths:
         population: data/population/API_SP.POP.TOTL_DS2_en_csv_v2_1217749.csv
         gdp: data/gdp-constant/API_NY.GDP.MKTP.KD_DS2_en_csv_v2_1495282.csv
-report:
-    r2_threshold: 0.5
-    p_value_threshold: 0.05
 countries:
     - Austria
     - Australia
@@ -66,18 +63,6 @@ crises:
         from-year: 2008
         to-year: 2009
         post-to-year: 2019
-    financial-and-euro-crisis:
-        name: Global Financial & Euro-Crisis
-        pre-from-year: 1998
-        from-year: 2008
-        to-year: 2013
-        post-to-year: 2019
-    asian-financial-crisis:
-        name: Asian Financial Crisis
-        pre-from-year: 1988
-        from-year: 1998
-        to-year: 1998
-        post-to-year: 2007
     soviet-union-collapse:
         name: Soviet Union’s collapse and Nordic countries’ Financial crisis
         pre-from-year: 1980
