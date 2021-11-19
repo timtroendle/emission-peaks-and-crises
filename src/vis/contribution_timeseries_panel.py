@@ -31,21 +31,23 @@ NICE_FACTOR_NAMES = {
 
 
 def timeseries(path_to_contributions, path_to_emissions, country_ids, from_year, to_year,
-               reference_year, crises_years, path_to_output):
+               path_to_peak_years, crises_years, path_to_output):
     nrows = math.ceil(len(country_ids) / 2)
 
+    reference_years = pd.read_csv(path_to_peak_years, index_col=0)["peak_year"]
     ds = (
         read_data(path_to_contributions, path_to_emissions)
         .sel(country_id=country_ids, year=range(from_year, to_year + 1))
     )
-    ds['emissions'] = ds.emissions / ds.emissions.sel(year=reference_year)
+    ds['emissions'] = ds.emissions
 
     fig = plt.figure(figsize=(8, nrows * 2))
     axes = fig.subplots(nrows, 2, sharex=True, sharey=True, squeeze=False)
     for ax, country_id in zip(axes.flatten(), country_ids):
+        emissions = ds.emissions.sel(country_id=country_id)
         ax.plot(
             ds.year,
-            ds.emissions.sel(country_id=country_id),
+            emissions / emissions.sel(year=reference_years[country_id]),
             label="$\mathrm{CO_2}$ emissions",
             linewidth=2.4
         )
@@ -53,7 +55,7 @@ def timeseries(path_to_contributions, path_to_emissions, country_ids, from_year,
             series = ds.contributions.sel(factor=factor, country_id=country_id).to_series()
             ax.plot(
                 ds.year,
-                series.cumprod() / series.cumprod().loc[reference_year],
+                series.cumprod() / series.cumprod().loc[reference_years[country_id]],
                 label=NICE_FACTOR_NAMES[factor],
                 linestyle="--"
             )
@@ -74,7 +76,7 @@ def timeseries(path_to_contributions, path_to_emissions, country_ids, from_year,
     axes[0, 0].legend(framealpha=1.0, ncol=2)
     for i, ax in enumerate(axes.flatten()):
         if i % 2 == 0:
-            ax.set_ylabel(f"Change since {reference_year}")
+            ax.set_ylabel(f"Change since peak")
     if len(country_ids) < len(axes.flatten()):
         # Last axis is empty.
         axes[-1, 1].set_axis_off()
@@ -101,10 +103,10 @@ if __name__ == "__main__":
     timeseries(
         path_to_contributions=snakemake.input.contributions,
         path_to_emissions=snakemake.input.emissions,
+        path_to_peak_years=snakemake.input.peak_years,
         country_ids=snakemake.params.country_ids,
         from_year=int(snakemake.params.from_year),
         to_year=int(snakemake.params.to_year),
-        reference_year=int(snakemake.params.reference_year),
         crises_years=snakemake.params.crises_years,
         path_to_output=snakemake.output[0]
     )

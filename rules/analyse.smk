@@ -147,51 +147,66 @@ rule plot_contribution_timeseries:
     script: "../src/vis/contribution_timeseries.py"
 
 
-rule plot_contribution_timeserie_panelA:
+rule plot_peaker:
+    message: "Plot timeline of peaks."
+    input:
+        src = "src/vis/peaker.py",
+        emissions = rules.emissions.output[0]
+    params:
+        crises_years = [1974, 1979, 1990, 2008],
+        crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis"]
+    output:
+        plot = "build/peaker.png",
+        csv = "build/peaker.csv"
+    conda: "../envs/default.yaml"
+    script: "../src/vis/peaker.py"
+
+
+rule plot_contribution_timeseries_panelA:
     message: "Plot timeseries of contributions, panel A."
     input:
         src = "src/vis/contribution_timeseries.py",
         emissions = rules.emissions.output[0],
-        contributions = rules.multiplicative_contributions.output.nc
+        contributions = rules.multiplicative_contributions.output.nc,
+        peak_years = rules.plot_peaker.output.csv
     params:
         country_ids = ["BEL", "DEU", "GBR", "LUX", "IRL", "ITA", "JPN", "NLD", "PRT", "USA"],
         from_year = 1970,
         to_year = 2019,
-        reference_year = 1990,
         crises_years = [1974, 1979, 1990, 2008]
     output: "build/contribution-timeseries/panelA.png"
     conda: "../envs/default.yaml"
     script: "../src/vis/contribution_timeseries_panel.py"
 
 
-rule plot_contribution_timeserie_panelB:
+rule plot_contribution_timeseries_panelB:
     message: "Plot timeseries of contributions, panel B."
     input:
         src = "src/vis/contribution_timeseries.py",
         emissions = rules.emissions.output[0],
-        contributions = rules.multiplicative_contributions.output.nc
+        contributions = rules.multiplicative_contributions.output.nc,
+        peak_years = rules.plot_peaker.output.csv
     params:
         country_ids = ["FRA", "SWE", "ESP", "ARG", "BRA"],
         from_year = 1970,
         to_year = 2019,
-        reference_year = 1990,
         crises_years = [1974, 1979, 1990, 2008]
     output: "build/contribution-timeseries/panelB.png"
     conda: "../envs/default.yaml"
     script: "../src/vis/contribution_timeseries_panel.py"
 
 
-rule plot_contribution_timeserie_panelC:
+rule plot_contribution_timeseries_panelC:
     message: "Plot timeseries of contributions, panel C."
     input:
         src = "src/vis/contribution_timeseries.py",
         emissions = rules.emissions.output[0],
-        contributions = rules.multiplicative_contributions.output.nc
+        contributions = rules.multiplicative_contributions.output.nc,
+        peak_years = rules.plot_peaker.output.csv
     params:
         country_ids = ["GRC", "SVN"],
         from_year = 1970,
         to_year = 2019,
-        reference_year = 1990,
         crises_years = [1974, 1979, 1990, 2008]
     output: "build/contribution-timeseries/panelC.png"
     conda: "../envs/default.yaml"
@@ -282,18 +297,3 @@ rule method_comparison:
     output: "build/crises/{crisis}/methods.nc"
     conda: "../envs/default.yaml"
     script: "../src/methods.py"
-
-
-rule plot_peaker:
-    message: "Plot timeline of peaks."
-    input:
-        src = "src/vis/peaker.py",
-        emissions = rules.emissions.output[0]
-    params:
-        crises_years = [1974, 1979, 1990, 2008],
-        crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis"]
-    output:
-        plot = "build/peaker.png",
-        csv = "build/peaker.csv"
-    conda: "../envs/default.yaml"
-    script: "../src/vis/peaker.py"
