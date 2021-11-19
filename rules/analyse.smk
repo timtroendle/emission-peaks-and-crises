@@ -147,6 +147,56 @@ rule plot_contribution_timeseries:
     script: "../src/vis/contribution_timeseries.py"
 
 
+rule plot_contribution_timeserie_panelA:
+    message: "Plot timeseries of contributions, panel A."
+    input:
+        src = "src/vis/contribution_timeseries.py",
+        emissions = rules.emissions.output[0],
+        contributions = rules.multiplicative_contributions.output.nc
+    params:
+        country_ids = ["BEL", "DEU", "GBR", "LUX", "IRL", "ITA", "JPN", "NLD", "PRT", "USA"],
+        from_year = 1970,
+        to_year = 2019,
+        reference_year = 1990,
+        crises_years = [1974, 1979, 1990, 2008]
+    output: "build/contribution-timeseries/panelA.png"
+    conda: "../envs/default.yaml"
+    script: "../src/vis/contribution_timeseries_panel.py"
+
+
+rule plot_contribution_timeserie_panelB:
+    message: "Plot timeseries of contributions, panel B."
+    input:
+        src = "src/vis/contribution_timeseries.py",
+        emissions = rules.emissions.output[0],
+        contributions = rules.multiplicative_contributions.output.nc
+    params:
+        country_ids = ["FRA", "SWE", "ESP", "ARG", "BRA"],
+        from_year = 1970,
+        to_year = 2019,
+        reference_year = 1990,
+        crises_years = [1974, 1979, 1990, 2008]
+    output: "build/contribution-timeseries/panelB.png"
+    conda: "../envs/default.yaml"
+    script: "../src/vis/contribution_timeseries_panel.py"
+
+
+rule plot_contribution_timeserie_panelC:
+    message: "Plot timeseries of contributions, panel C."
+    input:
+        src = "src/vis/contribution_timeseries.py",
+        emissions = rules.emissions.output[0],
+        contributions = rules.multiplicative_contributions.output.nc
+    params:
+        country_ids = ["GRC", "SVN"],
+        from_year = 1970,
+        to_year = 2019,
+        reference_year = 1990,
+        crises_years = [1974, 1979, 1990, 2008]
+    output: "build/contribution-timeseries/panelC.png"
+    conda: "../envs/default.yaml"
+    script: "../src/vis/contribution_timeseries_panel.py"
+
 rule overview:
     message: "Create overview table for {wildcards.crisis}."
     input:

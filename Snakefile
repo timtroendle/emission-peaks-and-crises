@@ -9,7 +9,11 @@ rule all:
     message: "Run entire analysis and compile report."
     input:
         "build/contributions.nc",
-        expand("build/crises/{crisis}/analysis.done", crisis=config["crises"])
+        expand("build/crises/{crisis}/analysis.done", crisis=config["crises"]),
+        "build/peaker.png",
+        "build/contribution-timeseries/panelA.png",
+        "build/contribution-timeseries/panelB.png",
+        "build/contribution-timeseries/panelC.png"
 
 
 def pandoc_options(wildcards):
