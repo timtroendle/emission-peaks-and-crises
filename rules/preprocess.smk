@@ -91,6 +91,17 @@ rule carbon_intensity:
     script: "../src/preprocess/divide.py"
 
 
+rule energy_and_carbon_intensity:
+    message: "Divide {input.df1} / {input.df2}."
+    input:
+        src = "src/preprocess/divide.py",
+        df1 = rules.emissions.output[0],
+        df2 = rules.gdp.output[0]
+    output: "build/energy-and-carbon-intensity-in-mt-per-usd.csv"
+    conda: "../envs/default.yaml"
+    script: "../src/preprocess/divide.py"
+
+
 rule gdp_per_capita:
     message: "Divide {input.df1} / {input.df2}"
     input:

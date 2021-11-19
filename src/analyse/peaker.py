@@ -39,7 +39,7 @@ def plot_peak_timeline(path_to_emissions, path_to_plot, crises, path_to_peak_csv
     )
     for name, year in crises.items():
         ax.annotate(
-            s=name,
+            text=name,
             xy=(year + 0.5, ax.get_ylim()[1]),
             va="top"
         )

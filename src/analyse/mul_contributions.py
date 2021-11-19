@@ -1,13 +1,14 @@
 import pandas as pd
 
 
-def contributions(path_to_carbon_intensity, path_to_energy_intensity,
+def contributions(path_to_carbon_intensity, path_to_energy_intensity, path_to_energy_and_carbon_intensity,
                   path_to_population, path_to_gdp, path_to_output_nc, path_to_output_csv):
     contributions = (
         pd
         .concat([
             contribution(path_to_carbon_intensity, "carbon-intensity"),
             contribution(path_to_energy_intensity, "energy-intensity"),
+            contribution(path_to_energy_and_carbon_intensity, "energy-and-carbon-intensity"),
             contribution(path_to_population, "population"),
             contribution(path_to_gdp, "gdp"),
         ])
@@ -40,6 +41,7 @@ if __name__ == "__main__":
     contributions(
         path_to_carbon_intensity=snakemake.input.carbon_intensity,
         path_to_energy_intensity=snakemake.input.energy_intensity,
+        path_to_energy_and_carbon_intensity=snakemake.input.energy_and_carbon_intensity,
         path_to_population=snakemake.input.population,
         path_to_gdp=snakemake.input.gdp,
         path_to_output_nc=snakemake.output.nc,

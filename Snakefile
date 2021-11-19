@@ -10,6 +10,7 @@ rule all:
     input:
         "build/multiplicative-contributions.nc",
         "build/peaker.png",
+        "build/prepost-contributions.png",
         "build/contribution-timeseries/panelA.png",
         "build/contribution-timeseries/panelB.png",
         "build/contribution-timeseries/panelC.png"

@@ -1,12 +1,5 @@
 from dataclasses import dataclass
 
-from src.analyse.crisis import Crisis
-
-CRISES = {
-    crisis_name: Crisis.from_config(config["crises"][crisis_name], config["countries"])
-    for crisis_name in config["crises"]
-}
-
 
 rule decoupling_index:
     message: "Calculate the decoupling index."
@@ -26,12 +19,40 @@ rule multiplicative_contributions:
         population = rules.population.output[0],
         energy_intensity = rules.energy_intensity.output[0],
         gdp = rules.gdp_per_capita.output[0],
-        carbon_intensity = rules.carbon_intensity.output[0]
+        carbon_intensity = rules.carbon_intensity.output[0],
+        energy_and_carbon_intensity = rules.energy_and_carbon_intensity.output[0]
     output:
         nc = "build/multiplicative-contributions.nc",
         csv = "build/multiplicative-contributions.csv"
     conda: "../envs/default.yaml"
     script: "../src/analyse/mul_contributions.py"
+
+
+rule prepost_multiplicative_contributions:
+    message: "Calculate average contributions pre and post all crises."
+    input:
+        src = "src/analyse/prepost_contributions.py",
+        contributions = rules.multiplicative_contributions.output[0]
+    params:
+        crises = config["crises"]
+    output: "build/prepost-contributions.nc"
+    conda: "../envs/default.yaml"
+    script: "../src/analyse/prepost_contributions.py"
+
+
+rule plot_prepost_contributions:
+    message: "Plot contributions pre and post crises."
+    input:
+        src = "src/analyse/prepost_panel.py",
+        contributions = rules.prepost_multiplicative_contributions.output[0]
+    params:
+        countries_in_crises = {
+            "oil-crisis":["BEL", "FRA", "DEU", "LUX", "GBR"],
+            "financial-crisis": ["ESP", "GRC", "IRL", "ITA", "JPN", "NLD", "PRT", "SVN", "USA"]
+        }
+    output: "build/prepost-contributions.png"
+    conda: "../envs/default.yaml"
+    script: "../src/analyse/prepost_panel.py"
 
 
 rule plot_peaker:
