@@ -61,7 +61,8 @@ rule plot_peaker:
         src = "src/analyse/peaker.py",
         emissions = rules.emissions.output[0]
     params:
-        crises_years = [1974, 1979, 1990, 2008],
+        crises_slugs = ["first-oil-crisis", "second-oil-crisis", "soviet-union-collapse", "financial-crisis"],
+        all_crises = config["crises"],
         crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis"]
     output:
         plot = "build/peaker.png",
