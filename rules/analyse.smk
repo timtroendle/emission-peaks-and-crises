@@ -63,7 +63,12 @@ rule plot_peaker:
     params:
         crises_slugs = ["first-oil-crisis", "second-oil-crisis", "soviet-union-collapse", "financial-crisis"],
         all_crises = config["crises"],
-        crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis"]
+        crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis"],
+        high_income = ["AUS", "AUT", "BEL", "CAN", "CHL", "CZE", "DEU", "DNK", "ESP", "EST", "FIN",
+                       "FRA", "GBR", "GRC", "HUN", "IRL", "ISL", "ISR", "ITA", "JPN", "KOR", "LTU",
+                       "LUX", "LVA", "NLD", "NOR", "NZL", "POL", "PRT", "SAU", "SVK", "SVN", "SWE",
+                       "CHE", "USA"],
+        middle_income = ["ARG", "BRA", "CHN", "COL", "IDN", "IND", "MEX", "RUS", "TUR", "ZAF"]
     output:
         plot = "build/peaker.png",
         csv = "build/peaker.csv"

@@ -1,7 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import country_converter as coco
 
 from crisis import Crisis
 
@@ -11,13 +10,9 @@ RED = '#A01914'
 GREY = "#7F7F7F"
 
 
-def plot_peak_timeline(path_to_emissions, path_to_plot, crises, path_to_peak_csv):
-    cc = coco.CountryConverter()
+def plot_peak_timeline(path_to_emissions, path_to_plot, crises, high_income, middle_income, path_to_peak_csv):
     emissions = pd.read_csv(path_to_emissions, index_col=0)
-    emissions.drop(
-        columns=list(filter(lambda x: x not in cc.data.ISO3.values, emissions.columns)),
-        inplace=True
-    )
+    emissions = emissions[high_income + middle_income]
     peak_years = (
         emissions
         .idxmax()
@@ -27,6 +22,7 @@ def plot_peak_timeline(path_to_emissions, path_to_plot, crises, path_to_peak_csv
     peak_years.to_csv(path_to_peak_csv, index=True, header=True)
     rolling_emissions = emissions.rolling(window=5, center=False).mean().dropna(how='all')
     n_peaked_all, n_not_peaked_all = cumsum_peaked(rolling_emissions)
+    n_peaked_high, n_not_peaked_high = cumsum_peaked(rolling_emissions[high_income])
 
     fig = plt.figure(figsize=(8, 3.5))
     ax = fig.add_subplot()
@@ -40,8 +36,10 @@ def plot_peak_timeline(path_to_emissions, path_to_plot, crises, path_to_peak_csv
             alpha=0.2,
             color=GREY
         )
-    ax.bar(n_peaked_all.index, n_peaked_all.values, label="Countries with emission peaks", color=BLUE, alpha=1)
-    ax.bar(n_not_peaked_all.index, n_not_peaked_all.values, label="Countries without emission peaks", color=RED, alpha=1)
+    ax.bar(n_peaked_all.index, n_peaked_all.values, label="All with emission peaks", color=BLUE, alpha=0.4)
+    ax.bar(n_peaked_high.index, n_peaked_high.values, label="High-income with emission peak", color=BLUE)
+    ax.bar(n_not_peaked_all.index, n_not_peaked_all.values, label="All without emission peak", color=RED, alpha=0.4)
+    ax.bar(n_not_peaked_high.index, n_not_peaked_high.values, label="High-income without emission peak", color=RED)
     ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1] + 10)
     for crisis in crises:
         ax.annotate(
@@ -88,5 +86,7 @@ if __name__ == "__main__":
         path_to_emissions=snakemake.input.emissions,
         path_to_plot=snakemake.output.plot,
         crises=crises,
+        high_income=snakemake.params.high_income,
+        middle_income=snakemake.params.middle_income,
         path_to_peak_csv=snakemake.output.csv
     )
