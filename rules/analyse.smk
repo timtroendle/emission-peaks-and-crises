@@ -47,7 +47,7 @@ rule plot_prepost_contributions:
         contributions = rules.prepost_multiplicative_contributions.output[0]
     params:
         countries_in_crises = {
-            "oil-crisis":["BEL", "FRA", "DEU", "LUX", "GBR"],
+            "first-oil-crisis":["BEL", "FRA", "DEU", "LUX", "GBR"],
             "financial-crisis": ["ESP", "GRC", "IRL", "ITA", "JPN", "NLD", "PRT", "SVN", "USA"]
         }
     output: "build/prepost-contributions.png"

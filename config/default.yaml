@@ -61,14 +61,35 @@ crises:
         name: Global Financial Crisis
         pre-from-year: 1998
         first-year: 2008
+        final-year: 2009
         post-to-year: 2018
     soviet-union-collapse:
         name: Soviet Union’s collapse and Nordic countries’ Financial crisis
         pre-from-year: 1980
         first-year: 1990
+        final-year: 1991
         post-to-year: 2000
-    oil-crisis:
-        name: Oil crisis
+    first-oil-crisis:
+        name: First oil crisis
         pre-from-year: 1966 # no energy intensity data available before that
-        first-year: 1974
-        post-to-year: 1984
+        first-year: 1973
+        final-year: 1975
+        post-to-year: 1979 # to not overlap with the Second oil crisis
+    second-oil-crisis:
+        name: Second oil crisis
+        pre-from-year: 1975
+        first-year: 1979
+        final-year: 1980
+        post-to-year: 1985
+    brazil:
+        name: National crisis of Brazil
+        pre-from-year: 2010
+        first-year: 2015
+        final-year: 2015
+        post-to-year: 2020
+    argentina:
+        name: National crisis of Argentina
+        pre-from-year: 2011
+        first-year: 2016
+        final-year: 2016
+        post-to-year: 2020
