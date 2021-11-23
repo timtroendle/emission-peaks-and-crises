@@ -23,7 +23,7 @@ rule energy:
     message: "Preprocess BP energy consumption data."
     input:
         src = "src/preprocess/bp.py",
-        bp = config["bp"]["path"]
+        bp = rules.download_bp_stats.output[0]
     params:
         sheet_name = config["bp"]["sheetnames"]["energy"],
         countries = config["countries"]
@@ -36,7 +36,7 @@ rule emissions:
     message: "Preprocess BP emissions data."
     input:
         src = "src/preprocess/bp.py",
-        bp = config["bp"]["path"]
+        bp = rules.download_bp_stats.output[0]
     params:
         sheet_name = config["bp"]["sheetnames"]["emissions"],
         countries = config["countries"]
@@ -49,7 +49,7 @@ rule population:
     message: "Preprocess Worldbank population data."
     input:
         src = "src/preprocess/worldbank.py",
-        path = config["worldbank"]["paths"]["population"]
+        path = rules.unzip_population.output[0]
     params:
         country_codes = COUNTRY_CODES
     output: "build/population.csv"
@@ -61,7 +61,7 @@ rule gdp:
     message: "Preprocess Worldbank GDP data."
     input:
         src = "src/preprocess/worldbank.py",
-        path = config["worldbank"]["paths"]["gdp"]
+        path = rules.unzip_gdp.output[0]
     params:
         country_codes = COUNTRY_CODES
     output: "build/gdp-in-usd.csv"

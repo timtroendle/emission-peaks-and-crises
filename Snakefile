@@ -1,6 +1,7 @@
 PANDOC = "pandoc --filter pantable --filter pandoc-fignos --filter pandoc-tablenos --filter pandoc-citeproc"
 
 configfile: "./config/default.yaml"
+include: "./rules/download.smk"
 include: "./rules/preprocess.smk"
 include: "./rules/analyse.smk"
 

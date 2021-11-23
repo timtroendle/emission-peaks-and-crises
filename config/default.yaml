@@ -1,12 +1,12 @@
 bp:
-    path: data/bp-stats-review-2020-all-data.xlsx
+    url: https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2021-all-data.xlsx
     sheetnames:
         energy: Primary Energy Consumption
         emissions: Carbon Dioxide Emissions
 worldbank:
-    paths:
-        population: data/population/API_SP.POP.TOTL_DS2_en_csv_v2_1217749.csv
-        gdp: data/gdp-constant/API_NY.GDP.MKTP.KD_DS2_en_csv_v2_1495282.csv
+    urls:
+        population: https://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=csv
+        gdp: https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.KD?downloadformat=csv
 countries:
     - Austria
     - Australia
