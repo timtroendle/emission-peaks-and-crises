@@ -81,13 +81,22 @@ rule plot_contribution_timeseries_panelA:
     input:
         src = "src/analyse/contribution_timeseries_panel.py",
         emissions = rules.emissions.output[0],
-        contributions = rules.multiplicative_contributions.output.nc,
-        peak_years = rules.plot_peaker.output.csv
+        contributions = rules.multiplicative_contributions.output.nc
     params:
-        country_ids = ["BEL", "DEU", "GBR", "LUX", "IRL", "ITA", "JPN", "NLD", "PRT", "USA"],
-        from_year = 1970,
-        to_year = 2019,
-        crises_years = [1974, 1979, 1990, 2008]
+        country_ids_to_crises = {
+            "BEL": "first-oil-crisis",
+            "DEU": "first-oil-crisis",
+            "GBR": "first-oil-crisis",
+            "LUX": "first-oil-crisis",
+            "IRL": "financial-crisis",
+            "ITA": "financial-crisis",
+            "JPN": "financial-crisis",
+            "NLD": "financial-crisis",
+            "PRT": "financial-crisis",
+            "USA": "financial-crisis"
+        },
+        years = 20,
+        all_crises = config["crises"]
     output: "build/contribution-timeseries/panelA.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/contribution_timeseries_panel.py"
@@ -99,12 +108,16 @@ rule plot_contribution_timeseries_panelB:
         src = "src/analyse/contribution_timeseries_panel.py",
         emissions = rules.emissions.output[0],
         contributions = rules.multiplicative_contributions.output.nc,
-        peak_years = rules.plot_peaker.output.csv
     params:
-        country_ids = ["FRA", "SWE", "ESP", "ARG", "BRA"],
-        from_year = 1970,
-        to_year = 2019,
-        crises_years = [1974, 1979, 1990, 2008]
+        country_ids_to_crises = {
+            "FRA": "first-oil-crisis",
+            "SWE": "second-oil-crisis",
+            "ESP": "financial-crisis",
+            "ARG": "argentinian-crisis",
+            "BRA": "brazilian-crisis"
+        },
+        years = 20,
+        all_crises = config["crises"]
     output: "build/contribution-timeseries/panelB.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/contribution_timeseries_panel.py"
@@ -116,12 +129,13 @@ rule plot_contribution_timeseries_panelC:
         src = "src/analyse/contribution_timeseries_panel.py",
         emissions = rules.emissions.output[0],
         contributions = rules.multiplicative_contributions.output.nc,
-        peak_years = rules.plot_peaker.output.csv
     params:
-        country_ids = ["GRC", "SVN"],
-        from_year = 1970,
-        to_year = 2019,
-        crises_years = [1974, 1979, 1990, 2008]
+        country_ids_to_crises = {
+            "GRC": "financial-crisis",
+            "SVN": "financial-crisis",
+        },
+        years = 20,
+        all_crises = config["crises"]
     output: "build/contribution-timeseries/panelC.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/contribution_timeseries_panel.py"

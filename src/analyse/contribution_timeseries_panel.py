@@ -3,9 +3,11 @@ import math
 import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
 import seaborn as sns
 import pycountry
 
+from crisis import Crisis
 
 COLOR_PALETTE = [ # Nature colors
     "#E64B35",
@@ -21,69 +23,43 @@ COLOR_PALETTE = [ # Nature colors
     "#00A087",
 ]
 sns.set_palette(COLOR_PALETTE)
+GREY = "#7F7F7F"
 
 NICE_FACTOR_NAMES = {
+    "gdp": "GDP",
     "carbon-intensity": "Carbon intensity",
     "energy-intensity": "Energy intensity",
-    "gdp": "GDP",
     "population": "Population"
 }
 
 
-def timeseries(path_to_contributions, path_to_emissions, country_ids, from_year, to_year,
-               path_to_peak_years, crises_years, path_to_output):
+def timeseries(path_to_contributions, path_to_emissions, country_ids_to_crises, years,
+               all_crises, path_to_output):
+    country_ids = list(country_ids_to_crises.keys())
     nrows = math.ceil(len(country_ids) / 2)
 
-    reference_years = pd.read_csv(path_to_peak_years, index_col=0)["peak_year"]
     ds = (
         read_data(path_to_contributions, path_to_emissions)
-        .sel(country_id=country_ids, year=range(from_year, to_year + 1))
+        .sel(country_id=country_ids)
     )
-    ds['emissions'] = ds.emissions
 
     fig = plt.figure(figsize=(8, nrows * 2))
-    axes = fig.subplots(nrows, 2, sharex=True, sharey=True, squeeze=False)
+    axes = fig.subplots(nrows, 2, sharex=False, sharey=True, squeeze=False)
     for ax, country_id in zip(axes.flatten(), country_ids):
-        emissions = ds.emissions.sel(country_id=country_id)
-        ax.plot(
-            ds.year,
-            emissions / emissions.sel(year=reference_years[country_id]),
-            label="$\mathrm{CO_2}$ emissions",
-            linewidth=2.4
-        )
-        for factor in ["gdp", "carbon-intensity", "energy-intensity", "population"]:
-            series = ds.contributions.sel(factor=factor, country_id=country_id).to_series()
-            ax.plot(
-                ds.year,
-                series.cumprod() / series.cumprod().loc[reference_years[country_id]],
-                label=NICE_FACTOR_NAMES[factor],
-                linestyle="--"
-            )
-        ax.set_title(pycountry.countries.lookup(country_id).name)
-
-    y_min = min(ax.get_ylim()[0] for ax in axes.flatten())
-    y_max = min(ax.get_ylim()[1] for ax in axes.flatten())
-    for ax, _ in zip(axes.flatten(), country_ids):
-        y_min
-        ax.vlines(
-            x=crises_years,
-            ymin=y_min,
-            ymax=y_max,
-            linestyles='--',
-            linewidths=0.5
-        )
+        crisis = all_crises[country_ids_to_crises[country_id]]
+        plot_timeseries(ds, country_id, crisis, years, ax)
 
     axes[0, 0].legend(framealpha=1.0, ncol=2)
     for i, ax in enumerate(axes.flatten()):
         if i % 2 == 0:
-            ax.set_ylabel(f"Change since peak")
+            ax.set_ylabel("Change since crisis")
     if len(country_ids) < len(axes.flatten()):
         # Last axis is empty.
         axes[-1, 1].set_axis_off()
 
     fig.tight_layout()
     fig.subplots_adjust(wspace=0.1)
-    sns.despine(fig)
+    sns.despine(fig, right=False)
     fig.savefig(path_to_output)
 
 
@@ -99,14 +75,48 @@ def read_data(path_to_contributions, path_to_emissions):
     return ds
 
 
+def plot_timeseries(ds, country_id, crisis, years, ax):
+    ds_crisis = ds.sel(year=range(crisis.pre_from_year, crisis.post_to_year + 1))
+    reference_year = crisis.from_year
+    emissions = ds_crisis.emissions.sel(country_id=country_id)
+    ax.plot(
+        ds_crisis.year,
+        emissions / emissions.sel(year=reference_year),
+        label="$\mathrm{CO_2}$ emissions",
+        linewidth=2.4
+    )
+    for factor in NICE_FACTOR_NAMES.keys():
+        series = ds_crisis.contributions.sel(factor=factor, country_id=country_id).to_series()
+        ax.plot(
+            ds_crisis.year,
+            series.cumprod() / series.cumprod().loc[reference_year],
+            label=NICE_FACTOR_NAMES[factor],
+            linestyle="--"
+        )
+    ax.axvspan(
+        xmin=crisis.from_year,
+        xmax=crisis.to_year + 1,
+        ymin=0,
+        ymax=1,
+        linewidth=0.0,
+        alpha=0.2,
+        color=GREY,
+        label="Crisis"
+    )
+    ax.set_title(pycountry.countries.lookup(country_id).name)
+    ax.set_xlim(crisis.from_year - years / 2, crisis.from_year + years / 2)
+    ax.get_xaxis().set_major_locator(MultipleLocator(10))
+    ax.get_xaxis().set_minor_locator(MultipleLocator(1))
+    ax.get_yaxis().set_tick_params(top=True, direction='in')
+
+
 if __name__ == "__main__":
     timeseries(
         path_to_contributions=snakemake.input.contributions,
         path_to_emissions=snakemake.input.emissions,
-        path_to_peak_years=snakemake.input.peak_years,
-        country_ids=snakemake.params.country_ids,
-        from_year=int(snakemake.params.from_year),
-        to_year=int(snakemake.params.to_year),
-        crises_years=snakemake.params.crises_years,
+        country_ids_to_crises=snakemake.params.country_ids_to_crises,
+        years=int(snakemake.params.years),
+        all_crises={crisis_slug: Crisis.from_config(crisis_slug, snakemake.params.all_crises[crisis_slug])
+                    for crisis_slug in snakemake.params.all_crises},
         path_to_output=snakemake.output[0]
     )

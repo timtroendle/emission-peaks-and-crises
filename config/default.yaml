@@ -81,13 +81,13 @@ crises:
         first-year: 1979
         final-year: 1980
         post-to-year: 1985
-    brazil:
+    brazilian-crisis:
         name: National crisis of Brazil
         pre-from-year: 2010
         first-year: 2015
         final-year: 2015
         post-to-year: 2020
-    argentina:
+    argentinian-crisis:
         name: National crisis of Argentina
         pre-from-year: 2011
         first-year: 2016
