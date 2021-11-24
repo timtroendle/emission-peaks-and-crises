@@ -47,8 +47,11 @@ rule plot_prepost_contributions:
         contributions = rules.prepost_multiplicative_contributions.output[0]
     params:
         countries_in_crises = {
-            "first-oil-crisis":["BEL", "FRA", "DEU", "LUX", "GBR"],
-            "financial-crisis": ["ESP", "GRC", "IRL", "ITA", "JPN", "NLD", "PRT", "SVN", "USA"]
+            "first-oil-crisis": ["BEL", "FRA", "DEU", "LUX", "GBR"],
+            "financial-crisis": ["ESP", "GRC", "IRL", "ITA", "JPN", "NLD", "PRT", "SVN", "USA"],
+            "second-oil-crisis": ["SWE"],
+            "brazilian-crisis": ["BRA"],
+            "argentinian-crisis": ["ARG"]
         }
     output: "build/prepost-contributions.png"
     conda: "../envs/default.yaml"
