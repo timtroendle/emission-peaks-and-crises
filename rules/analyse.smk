@@ -35,7 +35,9 @@ rule prepost_multiplicative_contributions:
         contributions = rules.multiplicative_contributions.output[0]
     params:
         crises = config["crises"]
-    output: "build/prepost-contributions.nc"
+    output:
+        nc = "build/prepost-contributions.nc",
+        csv = "build/prepost-contributions.csv"
     conda: "../envs/default.yaml"
     script: "../src/analyse/prepost_contributions.py"
 

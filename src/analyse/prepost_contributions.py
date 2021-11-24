@@ -3,17 +3,18 @@ import xarray as xr
 from crisis import Crisis
 
 
-def crises_pre_post_contribution(crises, path_to_multiplicative_contributions, path_to_output):
+def crises_pre_post_contribution(crises, path_to_multiplicative_contributions, paths_to_output):
     ds = xr.open_dataset(path_to_multiplicative_contributions)
 
-    (
+    prepost = (
         xr
         .concat(
             [derive_prepost_contribution_factors(ds, crisis) for crisis in crises],
             dim='crisis'
         )
-        .to_netcdf(path_to_output)
     )
+    prepost.to_netcdf(paths_to_output.nc)
+    prepost["contributions"].to_series().to_csv(paths_to_output.csv, header=True, index=True)
 
 
 def derive_prepost_contribution_factors(ds, crisis):
@@ -33,7 +34,8 @@ def derive_prepost_contribution_factors(ds, crisis):
 
 if __name__ == "__main__":
     crises_pre_post_contribution(
-        crises=[Crisis.from_config(crisis_slug, snakemake.params.crises[crisis_slug]) for crisis_slug in snakemake.params.crises],
+        crises=[Crisis.from_config(crisis_slug, snakemake.params.crises[crisis_slug])
+                for crisis_slug in snakemake.params.crises],
         path_to_multiplicative_contributions=snakemake.input.contributions,
-        path_to_output=snakemake.output[0]
+        paths_to_output=snakemake.output
     )
