@@ -5,7 +5,7 @@ rule decoupling_index:
     message: "Calculate the decoupling index."
     input:
         src = "src/analyse/decoupling.py",
-        emissions = rules.emissions.output[0],
+        emissions = "build/emissions-in-mt-bp.csv",
         gdp = rules.gdp.output[0]
     output: "build/decoupling-index.csv"
     conda: "../envs/default.yaml"
@@ -64,7 +64,7 @@ rule plot_peaker:
     message: "Plot timeline of peaks."
     input:
         src = "src/analyse/peaker.py",
-        emissions = rules.emissions.output[0]
+        emissions = "build/emissions-in-mt-{source}.csv"
     params:
         crises_slugs = ["first-oil-crisis", "second-oil-crisis", "soviet-union-collapse", "financial-crisis"],
         all_crises = config["crises"],
@@ -74,9 +74,11 @@ rule plot_peaker:
                        "LUX", "LVA", "NLD", "NOR", "NZL", "POL", "PRT", "SAU", "SVK", "SVN", "SWE",
                        "CHE", "USA"],
         middle_income = ["ARG", "BRA", "CHN", "COL", "IDN", "IND", "MEX", "RUS", "TUR", "ZAF"]
+    wildcard_constraints:
+        source = "((bp)|(iea))"
     output:
-        plot = "build/peaker.png",
-        csv = "build/peaker.csv"
+        plot = "build/peaker-{source}.png",
+        csv = "build/peaker-{source}.csv"
     conda: "../envs/default.yaml"
     script: "../src/analyse/peaker.py"
 
@@ -85,7 +87,7 @@ rule plot_contribution_timeseries_panelA:
     message: "Plot timeseries of contributions, panel A."
     input:
         src = "src/analyse/contribution_timeseries_panel.py",
-        emissions = rules.emissions.output[0],
+        emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc
     params:
         country_ids_to_crises = {
@@ -111,7 +113,7 @@ rule plot_contribution_timeseries_panelB:
     message: "Plot timeseries of contributions, panel B."
     input:
         src = "src/analyse/contribution_timeseries_panel.py",
-        emissions = rules.emissions.output[0],
+        emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc,
     params:
         country_ids_to_crises = {
@@ -132,7 +134,7 @@ rule plot_contribution_timeseries_panelC:
     message: "Plot timeseries of contributions, panel C."
     input:
         src = "src/analyse/contribution_timeseries_panel.py",
-        emissions = rules.emissions.output[0],
+        emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc,
     params:
         country_ids_to_crises = {

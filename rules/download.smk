@@ -2,7 +2,7 @@
 
 rule download_gdp:
     message: "Download GDP data."
-    params: url = config["worldbank"]["urls"]["gdp"]
+    params: url = config["data-sources"]["worldbank"]["urls"]["gdp"]
     output: protected("data/automatic/raw-gdp.zip")
     conda: "../envs/shell.yaml"
     shell: "curl -sLo {output} '{params.url}'"
@@ -21,7 +21,7 @@ rule unzip_gdp:
 
 rule download_population:
     message: "Download population data."
-    params: url = config["worldbank"]["urls"]["population"]
+    params: url = config["data-sources"]["worldbank"]["urls"]["population"]
     output: protected("data/automatic/raw-population.zip")
     conda: "../envs/shell.yaml"
     shell: "curl -sLo {output} '{params.url}'"
@@ -40,7 +40,7 @@ rule unzip_population:
 
 rule download_bp_stats:
     message: "Download BP statistical review of world energy."
-    params: url = config["bp"]["url"]
+    params: url = config["data-sources"]["bp"]["url"]
     output: protected("data/automatic/bp-stats-review-all-data.xlsx")
     conda: "../envs/shell.yaml"
     shell: "curl -sLo {output} '{params.url}'"

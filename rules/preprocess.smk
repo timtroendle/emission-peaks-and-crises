@@ -25,24 +25,37 @@ rule energy:
         src = "src/preprocess/bp.py",
         bp = rules.download_bp_stats.output[0]
     params:
-        sheet_name = config["bp"]["sheetnames"]["energy"],
+        sheet_name = config["data-sources"]["bp"]["sheetnames"]["energy"],
         countries = config["countries"]
     output: "build/energy-in-ej.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/bp.py"
 
 
-rule emissions:
+rule emissions_bp:
     message: "Preprocess BP emissions data."
     input:
         src = "src/preprocess/bp.py",
         bp = rules.download_bp_stats.output[0]
     params:
-        sheet_name = config["bp"]["sheetnames"]["emissions"],
+        sheet_name = config["data-sources"]["bp"]["sheetnames"]["emissions"],
         countries = config["countries"]
-    output: "build/emissions-in-mt.csv"
+    output: "build/emissions-in-mt-bp.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/bp.py"
+
+
+rule emissions_iea:
+    message: "Preprocess IEA emissions data."
+    input:
+        src = "src/preprocess/iea.py",
+        iea = config["data-sources"]["iea"]["path"]
+    params:
+        sheet_name = "GHG FC",
+        countries = config["countries"]
+    output: "build/emissions-in-mt-iea.csv"
+    conda: "../envs/default.yaml"
+    script: "../src/preprocess/iea.py"
 
 
 rule population:
@@ -84,7 +97,7 @@ rule carbon_intensity:
     message: "Divide {input.df1} / {input.df2}"
     input:
         src = "src/preprocess/divide.py",
-        df1 = rules.emissions.output[0],
+        df1 = "build/emissions-in-mt-bp.csv",
         df2 = rules.energy.output[0]
     output: "build/carbon-intensity-in-mt-per-ej.csv"
     conda: "../envs/default.yaml"
@@ -95,7 +108,7 @@ rule energy_and_carbon_intensity:
     message: "Divide {input.df1} / {input.df2}."
     input:
         src = "src/preprocess/divide.py",
-        df1 = rules.emissions.output[0],
+        df1 = "build/emissions-in-mt-bp.csv",
         df2 = rules.gdp.output[0]
     output: "build/energy-and-carbon-intensity-in-mt-per-usd.csv"
     conda: "../envs/default.yaml"
