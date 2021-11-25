@@ -42,20 +42,71 @@ rule prepost_multiplicative_contributions:
     script: "../src/analyse/prepost_contributions.py"
 
 
-rule plot_prepost_contributions:
-    message: "Plot contributions pre and post crises."
+rule plot_prepost_contributions_peak_and_decline:
+    message: "Plot contributions pre and post crises in peak-and-decline countries."
     input:
         src = "src/analyse/prepost_panel.py",
         contributions = rules.prepost_multiplicative_contributions.output[0]
     params:
-        countries_in_crises = {
-            "first-oil-crisis": ["BEL", "FRA", "DEU", "LUX", "GBR"],
-            "financial-crisis": ["ESP", "GRC", "IRL", "ITA", "JPN", "NLD", "PRT", "SVN", "USA"],
-            "second-oil-crisis": ["SWE"],
-            "brazilian-crisis": ["BRA"],
-            "argentinian-crisis": ["ARG"]
-        }
-    output: "build/prepost-contributions.png"
+        country_crisis_tuples = [
+                ("BEL", "first-oil-crisis"),
+                ("FRA", "first-oil-crisis"),
+                ("DEU", "first-oil-crisis"),
+                ("LUX", "first-oil-crisis"),
+                ("GBR", "first-oil-crisis"),
+                ("SWE", "second-oil-crisis"),
+                ("ESP", "financial-crisis"),
+                ("GRC", "financial-crisis"),
+                ("IRL", "financial-crisis"),
+                ("ITA", "financial-crisis"),
+                ("JPN", "financial-crisis"),
+                ("NLD", "financial-crisis"),
+                ("PRT", "financial-crisis"),
+                ("SVN", "financial-crisis"),
+                ("USA", "financial-crisis"),
+                ("BRA", "brazilian-crisis"),
+                ("ARG", "argentinian-crisis"),
+        ],
+        all_crises = config["crises"],
+    output: "build/prepost-contributions-peak-and-decline.png"
+    conda: "../envs/default.yaml"
+    script: "../src/analyse/prepost_panel.py"
+
+
+rule plot_prepost_contributions_no_peak_and_decline:
+    message: "Plot contributions pre and post crises in no peak-and-decline countries."
+    input:
+        src = "src/analyse/prepost_panel.py",
+        contributions = rules.prepost_multiplicative_contributions.output[0]
+    params:
+        country_crisis_tuples = [
+                ("AUS", "first-oil-crisis"),
+                ("CHL", "first-oil-crisis"),
+                ("COL", "first-oil-crisis"),
+                #("ISR", "first-oil-crisis"), we don't have all data
+                ("MEX", "first-oil-crisis"),
+                ("TUR", "first-oil-crisis"),
+                ("CHN", "first-oil-crisis"),
+                ("IDN", "first-oil-crisis"),
+                ("IND", "first-oil-crisis"),
+                ("ZAF", "first-oil-crisis"),
+                ("AUS", "financial-crisis"),
+                ("CAN", "financial-crisis"),
+                ("CHL", "financial-crisis"),
+                ("COL", "financial-crisis"),
+                ("ISR", "financial-crisis"),
+                ("MEX", "financial-crisis"),
+                ("NZL", "financial-crisis"),
+                ("TUR", "financial-crisis"),
+                ("CHN", "financial-crisis"),
+                ("IDN", "financial-crisis"),
+                ("IND", "financial-crisis"),
+                ("ZAF", "financial-crisis"),
+                ("SAU", "financial-crisis"),
+                ("ISL", "financial-crisis"),
+        ],
+        all_crises = config["crises"],
+    output: "build/prepost-contributions-no-peak-and-decline.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/prepost_panel.py"
 

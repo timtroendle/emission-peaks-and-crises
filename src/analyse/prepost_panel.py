@@ -3,8 +3,9 @@ import seaborn as sns
 import pycountry
 import xarray as xr
 
+from crisis import Crisis
 
-CRISIS = "oil-crisis"
+
 INCREASE_COLOR = "#E64B35"
 DECREASE_COLOR = "#4DBBD5"
 BAR_WIDTH = 0.8
@@ -16,38 +17,27 @@ FACTORS = {
     "energy-intensity": "Energy intensity",
     "energy-and-carbon-intensity": "Technological change"
 }
-# TODO mark the crises
 
 
-def plot_prepost_panel(path_to_prepost_contributions, countries_in_crises, path_to_plot):
+def plot_prepost_panel(path_to_prepost_contributions, country_crisis_tuples, path_to_plot):
     da = read_contribution_factors(path_to_prepost_contributions)
 
-    n_rows = sum([len(countries) for countries in countries_in_crises.values()])
-    fig = plt.figure(figsize=(8, n_rows * 0.8))
-    country_crisis_tuples = [
-        (country, crisis)
-        for crisis in countries_in_crises.keys()
-        for country in countries_in_crises[crisis]
-    ]
+    n_rows = len(country_crisis_tuples)
+    fig = plt.figure(figsize=(8, n_rows * 0.5))
     axes = fig.subplots(n_rows, 4, sharex=True, sharey=True)
 
     for col_id, factor in enumerate(FACTORS.keys()):
         for ax, (country, crisis) in zip(axes[:, col_id], country_crisis_tuples):
-            data = da.sel(factor=factor, country_id=country, crisis=crisis)
+            data = da.sel(factor=factor, country_id=country, crisis=crisis.slug)
             plot_contribution_factor_as_arrows(ax, data.sel(period="pre").item(), data.sel(period="post").item())
 
-    for ax, (country_id, _) in zip(axes[:, 0], country_crisis_tuples):
+    for ax, (country_id, crisis) in zip(axes[:, 0], country_crisis_tuples):
         ax.set_ylabel(
-            pycountry.countries.lookup(country_id).name,
+            pycountry.countries.lookup(country_id).name + "\n" + f"({crisis.pre_from_year}–{crisis.post_to_year})",
             rotation='horizontal',
             ha='right',
             va='center'
         )
-    for ax in axes.flatten():
-        ax.get_yaxis().set_ticks([])
-        ax.get_xaxis().set_ticks([0, 1])
-        ax.tick_params(bottom=False, labelbottom=False)
-        ax.set_ylim(top=7)
 
     for ax, factor in zip(axes[0, :], FACTORS.values()):
         ax.set_title(factor)
@@ -56,8 +46,8 @@ def plot_prepost_panel(path_to_prepost_contributions, countries_in_crises, path_
         ax.get_xaxis().set_ticklabels(["pre-crisis", "post-crisis"])
 
     sns.despine(fig, left=True, right=True, bottom=True, top=True)
-    fig.subplots_adjust(wspace=0.1)
     fig.tight_layout()
+    fig.subplots_adjust(wspace=0.1)
     fig.savefig(path_to_plot)
 
 
@@ -96,25 +86,35 @@ def plot_contribution_factor_as_arrows(ax, pre, post):
         [0, 1],
         [pre, post],
         marker='o',
-        color=color
+        color=color,
+        linewidth=1.75
     )
     ax.hlines(
         y=0,
-        xmin=0 - BAR_WIDTH / 2 * 1.5,
-        xmax=1 + BAR_WIDTH / 2 * 1.5,
+        xmin=0 - BAR_WIDTH / 2 * 0.5,
+        xmax=1 + BAR_WIDTH / 2 * 1.75,
         color=ZERO_LINE_COLOR,
-        linewidth=0.5
+        linewidth=0.25
     )
     ax.annotate(
         text="$\mathrm{\Delta}$: " + f"{post - pre:.1f}%",
-        xy=(0.5, 5),
-        ha='center'
+        xy=(1 + BAR_WIDTH / 2 * 1.75, 0.2),
+        ha='right',
+        va='bottom'
     )
+    ax.get_yaxis().set_ticks([0])
+    ax.get_xaxis().set_ticks([0, 1])
+    ax.tick_params(bottom=False, left=False, labelbottom=False, labelleft=True)
+    for tick in ax.get_yaxis().get_major_ticks():
+        tick.set_pad(-8)
 
 
 if __name__ == "__main__":
+    all_crises = {crisis_slug: Crisis.from_config(crisis_slug, snakemake.params.all_crises[crisis_slug])
+                  for crisis_slug in snakemake.params.all_crises}
     plot_prepost_panel(
         path_to_prepost_contributions=snakemake.input.contributions,
-        countries_in_crises=snakemake.params.countries_in_crises,
+        country_crisis_tuples=[(country_id, all_crises[crisis_slug])
+                               for (country_id, crisis_slug) in snakemake.params.country_crisis_tuples],
         path_to_plot=snakemake.output[0]
     )

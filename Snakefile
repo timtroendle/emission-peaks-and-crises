@@ -12,7 +12,8 @@ rule all:
         "build/multiplicative-contributions.nc",
         "build/peaker-bp.png",
         "build/peaker-iea.png",
-        "build/prepost-contributions.png",
+        "build/prepost-contributions-peak-and-decline.png",
+        "build/prepost-contributions-no-peak-and-decline.png",
         "build/contribution-timeseries/panelA.png",
         "build/contribution-timeseries/panelB.png",
         "build/contribution-timeseries/panelC.png"
