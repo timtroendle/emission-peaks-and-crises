@@ -13,7 +13,7 @@ GREY = "#7F7F7F"
 def plot_peak_timeline(path_to_emissions, path_to_plot, crises, high_income, middle_income, path_to_peak_csv):
     emissions = pd.read_csv(path_to_emissions, index_col=0)
     emissions = emissions[high_income + middle_income]
-    rolling_emissions = emissions.rolling(window=5, center=False).mean().dropna(how='all')
+    rolling_emissions = emissions.rolling(window=5, center=True).mean().dropna(how='all')
     peak_years = (
         rolling_emissions
         .idxmax()
