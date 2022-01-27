@@ -16,7 +16,8 @@ rule all:
         "build/prepost-contributions-no-peak-and-decline.png",
         "build/contribution-timeseries/panelA.png",
         "build/contribution-timeseries/panelB.png",
-        "build/contribution-timeseries/panelC.png"
+        "build/contribution-timeseries/panelC.png",
+        "build/logs/test-report.html"
 
 
 def pandoc_options(wildcards):
@@ -63,7 +64,14 @@ rule clean: # removes all generated results
 
 
 rule test:
-    conda: "envs/test.yaml"
-    output: "build/test-report.html"
-    shell:
-        "py.test --html={output} --self-contained-html"
+    message: "Run tests"
+    input:
+        test_dir = "tests",
+        tests = map(str, Path("tests").glob("**/test_*.py")),
+        emissions = "build/emissions-in-mt-bp.csv",
+        contribution_factors = rules.multiplicative_contributions.output.nc
+    params:
+        countries = COUNTRY_CODES
+    output: "build/logs/test-report.html"
+    conda: "./envs/test.yaml"
+    script: "./tests/test_runner.py"
