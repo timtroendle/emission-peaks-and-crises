@@ -1,3 +1,5 @@
+from itertools import chain
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pycountry
@@ -19,19 +21,23 @@ FACTORS = {
 }
 
 
-def plot_prepost_panel(path_to_prepost_contributions, country_crisis_tuples, path_to_plot):
+def plot_prepost_panel(path_to_prepost_contributions, crises_countries, path_to_plot):
+    country_ids = list(chain(*[crises_countries[crisis] for crisis in crises_countries.keys()]))
+    crises = {country: crisis for crisis, countries in crises_countries.items() for country in countries}
+
     da = read_contribution_factors(path_to_prepost_contributions)
 
-    n_rows = len(country_crisis_tuples)
+    n_rows = len(country_ids)
     fig = plt.figure(figsize=(8, n_rows * 0.5))
     axes = fig.subplots(n_rows, 4, sharex=True, sharey=True)
 
     for col_id, factor in enumerate(FACTORS.keys()):
-        for ax, (country, crisis) in zip(axes[:, col_id], country_crisis_tuples):
-            data = da.sel(factor=factor, country_id=country, crisis=crisis.slug)
+        for ax, country_id in zip(axes[:, col_id], country_ids):
+            data = da.sel(factor=factor, country_id=country_id, crisis=crises[country_id].slug)
             plot_contribution_factor_as_arrows(ax, data.sel(period="pre").item(), data.sel(period="post").item())
 
-    for ax, (country_id, crisis) in zip(axes[:, 0], country_crisis_tuples):
+    for ax, country_id in zip(axes[:, 0], country_ids):
+        crisis = crises[country_id]
         ax.set_ylabel(
             pycountry.countries.lookup(country_id).name + "\n" + f"({crisis.pre_from_year}–{crisis.post_to_year})",
             rotation='horizontal',
@@ -114,7 +120,7 @@ if __name__ == "__main__":
                   for crisis_slug in snakemake.params.all_crises}
     plot_prepost_panel(
         path_to_prepost_contributions=snakemake.input.contributions,
-        country_crisis_tuples=[(country_id, all_crises[crisis_slug])
-                               for (country_id, crisis_slug) in snakemake.params.country_crisis_tuples],
+        crises_countries={all_crises[crisis_slug]: countries
+                          for crisis_slug, countries in snakemake.params.crises_countries.items()},
         path_to_plot=snakemake.output[0]
     )

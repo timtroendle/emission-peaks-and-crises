@@ -58,26 +58,7 @@ rule plot_prepost_contributions_peak_and_decline:
         src = "src/analyse/prepost_panel.py",
         contributions = rules.prepost_multiplicative_contributions.output[0]
     params:
-        country_crisis_tuples = [
-                ("BEL", "first-oil-crisis"),
-                ("GBR", "first-oil-crisis"),
-                ("LUX", "first-oil-crisis"),
-                ("SWE", "second-oil-crisis"),
-                ("DEU", "second-oil-crisis"),
-                ("FRA", "second-oil-crisis"),
-                ("PRT", "financial-crisis"),
-                ("FIN", "financial-crisis"),
-                ("AUT", "financial-crisis"),
-                ("NOR", "financial-crisis"),
-                ("USA", "financial-crisis"),
-                ("ITA", "financial-crisis"),
-                ("NLD", "financial-crisis"),
-                ("JPN", "financial-crisis"),
-                ("IRL", "financial-crisis"),
-                ("ESP", "financial-crisis"),
-                ("SVN", "financial-crisis"),
-                ("GRC", "financial-crisis"),
-        ],
+        crises_countries = config["highlights"]["peak-and-decline"],
         all_crises = config["crises"],
     output: "build/prepost-contributions-peak-and-decline.png"
     conda: "../envs/default.yaml"
@@ -90,25 +71,7 @@ rule plot_prepost_contributions_no_peak_and_decline:
         src = "src/analyse/prepost_panel.py",
         contributions = rules.prepost_multiplicative_contributions.output[0]
     params:
-        country_crisis_tuples = [
-                ("AUS", "financial-crisis"),
-                ("ISR", "financial-crisis"),
-                ("ZAF", "financial-crisis"),
-                ("ARG", "financial-crisis"),
-                ("BRA", "financial-crisis"),
-                ("MEX", "financial-crisis"),
-                ("SAU", "financial-crisis"),
-                ("TUR", "financial-crisis"),
-                ("KOR", "financial-crisis"),
-                ("ISL", "financial-crisis"),
-                ("CHL", "financial-crisis"),
-                ("CHN", "financial-crisis"),
-                ("COL", "financial-crisis"),
-                ("IDN", "financial-crisis"),
-                ("IND", "financial-crisis"),
-                ("CAN", "financial-crisis"),
-                ("NZL", "financial-crisis"),
-        ],
+        crises_countries = config["highlights"]["no-peak-and-decline"],
         all_crises = config["crises"],
     output: "build/prepost-contributions-no-peak-and-decline.png"
     conda: "../envs/default.yaml"
@@ -138,66 +101,31 @@ rule plot_peaker:
     script: "../src/analyse/peaker.py"
 
 
-rule plot_contribution_timeseries_panelA:
-    message: "Plot timeseries of contributions, panel A."
+rule plot_contribution_timeseries_peak_and_decline:
+    message: "Plot timeseries of contributions, peak and decline."
     input:
         src = "src/analyse/contribution_timeseries_panel.py",
         emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc
     params:
-        country_ids_to_crises = {
-            "BEL": "first-oil-crisis",
-            "DEU": "first-oil-crisis",
-            "GBR": "first-oil-crisis",
-            "LUX": "first-oil-crisis",
-            "IRL": "financial-crisis",
-            "ITA": "financial-crisis",
-            "JPN": "financial-crisis",
-            "NLD": "financial-crisis",
-            "PRT": "financial-crisis",
-            "USA": "financial-crisis"
-        },
+        crises_countries = config["highlights"]["peak-and-decline"],
         years = 20,
         all_crises = config["crises"]
-    output: "build/contribution-timeseries/panelA.png"
+    output: "build/contribution-timeseries/peak-and-decline.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/contribution_timeseries_panel.py"
 
 
-rule plot_contribution_timeseries_panelB:
-    message: "Plot timeseries of contributions, panel B."
+rule plot_contribution_timeseries_no_peak_and_decline:
+    message: "Plot timeseries of contributions, no peak and decline."
     input:
         src = "src/analyse/contribution_timeseries_panel.py",
         emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc,
     params:
-        country_ids_to_crises = {
-            "FRA": "first-oil-crisis",
-            "SWE": "second-oil-crisis",
-            "ESP": "financial-crisis",
-            "ARG": "argentinian-crisis",
-            "BRA": "brazilian-crisis"
-        },
+        crises_countries = config["highlights"]["no-peak-and-decline"],
         years = 20,
         all_crises = config["crises"]
-    output: "build/contribution-timeseries/panelB.png"
-    conda: "../envs/default.yaml"
-    script: "../src/analyse/contribution_timeseries_panel.py"
-
-
-rule plot_contribution_timeseries_panelC:
-    message: "Plot timeseries of contributions, panel C."
-    input:
-        src = "src/analyse/contribution_timeseries_panel.py",
-        emissions = "build/emissions-in-mt-bp.csv",
-        contributions = rules.multiplicative_contributions.output.nc,
-    params:
-        country_ids_to_crises = {
-            "GRC": "financial-crisis",
-            "SVN": "financial-crisis",
-        },
-        years = 20,
-        all_crises = config["crises"]
-    output: "build/contribution-timeseries/panelC.png"
+    output: "build/contribution-timeseries/no-peak-and-decline.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/contribution_timeseries_panel.py"

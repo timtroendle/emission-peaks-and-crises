@@ -14,9 +14,8 @@ rule all:
         "build/peaker-iea.png",
         "build/prepost-contributions-peak-and-decline.png",
         "build/prepost-contributions-no-peak-and-decline.png",
-        "build/contribution-timeseries/panelA.png",
-        "build/contribution-timeseries/panelB.png",
-        "build/contribution-timeseries/panelC.png",
+        "build/contribution-timeseries/peak-and-decline.png",
+        "build/contribution-timeseries/no-peak-and-decline.png",
         "build/logs/test-report.html"
 
 

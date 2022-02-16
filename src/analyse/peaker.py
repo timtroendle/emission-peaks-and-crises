@@ -13,7 +13,8 @@ GREY = "#7F7F7F"
 PEAK_YEAR_THRESHOLD = 2010 # We cannot identify peaks after 2010.
 
 
-def plot_peak_timeline(path_to_emissions, path_to_plot, crises, high_income, middle_income, path_to_peak_csv):
+def plot_peak_timeline(path_to_emissions, crises, crises_names, high_income, middle_income,
+                       path_to_plot, path_to_peak_csv):
     emissions = pd.read_csv(path_to_emissions, index_col=0)
     emissions = emissions[high_income + middle_income]
     rolling_emissions = emissions.rolling(window=5, center=False).mean().dropna(how='all')
@@ -46,7 +47,7 @@ def plot_peak_timeline(path_to_emissions, path_to_plot, crises, high_income, mid
     ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1] + 10)
     for crisis in crises:
         ax.annotate(
-            text=crisis.name,
+            text=crises_names[crisis],
             xy=(crisis.from_year + 0.25, ax.get_ylim()[1] - 1),
             va="top"
         )
@@ -84,12 +85,11 @@ def cumsum_peaked(emissions):
 if __name__ == "__main__":
     crises = [Crisis.from_config(crisis_slug, snakemake.params.all_crises[crisis_slug])
               for crisis_slug in snakemake.params.crises_slugs]
-    for i, new_name in enumerate(snakemake.params.crises_names):
-        crises[i].name = new_name
     plot_peak_timeline(
         path_to_emissions=snakemake.input.emissions,
         path_to_plot=snakemake.output.plot,
         crises=crises,
+        crises_names={crisis: name for crisis, name in zip(crises, snakemake.params.crises_names)},
         high_income=snakemake.params.high_income,
         middle_income=snakemake.params.middle_income,
         path_to_peak_csv=snakemake.output.csv

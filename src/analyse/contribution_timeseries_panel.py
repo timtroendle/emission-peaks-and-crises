@@ -1,4 +1,5 @@
 import math
+from itertools import chain
 
 import pandas as pd
 import xarray as xr
@@ -40,9 +41,10 @@ LINE_STYLES = {
 }
 
 
-def timeseries(path_to_contributions, path_to_emissions, country_ids_to_crises, years,
+def timeseries(path_to_contributions, path_to_emissions, crises_countries, years,
                all_crises, path_to_output):
-    country_ids = list(country_ids_to_crises.keys())
+    country_ids = list(chain(*[crises_countries[crisis] for crisis in crises_countries.keys()]))
+    crises = {country: crisis for crisis, countries in crises_countries.items() for country in countries}
     nrows = math.ceil(len(country_ids) / 2)
 
     ds = (
@@ -53,7 +55,7 @@ def timeseries(path_to_contributions, path_to_emissions, country_ids_to_crises, 
     fig = plt.figure(figsize=(8, nrows * 2))
     axes = fig.subplots(nrows, 2, sharex=False, sharey=True, squeeze=False)
     for ax, country_id in zip(axes.flatten(), country_ids):
-        crisis = all_crises[country_ids_to_crises[country_id]]
+        crisis = all_crises[crises[country_id]]
         plot_timeseries(ds, country_id, crisis, years, ax)
 
     axes[0, 0].legend(framealpha=1.0, ncol=2)
@@ -121,7 +123,7 @@ if __name__ == "__main__":
     timeseries(
         path_to_contributions=snakemake.input.contributions,
         path_to_emissions=snakemake.input.emissions,
-        country_ids_to_crises=snakemake.params.country_ids_to_crises,
+        crises_countries=snakemake.params.crises_countries,
         years=int(snakemake.params.years),
         all_crises={crisis_slug: Crisis.from_config(crisis_slug, snakemake.params.all_crises[crisis_slug])
                     for crisis_slug in snakemake.params.all_crises},

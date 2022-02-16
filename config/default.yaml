@@ -96,3 +96,45 @@ crises:
         first-year: 2016
         final-year: 2016
         post-to-year: 2019
+highlights:
+    peak-and-decline:
+        first-oil-crisis:
+            - BEL
+            - GBR
+            - LUX
+        second-oil-crisis:
+            - SWE
+            - DEU
+            - FRA
+        financial-crisis:
+            - PRT
+            - FIN
+            - AUT
+            - NOR
+            - USA
+            - ITA
+            - NLD
+            - JPN
+            - IRL
+            - ESP
+            - SVN
+            - GRC
+    no-peak-and-decline:
+        financial-crisis:
+            - AUS
+            - ISR
+            - ZAF
+            - ARG
+            - BRA
+            - MEX
+            - SAU
+            - TUR
+            - KOR
+            - ISL
+            - CHL
+            - CHN
+            - COL
+            - IDN
+            - IND
+            - CAN
+            - NZL
