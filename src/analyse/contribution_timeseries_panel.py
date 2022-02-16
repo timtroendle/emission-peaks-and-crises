@@ -32,6 +32,13 @@ NICE_FACTOR_NAMES = {
     "population": "Population"
 }
 
+LINE_STYLES = {
+    "gdp": "-",
+    "carbon-intensity": "--",
+    "energy-intensity": "-.",
+    "population": ":"
+}
+
 
 def timeseries(path_to_contributions, path_to_emissions, country_ids_to_crises, years,
                all_crises, path_to_output):
@@ -91,7 +98,7 @@ def plot_timeseries(ds, country_id, crisis, years, ax):
             ds_crisis.year,
             series.cumprod() / series.cumprod().loc[reference_year],
             label=NICE_FACTOR_NAMES[factor],
-            linestyle="--"
+            linestyle=LINE_STYLES[factor]
         )
     ax.axvspan(
         xmin=crisis.from_year,

@@ -12,3 +12,4 @@ dependencies:
     - xlrd=1.2.0
     - pwlf=2.0.4
     - country_converter=0.7.3
+    - pycountry=20.7.3
