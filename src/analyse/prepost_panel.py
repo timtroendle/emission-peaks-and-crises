@@ -17,7 +17,7 @@ FACTORS = {
     "gdp": "GDP",
     "carbon-intensity": "Carbon intensity",
     "energy-intensity": "Energy intensity",
-    "energy-and-carbon-intensity": "Technological change"
+    "energy-and-carbon-intensity": "Structural change"
 }
 
 
@@ -87,12 +87,27 @@ def plot_contribution_factor_as_bars(ax, pre, post):
 
 
 def plot_contribution_factor_as_arrows(ax, pre, post):
-    color = INCREASE_COLOR if post > pre else DECREASE_COLOR
+    line_color = INCREASE_COLOR if post > pre else DECREASE_COLOR
+    pre_color = INCREASE_COLOR if pre > 0 else DECREASE_COLOR
+    post_color = INCREASE_COLOR if post > 0 else DECREASE_COLOR
     ax.plot(
         [0, 1],
         [pre, post],
-        marker='o',
-        color=color,
+        color=line_color,
+        linewidth=1.75
+    )
+    ax.plot(
+        [0],
+        [pre],
+        marker="o",
+        color=pre_color,
+        linewidth=1.75
+    )
+    ax.plot(
+        [1],
+        [post],
+        marker="o",
+        color=post_color,
         linewidth=1.75
     )
     ax.hlines(
