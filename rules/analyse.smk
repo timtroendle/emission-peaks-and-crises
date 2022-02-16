@@ -133,3 +133,18 @@ rule plot_contribution_timeseries_no_peak_and_decline:
     output: "build/contribution-timeseries/no-peak-and-decline.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/contribution_timeseries_panel.py"
+
+
+rule plot_contribution_timeseries_all:
+    message: "Plot timeseries of contributions, all."
+    input:
+        src = "src/analyse/contribution_timeseries_panel.py",
+        emissions = "build/emissions-in-mt-bp.csv",
+        contributions = rules.multiplicative_contributions.output.nc,
+    params:
+        crises_countries = config["highlights"]["all"],
+        years = 50,
+        all_crises = config["crises"]
+    output: "build/contribution-timeseries/all.png"
+    conda: "../envs/default.yaml"
+    script: "../src/analyse/contribution_timeseries_panel.py"

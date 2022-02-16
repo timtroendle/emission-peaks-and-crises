@@ -96,6 +96,12 @@ crises:
         first-year: 2016
         final-year: 2016
         post-to-year: 2019
+    entire-period:
+        name: A period covering all years
+        pre-from-year: 1968
+        first-year: 2000
+        final-year: 2000
+        post-to-year: 2019
 highlights:
     peak-and-decline:
         first-oil-crisis:
@@ -138,3 +144,50 @@ highlights:
             - IND
             - CAN
             - NZL
+    all:
+        entire-period:
+            - AUS
+            - AUT
+            - BEL
+            - CAN
+            - CHL
+            - COL
+            - CZE
+            - DNK
+            - EST
+            - FIN
+            - FRA
+            - DEU
+            - GRC
+            - HUN
+            - ISL
+            - IRL
+            - ISR
+            - ITA
+            - JPN
+            - KOR
+            - LVA
+            - LTU
+            - LUX
+            - MEX
+            - NLD
+            - NZL
+            - NOR
+            - POL
+            - PRT
+            - SVK
+            - SVN
+            - ESP
+            - SWE
+            - CHE
+            - TUR
+            - GBR
+            - USA
+            - ARG
+            - BRA
+            - CHN
+            - IDN
+            - IND
+            - RUS
+            - ZAF
+            - SAU
