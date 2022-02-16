@@ -9,7 +9,7 @@ include: "./rules/analyse.smk"
 rule all:
     message: "Run entire analysis and compile report."
     input:
-        "build/multiplicative-contributions.nc",
+        "build/global-emissions.png",
         "build/peaker-bp.png",
         "build/peaker-iea.png",
         "build/prepost-contributions-peak-and-decline.png",
