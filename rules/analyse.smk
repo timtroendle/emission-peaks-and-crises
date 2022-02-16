@@ -12,6 +12,16 @@ rule decoupling_index:
     script: "../src/analyse/decoupling.py"
 
 
+rule plot_global_emissions:
+    message: "Plot global emissions."
+    input:
+        src = "src/analyse/global_emissions.py",
+        emissions = "build/emissions-in-mt-bp.csv"
+    output: "build/global-emissions.png"
+    conda: "../envs/default.yaml"
+    script: "../src/analyse/global_emissions.py"
+
+
 rule multiplicative_contributions:
     message: "Calculate multiplicative contributions to emissions."
     input:
