@@ -25,7 +25,7 @@ rule energy:
         src = "src/preprocess/bp.py",
         bp = rules.download_bp_stats.output[0]
     params:
-        sheet_name = config["data-sources"]["bp"]["sheetnames"]["energy"],
+        sheet_name = config["data-sources"]["bp"]["sheet_names"]["energy"],
         countries = config["countries"]
     output: "build/energy-in-ej.csv"
     conda: "../envs/default.yaml"
@@ -38,7 +38,7 @@ rule emissions_bp:
         src = "src/preprocess/bp.py",
         bp = rules.download_bp_stats.output[0]
     params:
-        sheet_name = config["data-sources"]["bp"]["sheetnames"]["emissions"],
+        sheet_name = config["data-sources"]["bp"]["sheet_names"]["emissions"],
         countries = config["countries"]
     output: "build/emissions-in-mt-bp.csv"
     conda: "../envs/default.yaml"
@@ -70,16 +70,41 @@ rule population:
     script: "../src/preprocess/worldbank.py"
 
 
-rule gdp:
+rule worldbank_gdp:
     message: "Preprocess Worldbank GDP data."
     input:
         src = "src/preprocess/worldbank.py",
         path = rules.unzip_gdp.output[0]
     params:
         country_codes = COUNTRY_CODES
-    output: "build/gdp-in-usd.csv"
+    output: "build/worldbank-gdp-in-usd.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/worldbank.py"
+
+
+rule maddison_gdp:
+    message: "Preprocess Maddison GDP data."
+    input:
+        src = "src/preprocess/maddison.py",
+        path = rules.download_maddison_gdp.output[0]
+    params:
+        country_codes = config["data-sources"]["maddison"]["countries"],
+        gdp_sheet_name = config["data-sources"]["maddison"]["sheet_names"]["gdp_per_capita"],
+        pop_sheet_name = config["data-sources"]["maddison"]["sheet_names"]["population"]
+    output: "build/maddison-gdp-in-usd.csv"
+    conda: "../envs/default.yaml"
+    script: "../src/preprocess/maddison.py"
+
+
+rule gdp:
+    message: "Use selected countries from Maddison GDP, otherwise use Worldbank GDP."
+    input:
+        src = "src/preprocess/gdp.py",
+        worldbank = rules.worldbank_gdp.output[0],
+        maddison = rules.maddison_gdp.output[0]
+    output: "build/gdp-in-usd.csv"
+    conda: "../envs/default.yaml"
+    script: "../src/preprocess/gdp.py"
 
 
 rule energy_intensity:

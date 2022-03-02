@@ -44,3 +44,11 @@ rule download_bp_stats:
     output: protected("data/automatic/bp-stats-review-all-data.xlsx")
     conda: "../envs/shell.yaml"
     shell: "curl -sLo {output} '{params.url}'"
+
+
+rule download_maddison_gdp:
+    message: "Download Maddison GDP data."
+    params: url = config["data-sources"]["maddison"]["url"]
+    output: protected("data/automatic/mpd2020.xlsx")
+    conda: "../envs/shell.yaml"
+    shell: "curl -sLo {output} '{params.url}'"

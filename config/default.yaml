@@ -1,7 +1,7 @@
 data-sources:
     bp:
         url: https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2021-all-data.xlsx
-        sheetnames:
+        sheet_names:
             energy: Primary Energy Consumption
             emissions: Carbon Dioxide Emissions
     worldbank:
@@ -10,6 +10,20 @@ data-sources:
             gdp: https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.KD?downloadformat=csv
     iea:
         path: data/GHGHighlights.XLS
+    maddison:
+        url: https://www.rug.nl/ggdc/historicaldevelopment/maddison/data/mpd2020.xlsx
+        sheet_names:
+            gdp_per_capita: "GDP pc"
+            population: "Population"
+        countries:
+            - CZE
+            - HUN
+            - SVK
+            - LVA
+            - EST
+            - POL
+            - RUS
+            - LTU
 countries:
     - Austria
     - Australia
@@ -68,10 +82,10 @@ crises:
         post-to-year: 2017
     soviet-union-collapse:
         name: Soviet Union’s collapse and Nordic countries’ Financial crisis
-        pre-from-year: 1980
+        pre-from-year: 1985
         first-year: 1990
         final-year: 1991
-        post-to-year: 2000
+        post-to-year: 1994
     first-oil-crisis:
         name: First oil crisis
         pre-from-year: 1968
@@ -112,6 +126,15 @@ highlights:
             - SWE
             - DEU
             - FRA
+            - CZE
+            - HUN
+        soviet-union-collapse:
+            - SVK
+            - LVA
+            - EST
+            - POL
+            - RUS
+            - LTU
         financial-crisis:
             - PRT
             - FIN
