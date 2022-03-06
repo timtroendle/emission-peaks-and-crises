@@ -14,7 +14,7 @@ BAR_WIDTH = 0.8
 ZERO_LINE_COLOR = "black"
 
 FACTORS = {
-    "gdp": "GDP",
+    "gdp-and-population": "GDP",
     "carbon-intensity": "Carbon intensity",
     "energy-intensity": "Energy intensity",
     "energy-and-carbon-intensity": "Structural change"

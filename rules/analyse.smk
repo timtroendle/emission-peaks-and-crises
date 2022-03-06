@@ -34,7 +34,8 @@ rule multiplicative_contributions:
         energy_intensity = rules.energy_intensity.output[0],
         gdp = rules.gdp_per_capita.output[0],
         carbon_intensity = rules.carbon_intensity.output[0],
-        energy_and_carbon_intensity = rules.energy_and_carbon_intensity.output[0]
+        energy_and_carbon_intensity = rules.energy_and_carbon_intensity.output[0],
+        gdp_and_population = rules.gdp.output[0]
     output:
         nc = "build/multiplicative-contributions.nc",
         csv = "build/multiplicative-contributions.csv"
