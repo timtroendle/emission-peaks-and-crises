@@ -43,42 +43,47 @@ rule multiplicative_contributions:
     script: "../src/analyse/mul_contributions.py"
 
 
-rule prepost_multiplicative_contributions:
-    message: "Calculate average contributions pre and post all crises."
+rule prepost_growth_rates:
+    message: "Calculate growth rates pre and post all crises."
     input:
-        src = "src/analyse/prepost_contributions.py",
-        contributions = rules.multiplicative_contributions.output[0]
+        src = "src/analyse/prepost_growth.py",
+        population = rules.population.output[0],
+        energy_intensity = rules.energy_intensity.output[0],
+        gdp = rules.gdp_per_capita.output[0],
+        carbon_intensity = rules.carbon_intensity.output[0],
+        energy_and_carbon_intensity = rules.energy_and_carbon_intensity.output[0],
+        gdp_and_population = rules.gdp.output[0]
     params:
         crises = config["crises"]
     output:
-        nc = "build/prepost-contributions.nc",
-        csv = "build/prepost-contributions.csv"
+        nc = "build/prepost-growth-rates.nc",
+        csv = "build/prepost-growth-rates.csv"
     conda: "../envs/default.yaml"
-    script: "../src/analyse/prepost_contributions.py"
+    script: "../src/analyse/prepost_growth.py"
 
 
-rule plot_prepost_contributions_peak_and_decline:
-    message: "Plot contributions pre and post crises in peak-and-decline countries."
+rule plot_prepost_growth_peak_and_decline:
+    message: "Plot growth rates pre and post crises in peak-and-decline countries."
     input:
         src = "src/analyse/prepost_panel.py",
-        contributions = rules.prepost_multiplicative_contributions.output[0]
+        growth_rates = rules.prepost_growth_rates.output[0]
     params:
         crises_countries = config["highlights"]["peak-and-decline"],
         all_crises = config["crises"],
-    output: "build/prepost-contributions-peak-and-decline.png"
+    output: "build/prepost-growth-peak-and-decline.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/prepost_panel.py"
 
 
-rule plot_prepost_contributions_no_peak_and_decline:
-    message: "Plot contributions pre and post crises in no peak-and-decline countries."
+rule plot_prepost_growth_no_peak_and_decline:
+    message: "Plot growth rates pre and post crises in no peak-and-decline countries."
     input:
         src = "src/analyse/prepost_panel.py",
-        contributions = rules.prepost_multiplicative_contributions.output[0]
+        growth_rates = rules.prepost_growth_rates.output[0]
     params:
         crises_countries = config["highlights"]["no-peak-and-decline"],
         all_crises = config["crises"],
-    output: "build/prepost-contributions-no-peak-and-decline.png"
+    output: "build/prepost-growth-no-peak-and-decline.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/prepost_panel.py"
 
