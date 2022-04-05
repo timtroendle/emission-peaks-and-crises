@@ -37,9 +37,9 @@ def plot_prepost_panel(path_to_prepost_growth, crises_countries, path_to_plot):
             plot_growth_rates_as_arrows(ax, data.sel(period="pre").item(), data.sel(period="post").item())
 
     for ax, country_id in zip(axes[:, 0], country_ids):
-        crisis = crises[country_id]
+        period = crises[country_id].national_period(country_id)
         ax.set_ylabel(
-            pycountry.countries.lookup(country_id).name + "\n" + f"({crisis.pre_from_year}–{crisis.post_to_year})",
+            pycountry.countries.lookup(country_id).name + "\n" + f"({period.pre_from_year}–{period.post_to_year})",
             rotation='horizontal',
             ha='right',
             va='center'

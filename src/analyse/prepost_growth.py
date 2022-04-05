@@ -21,27 +21,29 @@ def crises_pre_post_contribution(crises: list, path_to_carbon_intensity: str, pa
         .to_xarray()
     )
 
-    prepost = (
-        xr
-        .concat(
-            [derive_prepost_contribution_factors(kaya_factors, crisis) for crisis in crises],
-            dim='crisis'
-        )
-    )
+    prepost =  xr.concat([
+        xr.concat([
+            derive_prepost_growth_rates(kaya_factors, crisis, country_id.item())
+            for country_id in kaya_factors.country_id
+        ], dim='country_id')
+        for crisis in crises
+    ], dim='crisis')
     prepost.to_netcdf(paths_to_output.nc)
     prepost.to_series().to_csv(paths_to_output.csv, header=True, index=True)
 
 
-def derive_prepost_contribution_factors(ds, crisis):
+def derive_prepost_growth_rates(ds, crisis, country_id):
+    ds = ds.sel(country_id=country_id)
+    period = crisis.national_period(country_id)
     pre = growth_rate(
-        initial_level=ds.sel(year=crisis.pre_from_year),
-        final_level=ds.sel(year=crisis.pre_to_year),
-        number_years =(crisis.pre_to_year - crisis.pre_from_year)
+        initial_level=ds.sel(year=period.pre_from_year),
+        final_level=ds.sel(year=period.pre_to_year),
+        number_years =(period.pre_to_year - period.pre_from_year)
     )
     post = growth_rate(
-        initial_level=ds.sel(year=crisis.post_from_year),
-        final_level=ds.sel(year=crisis.post_to_year),
-        number_years=(crisis.post_to_year - crisis.post_from_year)
+        initial_level=ds.sel(year=period.post_from_year),
+        final_level=ds.sel(year=period.post_to_year),
+        number_years=(period.post_to_year - period.post_from_year)
     )
 
     pre.coords['period'] = 'pre'

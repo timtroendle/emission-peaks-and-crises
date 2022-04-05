@@ -119,7 +119,8 @@ rule plot_contribution_timeseries_peak_and_decline:
         contributions = rules.multiplicative_contributions.output.nc
     params:
         crises_countries = config["highlights"]["peak-and-decline"],
-        years = 20,
+        years_before_crisis_start = 10,
+        years_after_crisis_start = 18,
         all_crises = config["crises"]
     output: "build/contribution-timeseries/peak-and-decline.png"
     conda: "../envs/default.yaml"
@@ -134,7 +135,8 @@ rule plot_contribution_timeseries_no_peak_and_decline:
         contributions = rules.multiplicative_contributions.output.nc,
     params:
         crises_countries = config["highlights"]["no-peak-and-decline"],
-        years = 20,
+        years_before_crisis_start = 10,
+        years_after_crisis_start = 9,
         all_crises = config["crises"]
     output: "build/contribution-timeseries/no-peak-and-decline.png"
     conda: "../envs/default.yaml"
@@ -149,7 +151,8 @@ rule plot_contribution_timeseries_all:
         contributions = rules.multiplicative_contributions.output.nc,
     params:
         crises_countries = config["highlights"]["all"],
-        years = 50,
+        years_before_crisis_start = 32,
+        years_after_crisis_start = 19,
         all_crises = config["crises"]
     output: "build/contribution-timeseries/all.png"
     conda: "../envs/default.yaml"

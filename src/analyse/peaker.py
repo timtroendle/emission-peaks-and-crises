@@ -32,8 +32,8 @@ def plot_peak_timeline(path_to_emissions, crises, crises_names, high_income, mid
     ax = fig.add_subplot()
     for crisis in crises:
         ax.axvspan(
-            xmin=crisis.from_year,
-            xmax=crisis.to_year + 1,
+            xmin=crisis.global_period.from_year,
+            xmax=crisis.global_period.to_year + 1,
             ymin=0,
             ymax=1,
             linewidth=0.0,
@@ -48,7 +48,7 @@ def plot_peak_timeline(path_to_emissions, crises, crises_names, high_income, mid
     for crisis in crises:
         ax.annotate(
             text=crises_names[crisis],
-            xy=(crisis.from_year + 0.25, ax.get_ylim()[1] - 1),
+            xy=(crisis.global_period.from_year + 0.25, ax.get_ylim()[1] - 1),
             va="top"
         )
     ax.set_xlabel("Year")

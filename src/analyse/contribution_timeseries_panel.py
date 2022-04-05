@@ -41,7 +41,8 @@ LINE_STYLES = {
 }
 
 
-def timeseries(path_to_contributions, path_to_emissions, crises_countries, years,
+def timeseries(path_to_contributions, path_to_emissions, crises_countries,
+               years_before_crisis_start, years_after_crisis_start,
                all_crises, path_to_output):
     country_ids = list(chain(*[crises_countries[crisis] for crisis in crises_countries.keys()]))
     crises = {country: crisis for crisis, countries in crises_countries.items() for country in countries}
@@ -56,7 +57,7 @@ def timeseries(path_to_contributions, path_to_emissions, crises_countries, years
     axes = fig.subplots(nrows, 2, sharex=False, sharey=True, squeeze=False)
     for ax, country_id in zip(axes.flatten(), country_ids):
         crisis = all_crises[crises[country_id]]
-        plot_timeseries(ds, country_id, crisis, years, ax)
+        plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_after_crisis_start, ax)
 
     axes[0, 0].legend(framealpha=1.0, ncol=2)
     for i, ax in enumerate(axes.flatten()):
@@ -84,9 +85,10 @@ def read_data(path_to_contributions, path_to_emissions):
     return ds
 
 
-def plot_timeseries(ds, country_id, crisis, years, ax):
-    ds_crisis = ds.sel(year=range(crisis.pre_from_year, crisis.post_to_year + 1))
-    reference_year = crisis.from_year
+def plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_after_crisis_start, ax):
+    period = crisis.national_period(country_id)
+    ds_crisis = ds.sel(year=range(period.pre_from_year, period.post_to_year + 1))
+    reference_year = period.from_year
     emissions = ds_crisis.emissions.sel(country_id=country_id)
     ax.plot(
         ds_crisis.year,
@@ -103,8 +105,8 @@ def plot_timeseries(ds, country_id, crisis, years, ax):
             linestyle=LINE_STYLES[factor]
         )
     ax.axvspan(
-        xmin=crisis.from_year,
-        xmax=crisis.to_year + 1,
+        xmin=period.from_year,
+        xmax=period.to_year + 1,
         ymin=0,
         ymax=1,
         linewidth=0.0,
@@ -113,7 +115,7 @@ def plot_timeseries(ds, country_id, crisis, years, ax):
         label="Crisis"
     )
     ax.set_title(pycountry.countries.lookup(country_id).name)
-    ax.set_xlim(crisis.from_year - years / 2, crisis.from_year + years / 2)
+    ax.set_xlim(period.from_year - years_before_crisis_start, period.from_year + years_after_crisis_start)
     ax.get_xaxis().set_major_locator(MultipleLocator(10))
     ax.get_xaxis().set_minor_locator(MultipleLocator(1))
     ax.get_yaxis().set_tick_params(top=True, direction='in')
@@ -124,7 +126,8 @@ if __name__ == "__main__":
         path_to_contributions=snakemake.input.contributions,
         path_to_emissions=snakemake.input.emissions,
         crises_countries=snakemake.params.crises_countries,
-        years=int(snakemake.params.years),
+        years_before_crisis_start=int(snakemake.params.years_before_crisis_start),
+        years_after_crisis_start=int(snakemake.params.years_after_crisis_start),
         all_crises={crisis_slug: Crisis.from_config(crisis_slug, snakemake.params.all_crises[crisis_slug])
                     for crisis_slug in snakemake.params.all_crises},
         path_to_output=snakemake.output[0]
