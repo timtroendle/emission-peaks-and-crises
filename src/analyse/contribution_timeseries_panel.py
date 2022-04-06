@@ -42,8 +42,8 @@ LINE_STYLES = {
 
 
 def timeseries(path_to_contributions, path_to_emissions, crises_countries,
-               years_before_crisis_start, years_after_crisis_start,
-               all_crises, path_to_output):
+               years_before_crisis_start, years_after_crisis_start, plot_crisis,
+               all_crises, share_y_axis, path_to_output):
     country_ids = list(chain(*[crises_countries[crisis] for crisis in crises_countries.keys()]))
     crises = {country: crisis for crisis, countries in crises_countries.items() for country in countries}
     nrows = math.ceil(len(country_ids) / 2)
@@ -54,15 +54,15 @@ def timeseries(path_to_contributions, path_to_emissions, crises_countries,
     )
 
     fig = plt.figure(figsize=(8, nrows * 2))
-    axes = fig.subplots(nrows, 2, sharex=False, sharey=True, squeeze=False)
+    axes = fig.subplots(nrows, 2, sharex=False, sharey=share_y_axis, squeeze=False)
     for ax, country_id in zip(axes.flatten(), country_ids):
         crisis = all_crises[crises[country_id]]
-        plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_after_crisis_start, ax)
+        plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_after_crisis_start, plot_crisis, ax)
 
-    axes[0, 0].legend(framealpha=1.0, ncol=2)
+    axes[0, 0].legend(framealpha=1.0, ncol=1)
     for i, ax in enumerate(axes.flatten()):
         if i % 2 == 0:
-            ax.set_ylabel("Change since crisis")
+            ax.set_ylabel("Change since reference year")
     if len(country_ids) < len(axes.flatten()):
         # Last axis is empty.
         axes[-1, 1].set_axis_off()
@@ -85,35 +85,36 @@ def read_data(path_to_contributions, path_to_emissions):
     return ds
 
 
-def plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_after_crisis_start, ax):
+def plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_after_crisis_start, plot_crisis, ax):
     period = crisis.national_period(country_id)
-    ds_crisis = ds.sel(year=range(period.pre_from_year, period.post_to_year + 1))
-    reference_year = period.from_year
-    emissions = ds_crisis.emissions.sel(country_id=country_id)
+    ds_crisis = ds.sel(country_id=country_id, year=range(period.pre_from_year, period.post_to_year + 1)).dropna("year", how="any")
+    emissions = ds_crisis.emissions
     ax.plot(
         ds_crisis.year,
-        emissions / emissions.sel(year=reference_year),
+        emissions / emissions.isel(year=0),
         label="$\mathrm{CO_2}$ emissions",
         linewidth=2.4
     )
     for factor in NICE_FACTOR_NAMES.keys():
-        series = ds_crisis.contributions.sel(factor=factor, country_id=country_id).to_series()
+        series = ds_crisis.contributions.sel(factor=factor).to_series()
+        series.iloc[0] = 1 # to establish as reference year
         ax.plot(
             ds_crisis.year,
-            series.cumprod() / series.cumprod().loc[reference_year],
+            series.cumprod(),
             label=NICE_FACTOR_NAMES[factor],
             linestyle=LINE_STYLES[factor]
         )
-    ax.axvspan(
-        xmin=period.from_year,
-        xmax=period.to_year + 1,
-        ymin=0,
-        ymax=1,
-        linewidth=0.0,
-        alpha=0.2,
-        color=GREY,
-        label="Crisis"
-    )
+    if plot_crisis:
+        ax.axvspan(
+            xmin=period.from_year,
+            xmax=period.to_year + 1,
+            ymin=0,
+            ymax=1,
+            linewidth=0.0,
+            alpha=0.2,
+            color=GREY,
+            label="Crisis"
+        )
     ax.set_title(pycountry.countries.lookup(country_id).name)
     ax.set_xlim(period.from_year - years_before_crisis_start, period.from_year + years_after_crisis_start)
     ax.get_xaxis().set_major_locator(MultipleLocator(10))
@@ -130,5 +131,7 @@ if __name__ == "__main__":
         years_after_crisis_start=int(snakemake.params.years_after_crisis_start),
         all_crises={crisis_slug: Crisis.from_config(crisis_slug, snakemake.params.all_crises[crisis_slug])
                     for crisis_slug in snakemake.params.all_crises},
+        share_y_axis=bool(snakemake.params.share_y_axis),
+        plot_crisis=bool(snakemake.params.plot_crisis),
         path_to_output=snakemake.output[0]
     )
