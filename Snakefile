@@ -11,7 +11,6 @@ rule all:
     input:
         "build/global-emissions.png",
         "build/peaker-bp.png",
-        "build/peaker-iea.png",
         "build/prepost-growth-peak-and-decline.png",
         "build/prepost-growth-no-peak-and-decline.png",
         "build/contribution-timeseries/peak-and-decline.png",

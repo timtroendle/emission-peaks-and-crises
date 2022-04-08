@@ -1,5 +1,6 @@
 from itertools import chain
 
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pycountry
@@ -22,24 +23,22 @@ FACTORS = {
 
 
 def plot_prepost_panel(path_to_prepost_growth, crises_countries, path_to_plot):
-    country_ids = list(chain(*[crises_countries[crisis] for crisis in crises_countries.keys()]))
-    crises = {country: crisis for crisis, countries in crises_countries.items() for country in countries}
-
     da = read_growth_rates(path_to_prepost_growth)
 
-    n_rows = len(country_ids)
+    n_rows = len(crises_countries)
     fig = plt.figure(figsize=(8, n_rows * 0.5))
     axes = fig.subplots(n_rows, 4, sharex=True, sharey=True)
 
     for col_id, factor in enumerate(FACTORS.keys()):
-        for ax, country_id in zip(axes[:, col_id], country_ids):
-            data = da.sel(factor=factor, country_id=country_id, crisis=crises[country_id].slug)
+        for ax, (crisis, country_id) in zip(axes[:, col_id], crises_countries):
+            data = da.sel(factor=factor, country_id=country_id, crisis=crisis.slug)
             plot_growth_rates_as_arrows(ax, data.sel(period="pre").item(), data.sel(period="post").item())
 
-    for ax, country_id in zip(axes[:, 0], country_ids):
-        period = crises[country_id].national_period(country_id)
+    for ax, (crisis, country_id) in zip(axes[:, 0], crises_countries):
+        period = crisis.national_period(country_id)
+        country = country_name(country_id)
         ax.set_ylabel(
-            pycountry.countries.lookup(country_id).name + "\n" + f"({period.pre_from_year}–{period.post_to_year})",
+            f"{country}, {period.from_year}\n({period.pre_from_year}–{period.post_to_year})",
             rotation='horizontal',
             ha='right',
             va='center'
@@ -55,6 +54,15 @@ def plot_prepost_panel(path_to_prepost_growth, crises_countries, path_to_plot):
     fig.tight_layout()
     fig.subplots_adjust(wspace=0.1)
     fig.savefig(path_to_plot)
+
+
+def country_name(country_id):
+    name = pycountry.countries.lookup(country_id).name
+    if name == "Russian Federation":
+        name = "Russia"
+    elif name == "Korea, Republic of":
+        name = "South Korea"
+    return name
 
 
 def read_growth_rates(path_to_data):
@@ -135,7 +143,10 @@ if __name__ == "__main__":
                   for crisis_slug in snakemake.params.all_crises}
     plot_prepost_panel(
         path_to_prepost_growth=snakemake.input.growth_rates,
-        crises_countries={all_crises[crisis_slug]: countries
-                          for crisis_slug, countries in snakemake.params.crises_countries.items()},
+        crises_countries=[
+            (all_crises[crisis_slug], country_id)
+            for crisis_slug in snakemake.params.crises_countries.keys()
+            for country_id in snakemake.params.crises_countries[crisis_slug]
+        ],
         path_to_plot=snakemake.output[0]
     )

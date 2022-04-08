@@ -46,30 +46,38 @@ def timeseries(path_to_contributions, path_to_emissions, crises_countries,
                all_crises, share_y_axis, path_to_output):
     country_ids = list(chain(*[crises_countries[crisis] for crisis in crises_countries.keys()]))
     crises = {country: crisis for crisis, countries in crises_countries.items() for country in countries}
-    nrows = math.ceil(len(country_ids) / 2)
+    nrows = math.ceil(len(country_ids) / 3)
 
     ds = (
         read_data(path_to_contributions, path_to_emissions)
         .sel(country_id=country_ids)
     )
 
-    fig = plt.figure(figsize=(8, nrows * 2))
-    axes = fig.subplots(nrows, 2, sharex=False, sharey=share_y_axis, squeeze=False)
+    fig = plt.figure(figsize=(8, nrows * 2 * 2 / 3))
+    axes = fig.subplots(nrows, 3, sharex=False, sharey=share_y_axis, squeeze=False)
     for ax, country_id in zip(axes.flatten(), country_ids):
         crisis = all_crises[crises[country_id]]
         plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_after_crisis_start, plot_crisis, ax)
 
-    axes[0, 0].legend(framealpha=1.0, ncol=1)
+    axes[-1, 1].legend(
+        framealpha=1.0,
+        ncol=6,
+        loc='upper center',
+        bbox_to_anchor=(0.5, -0.4),
+        frameon=False
+    )
     for i, ax in enumerate(axes.flatten()):
-        if i % 2 == 0:
-            ax.set_ylabel("Change since reference year")
+        if i % 3 == 0:
+            ax.set_ylabel("Change since\nreference year")
     if len(country_ids) < len(axes.flatten()):
         # Last axis is empty.
-        axes[-1, 1].set_axis_off()
+        axes[-1, 2].set_axis_off()
+        if len(country_ids) + 1 < len(axes.flatten()):
+            axes[-1, 1].set_axis_off()
 
-    fig.tight_layout()
-    fig.subplots_adjust(wspace=0.1)
     sns.despine(fig, right=False)
+    fig.tight_layout()
+    fig.subplots_adjust(wspace=0.2)
     fig.savefig(path_to_output)
 
 
@@ -115,11 +123,20 @@ def plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_aft
             color=GREY,
             label="Crisis"
         )
-    ax.set_title(pycountry.countries.lookup(country_id).name)
+    ax.set_title(country_name(country_id))
     ax.set_xlim(period.from_year - years_before_crisis_start, period.from_year + years_after_crisis_start)
     ax.get_xaxis().set_major_locator(MultipleLocator(10))
     ax.get_xaxis().set_minor_locator(MultipleLocator(1))
     ax.get_yaxis().set_tick_params(top=True, direction='in')
+
+
+def country_name(country_id):
+    name = pycountry.countries.lookup(country_id).name
+    if name == "Russian Federation":
+        name = "Russia"
+    elif name == "Korea, Republic of":
+        name = "South Korea"
+    return name
 
 
 if __name__ == "__main__":

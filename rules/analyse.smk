@@ -81,7 +81,7 @@ rule plot_prepost_growth_no_peak_and_decline:
         src = "src/analyse/prepost_panel.py",
         growth_rates = rules.prepost_growth_rates.output[0]
     params:
-        crises_countries = config["highlights"]["no-peak-and-decline"],
+        crises_countries = config["highlights"]["no-peak-and-decline-prepost"],
         all_crises = config["crises"],
     output: "build/prepost-growth-no-peak-and-decline.png"
     conda: "../envs/default.yaml"
@@ -136,7 +136,7 @@ rule plot_contribution_timeseries_no_peak_and_decline:
         emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc,
     params:
-        crises_countries = config["highlights"]["no-peak-and-decline"],
+        crises_countries = config["highlights"]["no-peak-and-decline-timeline"],
         years_before_crisis_start = 10,
         years_after_crisis_start = 9,
         all_crises = config["crises"],

@@ -19,6 +19,7 @@ def plot_global_emissions(path_to_emissions, crises, crises_names, path_to_plot)
 
     ax.plot(global_emissions, color=LINE_COLOR)
     ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1] + 5)
+    ax.set_xlim(1965, 2019)
     ax.xaxis.set_minor_locator(mtick.MultipleLocator(1))
     ax.set_ylabel("Global CO₂ emissions (Gt)")
 

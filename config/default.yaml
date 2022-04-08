@@ -289,7 +289,7 @@ highlights:
             - ESP
             - SVN
             - GRC
-    no-peak-and-decline:
+    no-peak-and-decline-timeline:
         financial-crisis:
             - AUS
             - ISR
@@ -308,6 +308,7 @@ highlights:
             - IND
             - CAN
             - NZL
+    no-peak-and-decline-prepost:
         soviet-union-collapse:
             - ARG
             - AUS
@@ -323,6 +324,24 @@ highlights:
             - SAU
             - TUR
             - ZAF
+        financial-crisis:
+            - AUS
+            - ISR
+            - ZAF
+            - ARG
+            - BRA
+            - MEX
+            - SAU
+            - TUR
+            - KOR
+            - ISL
+            - CHL
+            - CHN
+            - COL
+            - IDN
+            - IND
+            - CAN
+            - NZL
     all:
         entire-period:
             - AUS
