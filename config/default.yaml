@@ -145,10 +145,10 @@ crises:
     soviet-union-collapse:
         name: Soviet Union’s collapse and Nordic countries’ Financial crisis
         global:
-            pre-from-year: 1985
+            pre-from-year: 1980
             first-year: 1990
             final-year: 1991
-            post-to-year: 1994
+            post-to-year: 2001
         national:
             SVK:
                 pre-from-year: 1985
@@ -308,6 +308,21 @@ highlights:
             - IND
             - CAN
             - NZL
+        soviet-union-collapse:
+            - ARG
+            - AUS
+            - BRA
+            - CHL
+            - CHN
+            - COL
+            - IDN
+            - IND
+            - KOR
+            - MEX
+            - NZL
+            - SAU
+            - TUR
+            - ZAF
     all:
         entire-period:
             - AUS
