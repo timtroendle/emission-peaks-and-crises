@@ -183,7 +183,7 @@ crises:
     first-oil-crisis:
         name: First oil crisis
         global:
-            pre-from-year: 1968
+            pre-from-year: 1965
             first-year: 1974
             final-year: 1975
             post-to-year: 1979 # to not overlap with the Second oil crisis
@@ -206,10 +206,10 @@ crises:
     second-oil-crisis:
         name: Second oil crisis
         global:
-            pre-from-year: 1975
+            pre-from-year: 1976
             first-year: 1980
-            final-year: 1980
-            post-to-year: 1984
+            final-year: 1981
+            post-to-year: 1991
         national:
             SWE:
                 pre-from-year: 1976
