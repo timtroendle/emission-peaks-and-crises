@@ -78,7 +78,7 @@ def cumsum_peaked(emissions):
     )
     n_peaked.rename("Number of countries with emission peaks", inplace=True)
     n_peaked.index.rename("Year", inplace=True)
-    n_not_peaked = -(emissions.notna().sum(axis=1) - n_peaked)
+    n_not_peaked = -(emissions.shape[1] - n_peaked)
     return n_peaked.loc[:PEAK_YEAR_THRESHOLD], n_not_peaked.loc[:PEAK_YEAR_THRESHOLD]
 
 
