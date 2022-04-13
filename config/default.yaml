@@ -250,6 +250,20 @@ crises:
             first-year: 2016
             final-year: 2016
             post-to-year: 2019
+    denmark-peak:
+        name: Period surrounding Denmark's emission peak (not a crisis)
+        global:
+            pre-from-year: 1988
+            first-year: 1998
+            final-year: 1998
+            post-to-year: 2008
+    switzerland-peak:
+        name: Period surrounding Switzerland's emission peak (not a crisis)
+        global:
+            pre-from-year: 1991
+            first-year: 2001
+            final-year: 2001
+            post-to-year: 2011
     entire-period:
         name: A period covering all years
         global:
@@ -389,3 +403,8 @@ highlights:
             - RUS
             - ZAF
             - SAU
+    non-crisis-peaker:
+        denmark-peak:
+            - DNK
+        switzerland-peak:
+            - CHE

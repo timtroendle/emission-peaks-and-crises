@@ -52,18 +52,24 @@ def timeseries(path_to_contributions, path_to_emissions, crises_countries,
         read_data(path_to_contributions, path_to_emissions)
         .sel(country_id=country_ids)
     )
-
-    fig = plt.figure(figsize=(8, nrows * 2 * 2 / 3))
+    if nrows > 1:
+        fig = plt.figure(figsize=(8, nrows * 2 * 2 / 3))
+    else:
+        fig = plt.figure(figsize=(8, 2.5))
     axes = fig.subplots(nrows, 3, sharex=False, sharey=share_y_axis, squeeze=False)
     for ax, country_id in zip(axes.flatten(), country_ids):
         crisis = all_crises[crises[country_id]]
         plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_after_crisis_start, plot_crisis, ax)
 
+    if nrows > 1:
+        bbox_anchor = (0.5, -0.4)
+    else:
+        bbox_anchor = (0.5, -0.1)
     axes[-1, 1].legend(
         framealpha=1.0,
         ncol=6,
         loc='upper center',
-        bbox_to_anchor=(0.5, -0.4),
+        bbox_to_anchor=bbox_anchor,
         frameon=False
     )
     for i, ax in enumerate(axes.flatten()):
