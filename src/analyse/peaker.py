@@ -40,7 +40,7 @@ def plot_peak_timeline(path_to_emissions, crises, crises_names, high_income, mid
             alpha=0.2,
             color=GREY
         )
-    ax.bar(n_peaked_all.index, n_peaked_all.values, label="Medium-income with emission peaks", color=BLUE, alpha=0.4)
+    ax.bar(n_peaked_all.index, n_peaked_all.values, label="Medium-income with emission peak", color=BLUE, alpha=0.4)
     ax.bar(n_peaked_high.index, n_peaked_high.values, label="High-income with emission peak", color=BLUE)
     ax.bar(n_not_peaked_all.index, n_not_peaked_all.values, label="Medium-income without emission peak", color=RED, alpha=0.4)
     ax.bar(n_not_peaked_high.index, n_not_peaked_high.values, label="High-income without emission peak", color=RED)
