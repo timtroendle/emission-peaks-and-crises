@@ -52,3 +52,16 @@ rule download_maddison_gdp:
     output: protected("data/automatic/mpd2020.xlsx")
     conda: "../envs/shell.yaml"
     shell: "curl -sLo {output} '{params.url}'"
+
+
+def flag_url(wildcards):
+    country = pycountry.countries.lookup(wildcards.country).alpha_2.lower()
+    return config["data-sources"]["flags"]["url"].format(country=country)
+
+
+rule download_flag:
+    message: "Download flag of {wildcards.country}."
+    params: url = flag_url
+    output: "data/automatic/flags/{country}.png"
+    conda: "../envs/shell.yaml"
+    shell: "curl -sLo {output} '{params.url}'"

@@ -1,6 +1,9 @@
+from pathlib import Path
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
+from matplotlib.offsetbox import AnnotationBbox, OffsetImage
 import seaborn as sns
 
 from crisis import Crisis
@@ -13,7 +16,7 @@ GREY = "#7F7F7F"
 PEAK_YEAR_THRESHOLD = 2010 # We cannot identify peaks after 2010.
 
 
-def plot_peak_timeline(path_to_emissions, crises, crises_names, high_income, middle_income,
+def plot_peak_timeline(path_to_emissions, paths_to_flags, crises, crises_names, high_income, middle_income,
                        path_to_plot, path_to_peak_csv):
     emissions = pd.read_csv(path_to_emissions, index_col=0)
     emissions = emissions[high_income + middle_income]
@@ -44,13 +47,23 @@ def plot_peak_timeline(path_to_emissions, crises, crises_names, high_income, mid
     ax.bar(n_peaked_high.index, n_peaked_high.values, label="High-income with emission peak", color=BLUE)
     ax.bar(n_not_peaked_all.index, n_not_peaked_all.values, label="Medium-income without emission peak", color=RED, alpha=0.4)
     ax.bar(n_not_peaked_high.index, n_not_peaked_high.values, label="High-income without emission peak", color=RED)
-    ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1] + 10)
+    ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1] + 30)
     for crisis in crises:
         ax.annotate(
             text=crises_names[crisis],
             xy=(crisis.global_period.from_year + 0.25, ax.get_ylim()[1] - 1),
             va="top"
         )
+
+    flags = {Path(path).stem: plt.imread(path)
+             for path in paths_to_flags}
+    for year, countries in peak_years.groupby(peak_years.values).groups.items():
+        plot_flags(
+            year=year,
+            flags=[flags[country] for country in countries],
+            ax=ax
+        )
+
     ax.set_xlabel("Year")
     ax.set_ylabel("Number of countries")
     ax.legend(loc="lower right")
@@ -82,11 +95,30 @@ def cumsum_peaked(emissions):
     return n_peaked.loc[:PEAK_YEAR_THRESHOLD], n_not_peaked.loc[:PEAK_YEAR_THRESHOLD]
 
 
+def plot_flags(year, flags, ax):
+    if year < PEAK_YEAR_THRESHOLD:
+        y = 60
+        for flag in flags:
+            plot_flag((year, y), flag, ax)
+            y = y - 4
+
+
+def plot_flag(coords, flag, ax):
+    im = OffsetImage(flag, zoom=0.06)
+    im.image.axes = ax
+
+    ab = AnnotationBbox(im, coords,  xybox=(0., -16.), frameon=False,
+                        xycoords='data',  boxcoords="offset points", pad=0)
+
+    ax.add_artist(ab)
+
+
 if __name__ == "__main__":
     crises = [Crisis.from_config(crisis_slug, snakemake.params.all_crises[crisis_slug])
               for crisis_slug in snakemake.params.crises_slugs]
     plot_peak_timeline(
         path_to_emissions=snakemake.input.emissions,
+        paths_to_flags=snakemake.input.flags,
         path_to_plot=snakemake.output.plot,
         crises=crises,
         crises_names={crisis: name for crisis, name in zip(crises, snakemake.params.crises_names)},

@@ -24,6 +24,8 @@ data-sources:
             - POL
             - RUS
             - LTU
+    flags:
+        url: https://github.com/hampusborgos/country-flags/blob/main/png100px/{country}.png?raw=true
 countries:
     - Austria
     - Australia
@@ -408,3 +410,51 @@ highlights:
             - DNK
         switzerland-peak:
             - CHE
+groups:
+    high-income:
+        - AUS
+        - AUT
+        - BEL
+        - CAN
+        - CHL
+        - CZE
+        - DEU
+        - DNK
+        - ESP
+        - EST
+        - FIN
+        - FRA
+        - GBR
+        - GRC
+        - HUN
+        - IRL
+        - ISL
+        - ISR
+        - ITA
+        - JPN
+        - KOR
+        - LTU
+        - LUX
+        - LVA
+        - NLD
+        - NOR
+        - NZL
+        - POL
+        - PRT
+        - SAU
+        - SVK
+        - SVN
+        - SWE
+        - CHE
+        - USA
+    middle-income:
+        - ARG
+        - BRA
+        - CHN
+        - COL
+        - IDN
+        - IND
+        - MEX
+        - RUS
+        - TUR
+        - ZAF

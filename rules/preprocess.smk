@@ -149,3 +149,14 @@ rule gdp_per_capita:
     output: "build/gdp-in-usd-per-capita.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/divide.py"
+
+
+rule flag:
+    message: "Preprocess flag of {wildcards.country}."
+    input:
+        src = "src/preprocess/flag.py",
+        flag = rules.download_flag.output[0],
+    params: height = 100
+    output: "build/flag/{country}.png"
+    conda: "../envs/default.yaml"
+    script: "../src/preprocess/flag.py"

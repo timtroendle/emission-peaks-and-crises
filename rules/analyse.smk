@@ -92,16 +92,17 @@ rule plot_peaker:
     message: "Plot timeline of peaks."
     input:
         src = "src/analyse/peaker.py",
-        emissions = "build/emissions-in-mt-{source}.csv"
+        emissions = "build/emissions-in-mt-{source}.csv",
+        flags = expand(
+            "build/flag/{country}.png",
+            country=config["groups"]["high-income"] + config["groups"]["middle-income"]
+        )
     params:
         crises_slugs = ["first-oil-crisis", "second-oil-crisis", "soviet-union-collapse", "financial-crisis"],
         all_crises = config["crises"],
         crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis"],
-        high_income = ["AUS", "AUT", "BEL", "CAN", "CHL", "CZE", "DEU", "DNK", "ESP", "EST", "FIN",
-                       "FRA", "GBR", "GRC", "HUN", "IRL", "ISL", "ISR", "ITA", "JPN", "KOR", "LTU",
-                       "LUX", "LVA", "NLD", "NOR", "NZL", "POL", "PRT", "SAU", "SVK", "SVN", "SWE",
-                       "CHE", "USA"],
-        middle_income = ["ARG", "BRA", "CHN", "COL", "IDN", "IND", "MEX", "RUS", "TUR", "ZAF"]
+        high_income = config["groups"]["high-income"],
+        middle_income = config["groups"]["middle-income"]
     wildcard_constraints:
         source = "((bp)|(iea))"
     output:
