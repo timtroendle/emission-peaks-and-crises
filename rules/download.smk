@@ -13,7 +13,7 @@ rule unzip_gdp:
     input:
         rules.download_gdp.output[0]
     output:
-        "build/data/API_NY.GDP.MKTP.KD_DS2_en_csv_v2_3158988.csv"
+        "build/data/API_NY.GDP.MKTP.KD_DS2_en_csv_v2_4687500.csv"
     conda: "../envs/shell.yaml"
     shadow: "minimal"
     shell: "unzip -o {input} -d build/data"
@@ -32,7 +32,7 @@ rule unzip_population:
     input:
         rules.download_population.output[0]
     output:
-        "build/data/API_SP.POP.TOTL_DS2_en_csv_v2_3158886.csv"
+        "build/data/API_SP.POP.TOTL_DS2_en_csv_v2_4687738.csv"
     conda: "../envs/shell.yaml"
     shadow: "minimal"
     shell: "unzip -o {input} -d build/data"

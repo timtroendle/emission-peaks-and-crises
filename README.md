@@ -6,13 +6,13 @@ This repository contains the entire scientific project, including code and repor
 
 ## Getting ready
 
-You need [conda](https://conda.io/docs/index.html) to run the analysis. Using conda, you can create a conda environment from within you can run it:
+You need [mamba](https://mamba.readthedocs.io/en/latest/) to run the analysis. Using mamba, you can create an environment from within you can run it:
 
-    conda env create -f environment.yaml
+    mamba env create -f environment.yaml --no-default-packages
 
 ## Run the analysis
 
-    snakemake  --use-conda
+    snakemake --profile profiles/default
 
 This will run all analysis steps to reproduce results and eventually build the report.
 
@@ -20,11 +20,11 @@ You can also run certain parts only by using other `snakemake` rules; to get a l
 
 To generate a PDF of the dependency graph of all steps, and if you have `dot` installed, run:
 
-    snakemake --rulegraph | dot -Tpdf > dag.pdf
+    snakemake --profiles profiles/default --rulegraph | dot -Tpdf > dag.pdf
 
 ## Run the tests
 
-    snakemake test --use-conda
+    snakemake --profile profiles/default test
 
 ## Repo structure
 
@@ -35,6 +35,7 @@ To generate a PDF of the dependency graph of all steps, and if you have `dot` in
 * `config`: configurations used in the study
 * `data`: place for raw data
 * `build`: will contain all results (does not exist initially)
+* `profiles`: Snakemake execution profiles
 
 ## License
 

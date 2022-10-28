@@ -1,9 +1,12 @@
+from snakemake.utils import min_version
+
 PANDOC = "pandoc --filter pantable --filter pandoc-fignos --filter pandoc-tablenos --filter pandoc-citeproc"
 
 configfile: "./config/default.yaml"
 include: "./rules/download.smk"
 include: "./rules/preprocess.smk"
 include: "./rules/analyse.smk"
+min_version("7.17")
 
 
 rule all:

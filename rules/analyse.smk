@@ -4,7 +4,6 @@ from dataclasses import dataclass
 rule decoupling_index:
     message: "Calculate the decoupling index."
     input:
-        src = "src/analyse/decoupling.py",
         emissions = "build/emissions-in-mt-bp.csv",
         gdp = rules.gdp.output[0]
     output: "build/decoupling-index.csv"
@@ -15,7 +14,6 @@ rule decoupling_index:
 rule plot_global_emissions:
     message: "Plot global emissions."
     input:
-        src = "src/analyse/global_emissions.py",
         emissions = "build/emissions-in-mt-bp.csv"
     params:
         crises_slugs = ["first-oil-crisis", "second-oil-crisis", "soviet-union-collapse", "financial-crisis"],
@@ -29,7 +27,6 @@ rule plot_global_emissions:
 rule multiplicative_contributions:
     message: "Calculate multiplicative contributions to emissions."
     input:
-        src = "src/analyse/mul_contributions.py",
         population = rules.population.output[0],
         energy_intensity = rules.energy_intensity.output[0],
         gdp = rules.gdp_per_capita.output[0],
@@ -46,7 +43,6 @@ rule multiplicative_contributions:
 rule prepost_growth_rates:
     message: "Calculate growth rates pre and post all crises."
     input:
-        src = "src/analyse/prepost_growth.py",
         population = rules.population.output[0],
         energy_intensity = rules.energy_intensity.output[0],
         gdp = rules.gdp_per_capita.output[0],
@@ -65,7 +61,6 @@ rule prepost_growth_rates:
 rule plot_prepost_growth_peak_and_decline:
     message: "Plot growth rates pre and post crises in peak-and-decline countries."
     input:
-        src = "src/analyse/prepost_panel.py",
         growth_rates = rules.prepost_growth_rates.output[0]
     params:
         crises_countries = config["highlights"]["peak-and-decline"],
@@ -78,7 +73,6 @@ rule plot_prepost_growth_peak_and_decline:
 rule plot_prepost_growth_no_peak_and_decline:
     message: "Plot growth rates pre and post crises in no peak-and-decline countries."
     input:
-        src = "src/analyse/prepost_panel.py",
         growth_rates = rules.prepost_growth_rates.output[0]
     params:
         crises_countries = config["highlights"]["no-peak-and-decline-prepost"],
@@ -91,7 +85,6 @@ rule plot_prepost_growth_no_peak_and_decline:
 rule plot_peaker:
     message: "Plot timeline of peaks."
     input:
-        src = "src/analyse/peaker.py",
         emissions = "build/emissions-in-mt-{source}.csv",
         flags = expand(
             "build/flag/{country}.png",
@@ -115,7 +108,6 @@ rule plot_peaker:
 rule plot_contribution_timeseries_peak_and_decline:
     message: "Plot timeseries of contributions, peak and decline."
     input:
-        src = "src/analyse/contribution_timeseries_panel.py",
         emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc
     params:
@@ -133,7 +125,6 @@ rule plot_contribution_timeseries_peak_and_decline:
 rule plot_contribution_timeseries_no_peak_and_decline:
     message: "Plot timeseries of contributions, no peak and decline."
     input:
-        src = "src/analyse/contribution_timeseries_panel.py",
         emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc,
     params:
@@ -151,7 +142,6 @@ rule plot_contribution_timeseries_no_peak_and_decline:
 rule plot_contribution_timeseries_all:
     message: "Plot timeseries of contributions, all."
     input:
-        src = "src/analyse/contribution_timeseries_panel.py",
         emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc,
     params:
@@ -169,7 +159,6 @@ rule plot_contribution_timeseries_all:
 rule plot_contribution_timeseries_non_crisis_peaker:
     message: "Plot timeseries of contributions, non crisis peaker."
     input:
-        src = "src/analyse/contribution_timeseries_panel.py",
         emissions = "build/emissions-in-mt-bp.csv",
         contributions = rules.multiplicative_contributions.output.nc
     params:

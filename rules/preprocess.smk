@@ -22,7 +22,6 @@ COUNTRY_CODES = sorted([
 rule energy:
     message: "Preprocess BP energy consumption data."
     input:
-        src = "src/preprocess/bp.py",
         bp = rules.download_bp_stats.output[0]
     params:
         sheet_name = config["data-sources"]["bp"]["sheet_names"]["energy"],
@@ -35,7 +34,6 @@ rule energy:
 rule emissions_bp:
     message: "Preprocess BP emissions data."
     input:
-        src = "src/preprocess/bp.py",
         bp = rules.download_bp_stats.output[0]
     params:
         sheet_name = config["data-sources"]["bp"]["sheet_names"]["emissions"],
@@ -48,7 +46,6 @@ rule emissions_bp:
 rule emissions_iea:
     message: "Preprocess IEA emissions data."
     input:
-        src = "src/preprocess/iea.py",
         iea = config["data-sources"]["iea"]["path"]
     params:
         sheet_name = "GHG FC",
@@ -61,7 +58,6 @@ rule emissions_iea:
 rule population:
     message: "Preprocess Worldbank population data."
     input:
-        src = "src/preprocess/worldbank.py",
         path = rules.unzip_population.output[0]
     params:
         country_codes = COUNTRY_CODES
@@ -73,7 +69,6 @@ rule population:
 rule worldbank_gdp:
     message: "Preprocess Worldbank GDP data."
     input:
-        src = "src/preprocess/worldbank.py",
         path = rules.unzip_gdp.output[0]
     params:
         country_codes = COUNTRY_CODES
@@ -85,7 +80,6 @@ rule worldbank_gdp:
 rule maddison_gdp:
     message: "Preprocess Maddison GDP data."
     input:
-        src = "src/preprocess/maddison.py",
         path = rules.download_maddison_gdp.output[0]
     params:
         country_codes = config["data-sources"]["maddison"]["countries"],
@@ -99,7 +93,6 @@ rule maddison_gdp:
 rule gdp:
     message: "Use selected countries from Maddison GDP, otherwise use Worldbank GDP."
     input:
-        src = "src/preprocess/gdp.py",
         worldbank = rules.worldbank_gdp.output[0],
         maddison = rules.maddison_gdp.output[0]
     output: "build/gdp-in-usd.csv"
@@ -110,7 +103,6 @@ rule gdp:
 rule energy_intensity:
     message: "Divide {input.df1} / {input.df2}"
     input:
-        src = "src/preprocess/divide.py",
         df1 = rules.energy.output[0],
         df2 = rules.gdp.output[0]
     output: "build/energy-intensity-in-ej-per-usd.csv"
@@ -121,7 +113,6 @@ rule energy_intensity:
 rule carbon_intensity:
     message: "Divide {input.df1} / {input.df2}"
     input:
-        src = "src/preprocess/divide.py",
         df1 = "build/emissions-in-mt-bp.csv",
         df2 = rules.energy.output[0]
     output: "build/carbon-intensity-in-mt-per-ej.csv"
@@ -132,7 +123,6 @@ rule carbon_intensity:
 rule energy_and_carbon_intensity:
     message: "Divide {input.df1} / {input.df2}."
     input:
-        src = "src/preprocess/divide.py",
         df1 = "build/emissions-in-mt-bp.csv",
         df2 = rules.gdp.output[0]
     output: "build/energy-and-carbon-intensity-in-mt-per-usd.csv"
@@ -143,7 +133,6 @@ rule energy_and_carbon_intensity:
 rule gdp_per_capita:
     message: "Divide {input.df1} / {input.df2}"
     input:
-        src = "src/preprocess/divide.py",
         df1 = rules.gdp.output[0],
         df2 = rules.population.output[0]
     output: "build/gdp-in-usd-per-capita.csv"
@@ -154,7 +143,6 @@ rule gdp_per_capita:
 rule flag:
     message: "Preprocess flag of {wildcards.country}."
     input:
-        src = "src/preprocess/flag.py",
         flag = rules.download_flag.output[0],
     params: height = 100
     output: "build/flag/{country}.png"
