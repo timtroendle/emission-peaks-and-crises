@@ -59,6 +59,15 @@ rule report:
         """
 
 
+rule push:
+    message: "Package, zip, and move entire build."
+    params: push_directory = config["push-directory"]
+    shell:
+        """
+        zip -r {params.push_directory}/kaya-results-$(date -Idate).zip build
+        """
+
+
 rule clean: # removes all generated results
     shell:
         """
