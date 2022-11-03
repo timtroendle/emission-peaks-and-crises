@@ -58,6 +58,33 @@ rule prepost_growth_rates:
     script: "../src/analyse/prepost_growth.py"
 
 
+rule prepost_growth_rates_peaks_marked:
+    message: "Mark prepost growth rates with emission peaks."
+    input:
+        prepost = rules.prepost_growth_rates.output.nc
+    params:
+        peak_and_decline = config["highlights"]["peaks"]["peak-and-decline"],
+        no_peak_and_decline = config["highlights"]["peaks"]["no-peak-and-decline"],
+        peaked_before = config["highlights"]["peaks"]["peaked-before"]
+    output:
+        nc = "build/prepost-growth-rates-marked.nc",
+        csv = "build/prepost-growth-rates-marked.csv"
+    conda: "../envs/default.yaml"
+    script: "../src/analyse/prepost_growth_marked.py"
+
+
+rule test_prepost_growth:
+    message: "Run tests on the growth rates during crises."
+    input:
+        prepost = rules.prepost_growth_rates_peaks_marked.output[0]
+    output:
+        qq = "build/prepost-growth-qq-plots.png",
+        hist = "build/prepost-growth-histograms.png",
+        test = "build/prepost-growth-tests.csv"
+    conda: "../envs/default.yaml"
+    script: "../src/analyse/prepost_growth_test.py"
+
+
 rule plot_prepost_growth_peak_and_decline:
     message: "Plot growth rates pre and post crises in peak-and-decline countries."
     input:

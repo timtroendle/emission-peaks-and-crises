@@ -16,6 +16,7 @@ rule all:
         "build/peaker-bp.png",
         "build/prepost-growth-peak-and-decline.png",
         "build/prepost-growth-no-peak-and-decline.png",
+        "build/prepost-growth-tests.csv",
         "build/contribution-timeseries/peak-and-decline.png",
         "build/contribution-timeseries/no-peak-and-decline.png",
         "build/contribution-timeseries/non-crisis-peaker.png",

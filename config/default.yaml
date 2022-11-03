@@ -410,6 +410,202 @@ highlights:
             - DNK
         switzerland-peak:
             - CHE
+    peaks:
+        peak-and-decline:
+            first-oil-crisis:
+                - BEL
+                - GBR
+                - LUX
+            second-oil-crisis:
+                - SWE
+                - DEU
+                - FRA
+                - CZE
+                - HUN
+            soviet-union-collapse:
+                - SVK
+                - LVA
+                - EST
+                - POL
+                - RUS
+                - LTU
+            financial-crisis:
+                - PRT
+                - FIN
+                - AUT
+                - NOR
+                - USA
+                - ITA
+                - NLD
+                - JPN
+                - IRL
+                - ESP
+                - SVN
+                - GRC
+        no-peak-and-decline:
+            first-oil-crisis:
+                - AUS
+                - AUT
+                - ARG
+                - BRA
+                - CAN
+                - CHL
+                - CHN
+                - COL
+                - CZE
+                - DEU
+                - DNK
+                - ESP
+                - EST
+                - FIN
+                - FRA
+                - GRC
+                - HUN
+                - IDN
+                - IND
+                - IRL
+                - ISL
+                - ISR
+                - ITA
+                - JPN
+                - KOR
+                - LTU
+                - LVA
+                - MEX
+                - NLD
+                - NOR
+                - NZL
+                - POL
+                - PRT
+                - RUS
+                - SAU
+                - SVK
+                - SVN
+                - SWE
+                - TUR
+                - CHE
+                - USA
+                - ZAF
+            second-oil-crisis:
+                - AUS
+                - AUT
+                - ARG
+                - BRA
+                - CAN
+                - CHL
+                - CHN
+                - COL
+                - DNK
+                - ESP
+                - EST
+                - FIN
+                - GRC
+                - IDN
+                - IND
+                - IRL
+                - ISL
+                - ISR
+                - ITA
+                - JPN
+                - KOR
+                - LTU
+                - LVA
+                - MEX
+                - NLD
+                - NOR
+                - NZL
+                - POL
+                - PRT
+                - RUS
+                - SAU
+                - SVK
+                - SVN
+                - TUR
+                - CHE
+                - USA
+                - ZAF
+            soviet-union-collapse:
+                - AUS
+                - AUT
+                - ARG
+                - BRA
+                - CAN
+                - CHL
+                - CHN
+                - COL
+                - DNK
+                - ESP
+                - FIN
+                - GRC
+                - IDN
+                - IND
+                - IRL
+                - ISL
+                - ISR
+                - ITA
+                - JPN
+                - KOR
+                - MEX
+                - NLD
+                - NOR
+                - NZL
+                - PRT
+                - SAU
+                - SVN
+                - TUR
+                - CHE
+                - USA
+                - ZAF
+            financial-crisis:
+                - AUS
+                - ARG
+                - BRA
+                - CAN
+                - CHL
+                - CHN
+                - COL
+                - IDN
+                - IND
+                - ISL
+                - ISR
+                - KOR
+                - MEX
+                - NZL
+                - SAU
+                - TUR
+                - ZAF
+        peaked-before:
+            first-oil-crisis:
+            second-oil-crisis:
+                - BEL
+                - GBR
+                - LUX
+            soviet-union-collapse:
+                - BEL
+                - GBR
+                - LUX
+                - SWE
+                - DEU
+                - FRA
+                - CZE
+                - HUN
+            financial-crisis:
+                - BEL
+                - GBR
+                - LUX
+                - SWE
+                - DEU
+                - FRA
+                - CZE
+                - HUN
+                - SVK
+                - LVA
+                - EST
+                - POL
+                - RUS
+                - LTU
+                - CHE
+                - DNK
 groups:
     high-income:
         - AUS
