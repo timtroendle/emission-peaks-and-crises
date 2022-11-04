@@ -2,15 +2,18 @@ import pandas as pd
 import pycountry
 
 
-COLS = "A:BD"
+COLS = "A:BF"
 SKIPROWS = [0, 1]
+NA_VALUE = ["0"]
 
 
 def preprocess_bp_data(path_to_bp_data, sheet_name, countries, path_to_output):
     countries = list(map(bp_country_names, countries))
     (
         pd
-        .read_excel(path_to_bp_data, sheet_name=sheet_name, index_col=0, skiprows=SKIPROWS, usecols=COLS)
+        .read_excel(
+            path_to_bp_data, sheet_name=sheet_name, index_col=0,
+            skiprows=SKIPROWS, usecols=COLS, na_values=NA_VALUE)
         .loc[countries, :]
         .transpose()
         .rename(columns=sane_country_names)

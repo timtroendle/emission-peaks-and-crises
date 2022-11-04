@@ -16,9 +16,9 @@ rule plot_global_emissions:
     input:
         emissions = "build/emissions-in-mt-bp.csv"
     params:
-        crises_slugs = ["first-oil-crisis", "second-oil-crisis", "soviet-union-collapse", "financial-crisis"],
+        crises_slugs = ["first-oil-crisis", "second-oil-crisis", "soviet-union-collapse", "financial-crisis", "covid-crisis"],
         all_crises = config["crises"],
-        crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis"],
+        crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis", "COVID-19 pandemic"],
     output: "build/global-emissions.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/global_emissions.py"
