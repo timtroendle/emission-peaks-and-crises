@@ -14,6 +14,7 @@ RED = '#A01914'
 GREY = "#7F7F7F"
 
 PEAK_YEAR_THRESHOLD = 2010 # We cannot identify peaks after 2010.
+PEAK_NOT_CERTAIN = ["NZL"] # we cannot be sure about emissions peaks in these countries
 
 
 def plot_peak_timeline(path_to_emissions, paths_to_flags, crises, crises_names, high_income, middle_income,
@@ -28,6 +29,10 @@ def plot_peak_timeline(path_to_emissions, paths_to_flags, crises, crises_names, 
         .sort_values()
     )
     peak_years.to_csv(path_to_peak_csv, index=True, header=True)
+
+    for country in PEAK_NOT_CERTAIN: # prevent these countries from being plotted as peak-and-decline
+        peak_years[country] = peak_years.max()
+
     n_peaked_all, n_not_peaked_all = cumsum_peaked(rolling_emissions)
     n_peaked_high, n_not_peaked_high = cumsum_peaked(rolling_emissions[high_income])
 
