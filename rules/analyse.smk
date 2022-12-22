@@ -1,16 +1,6 @@
 from dataclasses import dataclass
 
 
-rule decoupling_index:
-    message: "Calculate the decoupling index."
-    input:
-        emissions = "build/emissions-in-mt-bp.csv",
-        gdp = rules.gdp.output[0]
-    output: "build/decoupling-index.csv"
-    conda: "../envs/default.yaml"
-    script: "../src/analyse/decoupling.py"
-
-
 rule plot_global_emissions:
     message: "Plot global emissions."
     input:

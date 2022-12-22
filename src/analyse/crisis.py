@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from typing import Mapping
-import warnings
 
 
 @dataclass(eq=True, frozen=True)
@@ -25,12 +24,15 @@ class CrisisPeriod:
 
 
 class hashabledict(dict):
-  def __key(self):
-    return tuple((k,self[k]) for k in sorted(self))
-  def __hash__(self):
-    return hash(self.__key())
-  def __eq__(self, other):
-    return self.__key() == other.__key()
+
+    def __key(self):
+        return tuple((k, self[k]) for k in sorted(self))
+
+    def __hash__(self):
+        return hash(self.__key())
+
+    def __eq__(self, other):
+        return self.__key() == other.__key()
 
 
 @dataclass(eq=True, frozen=True)
@@ -55,7 +57,6 @@ class Crisis:
             global_period=CrisisPeriod.from_config(config["global"]),
             national_periods=national_periods
         )
-
 
     def national_period(self, country_id):
         try:

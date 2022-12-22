@@ -21,7 +21,7 @@ def crises_pre_post_contribution(crises: list, path_to_carbon_intensity: str, pa
         .to_xarray()
     )
 
-    prepost =  xr.concat([
+    prepost = xr.concat([
         xr.concat([
             derive_prepost_growth_rates(kaya_factors, crisis, country_id.item())
             for country_id in kaya_factors.country_id

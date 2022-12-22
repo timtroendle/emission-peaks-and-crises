@@ -112,8 +112,8 @@ def plot_flag(coords, flag, ax):
     im = OffsetImage(flag, zoom=0.06)
     im.image.axes = ax
 
-    ab = AnnotationBbox(im, coords,  xybox=(0., -16.), frameon=False,
-                        xycoords='data',  boxcoords="offset points", pad=0)
+    ab = AnnotationBbox(im, coords, xybox=(0., -16.), frameon=False,
+                        xycoords='data', boxcoords="offset points", pad=0)
 
     ax.add_artist(ab)
 
