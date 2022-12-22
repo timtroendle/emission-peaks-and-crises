@@ -31,6 +31,20 @@ rule push:
         """
 
 
+rule build_data_publication:
+    message: "Package data publication."
+    input:
+        "build/analysis/multiplicative-contributions.csv",
+        "build/analysis/multiplicative-contributions.nc",
+        "build/analysis/prepost-growth-rates.csv",
+        "build/analysis/prepost-growth-rates.nc",
+        "src/doc/README.md"
+    output:
+        "build/data-publication.zip"
+    shell: "zip -rj {output} {input}"
+
+
+
 rule clean: # removes all generated results
     shell:
         """
