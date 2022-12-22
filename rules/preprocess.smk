@@ -26,7 +26,7 @@ rule energy:
     params:
         sheet_name = config["data-sources"]["bp"]["sheet_names"]["energy"],
         countries = config["countries"]
-    output: "build/energy-in-ej.csv"
+    output: "build/data/energy-in-ej.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/bp.py"
 
@@ -38,7 +38,7 @@ rule emissions_bp:
     params:
         sheet_name = config["data-sources"]["bp"]["sheet_names"]["emissions"],
         countries = config["countries"]
-    output: "build/emissions-in-mt-bp.csv"
+    output: "build/data/emissions-in-mt-bp.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/bp.py"
 
@@ -50,7 +50,7 @@ rule emissions_iea:
     params:
         sheet_name = "GHG FC",
         countries = config["countries"]
-    output: "build/emissions-in-mt-iea.csv"
+    output: "build/data/emissions-in-mt-iea.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/iea.py"
 
@@ -61,7 +61,7 @@ rule population:
         path = rules.unzip_population.output[0]
     params:
         country_codes = COUNTRY_CODES
-    output: "build/population.csv"
+    output: "build/data/population.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/worldbank.py"
 
@@ -72,7 +72,7 @@ rule worldbank_gdp:
         path = rules.unzip_gdp.output[0]
     params:
         country_codes = COUNTRY_CODES
-    output: "build/worldbank-gdp-in-usd.csv"
+    output: "build/data/worldbank-gdp-in-usd.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/worldbank.py"
 
@@ -85,7 +85,7 @@ rule maddison_gdp:
         country_codes = config["data-sources"]["maddison"]["countries"],
         gdp_sheet_name = config["data-sources"]["maddison"]["sheet_names"]["gdp_per_capita"],
         pop_sheet_name = config["data-sources"]["maddison"]["sheet_names"]["population"]
-    output: "build/maddison-gdp-in-usd.csv"
+    output: "build/data/maddison-gdp-in-usd.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/maddison.py"
 
@@ -95,7 +95,7 @@ rule gdp:
     input:
         worldbank = rules.worldbank_gdp.output[0],
         maddison = rules.maddison_gdp.output[0]
-    output: "build/gdp-in-usd.csv"
+    output: "build/data/gdp-in-usd.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/gdp.py"
 
@@ -105,7 +105,7 @@ rule energy_intensity:
     input:
         df1 = rules.energy.output[0],
         df2 = rules.gdp.output[0]
-    output: "build/energy-intensity-in-ej-per-usd.csv"
+    output: "build/data/energy-intensity-in-ej-per-usd.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/divide.py"
 
@@ -113,9 +113,9 @@ rule energy_intensity:
 rule carbon_intensity:
     message: "Divide {input.df1} / {input.df2}"
     input:
-        df1 = "build/emissions-in-mt-bp.csv",
+        df1 = "build/data/emissions-in-mt-bp.csv",
         df2 = rules.energy.output[0]
-    output: "build/carbon-intensity-in-mt-per-ej.csv"
+    output: "build/data/carbon-intensity-in-mt-per-ej.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/divide.py"
 
@@ -123,9 +123,9 @@ rule carbon_intensity:
 rule energy_and_carbon_intensity:
     message: "Divide {input.df1} / {input.df2}."
     input:
-        df1 = "build/emissions-in-mt-bp.csv",
+        df1 = "build/data/emissions-in-mt-bp.csv",
         df2 = rules.gdp.output[0]
-    output: "build/energy-and-carbon-intensity-in-mt-per-usd.csv"
+    output: "build/data/energy-and-carbon-intensity-in-mt-per-usd.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/divide.py"
 
@@ -135,7 +135,7 @@ rule gdp_per_capita:
     input:
         df1 = rules.gdp.output[0],
         df2 = rules.population.output[0]
-    output: "build/gdp-in-usd-per-capita.csv"
+    output: "build/data/gdp-in-usd-per-capita.csv"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/divide.py"
 

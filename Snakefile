@@ -12,15 +12,15 @@ min_version("7.17")
 rule all:
     message: "Run entire analysis and compile report."
     input:
-        "build/global-emissions.png",
-        "build/peaker-bp.png",
-        "build/prepost-growth-peak-and-decline.png",
-        "build/prepost-growth-no-peak-and-decline.png",
-        "build/prepost-growth-tests.csv",
-        "build/contribution-timeseries/peak-and-decline.png",
-        "build/contribution-timeseries/no-peak-and-decline.png",
-        "build/contribution-timeseries/non-crisis-peaker.png",
-        "build/contribution-timeseries/all.png",
+        "build/figures/global-emissions.png",
+        "build/figures/peaker-bp.png",
+        "build/figures/prepost-growth-peak-and-decline.png",
+        "build/figures/prepost-growth-no-peak-and-decline.png",
+        "build/analysis/prepost-growth-tests.csv",
+        "build/figures/contribution-timeseries/peak-and-decline.png",
+        "build/figures/contribution-timeseries/no-peak-and-decline.png",
+        "build/figures/contribution-timeseries/non-crisis-peaker.png",
+        "build/figures/contribution-timeseries/all.png",
         "build/logs/test-report.html"
 
 
@@ -81,7 +81,7 @@ rule test:
     input:
         test_dir = "tests",
         tests = map(str, Path("tests").glob("**/test_*.py")),
-        emissions = "build/emissions-in-mt-bp.csv",
+        emissions = "build/data/emissions-in-mt-bp.csv",
         contribution_factors = rules.multiplicative_contributions.output.nc
     params:
         countries = COUNTRY_CODES
