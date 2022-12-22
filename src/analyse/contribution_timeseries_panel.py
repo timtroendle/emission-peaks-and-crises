@@ -53,9 +53,9 @@ def timeseries(path_to_contributions, path_to_emissions, crises_countries,
         .sel(country_id=country_ids)
     )
     if nrows > 1:
-        fig = plt.figure(figsize=(8, nrows * 2 * 2 / 3))
+        fig = plt.figure(figsize=(7.09, nrows * 2 * 2 / 3 * 0.88625))
     else:
-        fig = plt.figure(figsize=(8, 2))
+        fig = plt.figure(figsize=(7.09, 1.77))
     axes = fig.subplots(nrows, 3, sharex=False, sharey=share_y_axis, squeeze=False)
     for ax, country_id in zip(axes.flatten(), country_ids):
         crisis = all_crises[crises[country_id]]

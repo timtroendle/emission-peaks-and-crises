@@ -16,7 +16,7 @@ def test_prepost_growth(path_to_prepost_growth: str, paths_to_output: typing.Any
 
 
 def plot_qq(datas: dict[str, pd.Series], path_to_plot: str):
-    fig = figure.Figure(figsize=(8, 4))
+    fig = figure.Figure(figsize=(7.09, 3.55))
     axes = fig.subplots(2, 3).flatten()
     for ax, name, data in zip(axes, datas.keys(), datas.values()):
         scipy.stats.probplot(data, dist="norm", plot=ax)
@@ -26,7 +26,7 @@ def plot_qq(datas: dict[str, pd.Series], path_to_plot: str):
 
 
 def plot_hist(all_data_points: pd.DataFrame, path_to_plot: str):
-    fig = figure.Figure(figsize=(8, 5))
+    fig = figure.Figure(figsize=(7.09, 4.43))
     p = (
         so
         .Plot(all_data_points.replace({"gdp-and-population": "GDP", "energy-and-carbon-intensity": "Economic structure"}), x="diffs", color="factor")

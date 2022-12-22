@@ -36,7 +36,7 @@ def plot_peak_timeline(path_to_emissions, paths_to_flags, crises, crises_names, 
     n_peaked_all, n_not_peaked_all = cumsum_peaked(rolling_emissions)
     n_peaked_high, n_not_peaked_high = cumsum_peaked(rolling_emissions[high_income])
 
-    fig = plt.figure(figsize=(8, 3.5))
+    fig = plt.figure(figsize=(7.09, 3.1))
     ax = fig.add_subplot()
     for crisis in crises:
         ax.axvspan(

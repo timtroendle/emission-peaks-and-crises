@@ -26,7 +26,7 @@ def plot_prepost_panel(path_to_prepost_growth, crises_countries, path_to_plot):
     da = read_growth_rates(path_to_prepost_growth)
 
     n_rows = len(crises_countries)
-    fig = plt.figure(figsize=(8, n_rows * 0.5))
+    fig = plt.figure(figsize=(7.09, n_rows * 0.5 * 0.88625))
     axes = fig.subplots(n_rows, 4, sharex=True, sharey=True)
 
     for col_id, factor in enumerate(FACTORS.keys()):

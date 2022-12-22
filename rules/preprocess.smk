@@ -144,7 +144,7 @@ rule flag:
     message: "Preprocess flag of {wildcards.country}."
     input:
         flag = rules.download_flag.output[0],
-    params: height = 200
+    params: height = 180
     output: "build/flag/{country}.png"
     conda: "../envs/default.yaml"
     script: "../src/preprocess/flag.py"
