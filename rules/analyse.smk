@@ -8,7 +8,7 @@ rule plot_global_emissions:
     params:
         crises_slugs = ["first-oil-crisis", "second-oil-crisis", "soviet-union-collapse", "financial-crisis", "covid-crisis"],
         all_crises = config["crises"],
-        crises_names = ["First and", "Second oil crisis", "Soviet Union collapse", "Financial crisis", "COVID-19 pandemic"],
+        crises_names = ["First\nand", "Second\noil\ncrisis", "Soviet\nUnion\ncollapse", "Financial\ncrisis", "COVID-19\npandemic"],
     output: "build/figures/global-emissions.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/global_emissions.py"

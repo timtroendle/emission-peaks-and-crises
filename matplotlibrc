@@ -4,26 +4,26 @@ axes.titleweight: bold
 figure.dpi: 300
 
 ## The following are adaptations from seaborn's paper context settings
-font.size: 9
-axes.labelsize: 9
-axes.titlesize: 9
-xtick.labelsize: 8
-ytick.labelsize: 8
-legend.fontsize: 8
-legend.title_fontsize: 9
+font.size: 7
+axes.labelsize: 7
+axes.titlesize: 7
+xtick.labelsize: 6.2
+ytick.labelsize: 6.2
+legend.fontsize: 6.2
+legend.title_fontsize: 7
 
-axes.linewidth: 1
-grid.linewidth: 0.8
-lines.linewidth: 1.2
-lines.markersize: 4.8
-patch.linewidth: 0.8
+axes.linewidth: 0.77
+grid.linewidth: 0.62
+lines.linewidth: 0.93
+lines.markersize: 3.73
+patch.linewidth: 0.62
 
-xtick.major.width: 1
-ytick.major.width: 1
-xtick.minor.width: 0.8
-ytick.minor.width: 0.8
+xtick.major.width: 0.77
+ytick.major.width: 0.77
+xtick.minor.width: 0.62
+ytick.minor.width: 0.62
 
-xtick.major.size: 4.8
-ytick.major.size: 4.8
-xtick.minor.size: 3.2
-ytick.minor.size: 3.2
+xtick.major.size: 3.73
+ytick.major.size: 3.73
+xtick.minor.size: 2.49
+ytick.minor.size: 2.49

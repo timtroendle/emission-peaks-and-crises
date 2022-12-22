@@ -14,13 +14,13 @@ INDEX_WORLD = "WLD"
 def plot_global_emissions(path_to_emissions, crises, crises_names, path_to_plot):
     global_emissions = pd.read_csv(path_to_emissions, index_col=0).loc[:, INDEX_WORLD].div(1000)
 
-    fig = plt.figure(figsize=(7.09, 2))
+    fig = plt.figure(figsize=(7.09 / 2, 1.5))
     ax = fig.add_subplot(111)
 
     ax.plot(global_emissions, color=LINE_COLOR)
     ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1] + 5)
     ax.set_xlim(1965, 2021)
-    ax.xaxis.set_minor_locator(mtick.MultipleLocator(1))
+    ax.xaxis.set_minor_locator(mtick.MultipleLocator(5))
     ax.set_ylabel("Global CO₂ emissions (Gt)")
     ax.set_xlabel("Year")
 

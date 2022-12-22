@@ -36,7 +36,7 @@ def plot_peak_timeline(path_to_emissions, paths_to_flags, crises, crises_names, 
     n_peaked_all, n_not_peaked_all = cumsum_peaked(rolling_emissions)
     n_peaked_high, n_not_peaked_high = cumsum_peaked(rolling_emissions[high_income])
 
-    fig = plt.figure(figsize=(7.09, 3.1))
+    fig = plt.figure(figsize=(7.09, 2.5))
     ax = fig.add_subplot()
     for crisis in crises:
         ax.axvspan(
@@ -52,7 +52,7 @@ def plot_peak_timeline(path_to_emissions, paths_to_flags, crises, crises_names, 
     ax.bar(n_peaked_high.index, n_peaked_high.values, label="High-income with emission peak", color=BLUE)
     ax.bar(n_not_peaked_all.index, n_not_peaked_all.values, label="Medium-income without emission peak", color=RED, alpha=0.4)
     ax.bar(n_not_peaked_high.index, n_not_peaked_high.values, label="High-income without emission peak", color=RED)
-    ax.set_ylim(ax.get_ylim()[0], ax.get_ylim()[1] + 30)
+    ax.set_ylim(ax.get_ylim()[0] - 10, ax.get_ylim()[1] + 10)
     for crisis in crises:
         ax.annotate(
             text=crises_names[crisis],
@@ -71,7 +71,13 @@ def plot_peak_timeline(path_to_emissions, paths_to_flags, crises, crises_names, 
 
     ax.set_xlabel("Year")
     ax.set_ylabel("Number of countries")
-    ax.legend(loc="lower right")
+    ax.legend(
+        framealpha=1.0,
+        ncol=2,
+        loc='upper center',
+        bbox_to_anchor=(0.5, -0.2),
+        frameon=False
+    )
     sns.despine()
     fig.tight_layout()
     abs_ticklabels = [t for t in ax.get_yaxis().get_ticklabels()]
@@ -102,17 +108,17 @@ def cumsum_peaked(emissions):
 
 def plot_flags(year, flags, ax):
     if year < PEAK_YEAR_THRESHOLD:
-        y = 60
+        y = -55
         for flag in flags:
             plot_flag((year, y), flag, ax)
-            y = y - 4
+            y = y + 5.85
 
 
 def plot_flag(coords, flag, ax):
     im = OffsetImage(flag, zoom=0.06)
     im.image.axes = ax
 
-    ab = AnnotationBbox(im, coords, xybox=(0., -16.), frameon=False,
+    ab = AnnotationBbox(im, coords, xybox=(0., 0), frameon=False,
                         xycoords='data', boxcoords="offset points", pad=0)
 
     ax.add_artist(ab)
