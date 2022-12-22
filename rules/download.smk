@@ -55,8 +55,9 @@ rule download_maddison_gdp:
 
 
 def flag_url(wildcards):
-    country = pycountry.countries.lookup(wildcards.country).alpha_2.lower()
-    return config["data-sources"]["flags"]["url"].format(country=country)
+    country_code = pycountry.countries.lookup(wildcards.country).alpha_3
+    country_unicode = config["flags"][country_code]
+    return config["data-sources"]["flags"]["url"].format(country_unicode=country_unicode)
 
 
 rule download_flag:
