@@ -1,6 +1,6 @@
-# Kaya
+# Peak emissions
 
-Analysing how Kaya factors change during crises.
+This study is investigating the relationship between emission peaks and economic crises.
 
 This repository contains the entire scientific project. The philosophy behind this repository is that no intermediary results are included, but all results are computed from raw data and code.
 
