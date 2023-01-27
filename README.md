@@ -12,7 +12,7 @@ You need [mamba](https://mamba.readthedocs.io/en/latest/) to run the analysis. U
 
 ## Run the analysis
 
-    snakemake --profile profiles/default
+    snakemake
 
 This will run all analysis steps to reproduce results.
 
@@ -20,11 +20,11 @@ You can also run certain parts only by using other `snakemake` rules; to get a l
 
 To generate a PDF of the dependency graph of all steps, and if you have `dot` installed, run:
 
-    snakemake --profiles profiles/default --rulegraph | dot -Tpdf > dag.pdf
+    snakemake --rulegraph | dot -Tpdf > dag.pdf
 
 ## Run the tests
 
-    snakemake --profile profiles/default test
+    snakemake test
 
 ## Repo structure
 
