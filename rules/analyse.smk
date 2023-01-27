@@ -188,3 +188,18 @@ rule plot_contribution_timeseries_non_crisis_peaker:
     output: "build/figures/contribution-timeseries/non-crisis-peaker.png"
     conda: "../envs/default.yaml"
     script: "../src/analyse/contribution_timeseries_panel.py"
+
+
+rule plot_contribution_timeseries_single:
+    message: "Plot timeseries of contributions, single country."
+    input:
+        emissions = "build/data/emissions-in-mt-bp.csv",
+        contributions = rules.multiplicative_contributions.output.nc
+    params:
+        years_before_crisis_start = 10,
+        years_after_crisis_start = 10,
+        all_crises = config["crises"],
+        plot_crisis = True,
+    output: "build/figures/contribution-timeseries/{country_id}--{crisis}.png"
+    conda: "../envs/default.yaml"
+    script: "../src/analyse/contribution_timeseries.py"

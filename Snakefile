@@ -19,6 +19,11 @@ rule all:
         "build/figures/contribution-timeseries/no-peak-and-decline.png",
         "build/figures/contribution-timeseries/non-crisis-peaker.png",
         "build/figures/contribution-timeseries/all.png",
+        [
+            f"build/figures/contribution-timeseries/{country_id}--{crisis}.png"
+            for crisis, countries in config["highlights"]["peak-and-decline"].items()
+            for country_id in countries
+        ],
         "build/logs/test-report.html"
 
 
