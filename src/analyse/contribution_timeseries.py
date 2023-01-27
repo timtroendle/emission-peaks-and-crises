@@ -1,5 +1,4 @@
-import math
-from itertools import chain
+import gettext
 
 import pandas as pd
 import xarray as xr
@@ -9,6 +8,10 @@ import seaborn as sns
 import pycountry
 
 from crisis import Crisis
+
+
+german = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['de'])
+german.install()
 
 COLOR_PALETTE = [ # Nature colors
     "#E64B35",
@@ -27,10 +30,10 @@ sns.set_palette(COLOR_PALETTE)
 GREY = "#7F7F7F"
 
 NICE_FACTOR_NAMES = {
-    "gdp": "GDP",
-    "carbon-intensity": "Carbon intensity",
-    "energy-intensity": "Energy intensity",
-    "population": "Population"
+    "gdp": "BIP",
+    "carbon-intensity": "Kohlenstoffintensität",
+    "energy-intensity": "Energieintensität",
+    "population": "Bevölkerung"
 }
 
 LINE_STYLES = {
@@ -60,7 +63,7 @@ def timeseries(path_to_contributions: str, path_to_emissions: str, country_id: s
         bbox_to_anchor=(0.5, -0.1),
         frameon=False
     )
-    ax.set_ylabel("Change since\nreference year")
+    ax.set_ylabel("Veränderung seit\nReferenzjahr")
     sns.despine(fig, right=False)
     fig.tight_layout()
     fig.subplots_adjust(wspace=0.2)
@@ -86,7 +89,7 @@ def plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_aft
     ax.plot(
         ds_crisis.year,
         emissions / emissions.isel(year=0),
-        label="$\mathrm{CO_2}$ emissions",
+        label="$\mathrm{CO_2}$-Emissionen",
         linewidth=2.4
     )
     for factor in NICE_FACTOR_NAMES.keys():
@@ -107,9 +110,9 @@ def plot_timeseries(ds, country_id, crisis, years_before_crisis_start, years_aft
             linewidth=0.0,
             alpha=0.2,
             color=GREY,
-            label="Crisis"
+            label="Krise"
         )
-    ax.set_title(country_name(country_id))
+    ax.set_title(_(country_name(country_id)))
     ax.set_xlim(period.from_year - years_before_crisis_start, period.from_year + years_after_crisis_start)
     ax.get_xaxis().set_major_locator(MultipleLocator(5))
     ax.get_xaxis().set_minor_locator(MultipleLocator(1))
