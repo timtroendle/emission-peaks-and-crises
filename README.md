@@ -1,4 +1,4 @@
-# Peak emissions
+# Emission peaks and crises
 
 This study is investigating the relationship between emission peaks and economic crises.
 
@@ -28,13 +28,13 @@ To generate a PDF of the dependency graph of all steps, and if you have `dot` in
 
 ## Repo structure
 
-* `src`: contains the Python source code
-* `envs`: contains execution environments
-* `tests`: contains the test code
-* `config`: configurations used in the study
-* `data`: place for raw data
 * `build`: will contain all results (does not exist initially)
+* `config`: configurations used in the study
+* `envs`: contains execution environments
 * `profiles`: Snakemake execution profiles
+* `rules`: Snakemake rules
+* `src`: contains the Python source code
+* `tests`: contains the test code
 
 ## License
 
