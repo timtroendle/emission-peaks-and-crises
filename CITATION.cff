@@ -1,0 +1,27 @@
+cff-version: 1.1.0
+message: "If you use this in an academic publication, please cite: Bersalli, G., Tröndle, T., & Lilliestam, J. (2023). Most industrialised countries have peaked carbon dioxide emissions during economic crises through strengthened structural change. <i>Communications Earth & Environment</i>, <i>4</>(1). <a href=https://doi.org/10.1038/s43247-023-00687-8>10.1038/s43247-023-00687-8</a>"
+date-released: 2023-02-21
+title: emissions-peaks-and-crises
+version: 2023-02-21
+doi: 10.5281/zenodo.7477484
+authors:
+  - family-names: Tröndle
+    given-names: Tim
+    orcid: https://orcid.org/0000-0002-3734-8284
+references:
+  - type: article
+    title: Most industrialised countries have peaked carbon dioxide emissions during economic crises through strengthened structural change.
+    journal: Communications Earth & Environment
+    date-published: 2023-02-21
+    doi: 10.1038/s43247-023-00687-8
+    authors:
+      - family-names: Bersalli
+        given-names: Germán
+        orcid: https://orcid.org/0000-0001-9375-4677
+      - family-names: Tröndle
+        given-names: Tim
+        orcid: https://orcid.org/0000-0002-3734-8284
+      - family-names: Lilliestam
+        given-names: Johan
+        orcid: https://orcid.org/0000-0001-6913-5956
+

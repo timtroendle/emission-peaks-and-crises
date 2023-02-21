@@ -4,6 +4,10 @@ This study is investigating the relationship between emission peaks and economic
 
 This repository contains the entire scientific project. The philosophy behind this repository is that no intermediary results are included, but all results are computed from raw data and code.
 
+[![article](https://img.shields.io/badge/article-doi-blue)](https://doi.org/10.1038/s43247-023-00687-8)
+[![data](https://img.shields.io/badge/data-10.5281/zenodo.7474120-blue)](https://doi.org/10.5281/zenodo.7474120)
+[![workflow archive](https://img.shields.io/badge/workflow-10.5281/zenodo.7477484-blue)](https://doi.org/10.5281/zenodo.7477484)
+
 ## Getting ready
 
 You need [mamba](https://mamba.readthedocs.io/en/latest/) to run the analysis. Using mamba, you can create an environment from within you can run it:
